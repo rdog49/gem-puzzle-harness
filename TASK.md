@@ -1,104 +1,124 @@
-# Спецификация проекта
+# Project Specification: Gem Puzzle
 
-## Имя проекта
+## Overview
+Implement a classic browser-based [15-puzzle game](https://en.wikipedia.org/wiki/15_puzzle).
 
-Gem-puzzle
-
-## Общая задача
-
-реализовать классическую браузерную игру [пятнашки](https://ru.wikipedia.org/wiki/Игра_в_15).
-
-## Стек технологий
-
-- Чистый JavaScript
-- git
-- CSS
+## Tech Stack
+- Vanilla JavaScript (ES6+)
+- HTML5 / CSS3 (CSS frameworks or preprocessors are allowed)
 - Webpack
-- ESlint
+- ESLint (Airbnb base config)
+- Git
 
-## Технические требования
+## Technical Requirements
+- The application must work correctly in the latest version of Google Chrome.
+- **Forbidden:** jQuery, React, Vue, Angular, or external API wrapper libraries like Axios.
+- **Allowed:** Bootstrap, CSS frameworks, preprocessors, TypeScript, and Canvas (though not strictly required).
+- Network requests must use native `fetch`, Promises, and `async/await`.
 
-- Приложение должно корректно работать в последней версии Google Chrome.
-- jQuery использовать нельзя.
-- Angular, React и Vue использовать нельзя.
-- Разрешены Bootstrap, CSS-фреймворки, HTML- и CSS-препроцессоры.
-- TypeScript и Canvas не обязательны, но допустимы.
-- Для работы с сетью использовать нативный `fetch`, промисы и `async/await`. Обёртки вроде axios не нужны.
+## Project Organization & Git Workflow
+- Work in a separate branch (`feat/some-feature-name`) and dedicated folder. Do not break the main branch or initial repository structure.
+- Commit history must reflect the actual development process (commit message format: `feat: description`).
+- The working demo must be deployable to GitHub Pages.
 
-## Организация проекта
+## Functional Requirements
+### Level 1: Basic
 
-- Все коммитить и пушить в отдельную папку, main ветку не портить, работать в отдельной ветке/папке, исходный репо не портить.
-- История коммитов должна отражать ход разработки, а не один финальный снимок.
-- формат веток и коммитов: ветка feat/какое_то-название-ветки, коммит feat:какое_то-название-коммита.
-- Рабочую демо-версию нужно разместить на GitHub Pages.
+    Responsive UI: Adapts to desktop, tablet, and mobile screens without overflow or layout breaks. Mobile versions can use a burger menu.
 
-## Пример внешнего вида
+    DOM Structure: The initial index.html must have an empty ``. All markup must be generated dynamically via JavaScript.
 
-[Демо](https://xmelsky-gem-puzzle.netlify.app/)
+    Grid Size: Default grid size is 4x4.
 
-Дизайн может отличаться. Важно, чтобы интерфейс был понятным, адаптивным и содержал весь требуемый функционал.
+    Solvable State: The board must be shuffled randomly upon starting a new game, but the initial state must be mathematically solvable (Tip: generate valid states by making random legal moves backward from the solved state).
 
-## Функциональные требования
+    Movement: Clicking a tile adjacent to the empty cell moves it into the empty space.
 
-### Базовый уровень
+    Drag & Drop: Tiles can be dragged onto the empty cell using the mouse.
 
-- Адаптивный интерфейс: десктоп, планшет, мобильный. При смене ширины экрана ничего не должно пропадать, наезжать друг на друга или уезжать за край. На мобильной версии допустимо спрятать кнопки в бургер-меню.
-- В исходном `index.html` тег `body` должен быть пустым. Вся разметка создаётся средствами JavaScript.
-- Размер поля по умолчанию — 4×4.
-- При старте новой игры поле перемешивается случайным образом. Нужно учитывать, что не каждая случайная перестановка имеет решение: стартовая позиция должна быть решаемой.
-- Клик по фишке, соседней с пустой клеткой, перемещает фишку на место пустой клетки.
-- Фишки можно перетаскивать на пустую клетку мышью (drag and drop).
-- Игру можно начать заново без перезагрузки страницы: кнопкой, пунктом меню или сочетанием клавиш.
-- На экране отображаются продолжительность партии в формате `мм:сс` и количество ходов.
-- Состояние игры сохраняется (например, в `localStorage`), чтобы после перезагрузки страницы можно было продолжить с того же места.
+    Restart: The game can be restarted without reloading the page via a button, menu item, or hotkey.
 
-### Продвинутый уровень
+    Stats Display: Show the elapsed time in mm:ss format and the total move count.
 
-- Выбор размера поля: от 3×3 до 8×8.
-- Анимация перемещения фишек.
-- После победы показывается сообщение вида: «Ура! Вы решили головоломку за #:## и N ходов».
-- Можно включать и выключать звук перемещения фишек. Звук на выбор автора.
-- В таблицу рекордов сохраняются 10 лучших результатов. Таблицу можно открыть из интерфейса, например по кнопке.
+    State Persistence: Game state must be saved in localStorage (key: gem_puzzle_state) so the game can be resumed after a page reload.
 
-### Сложный уровень
+### Level 2: Advanced
 
-- Вместо цифр на фишках отображаются фрагменты картинки. Нужно собрать изображение, передвигая фишки.
-- Картинки нельзя зашивать в бандл статическим импортом. Их нужно получать с сети: сначала запросить список доступных изображений, затем загрузить выбранное. Подойдёт публичный API без ключа, например [Lorem Picsum](https://picsum.photos/) (`/v2/list` для списка и URL вида `https://picsum.photos/id/{id}/512/512` для самой картинки). Допустимы и другие открытые источники, в том числе [image-data/box](https://github.com/irinainina/image-data/tree/master/box).
-- Запросы пишутся через `fetch` и `async/await`. Цепочку «список → картинка → нарезка на фишки» нельзя собирать только на колбэках `onload`.
-- Пока идёт загрузка, на поле или рядом с ним видно состояние ожидания: лоадер, скелетон или текст «Загрузка…». Играть на недогруженном изображении нельзя.
-- Если запрос не удался, приложение не падает: показывается сообщение об ошибке и кнопка повтора. Можно дополнительно откатиться к числовому режиму.
-- Игрок может запросить другую случайную картинку без перезагрузки страницы. Предыдущий незавершённый запрос нужно отменить через `AbortController`.
-- Превью нескольких картинок (минимум 3) загружаются параллельно через `Promise.all`. По клику на превью выбранное изображение ставится на поле.
-- Кнопка автозавершения: если игрок не знает, как решить пазл, фишки сами складываются в правильном порядке. Сборка должна быть анимированной, чтобы ходы было видно.
-- Подключены и используются [ESLint](https://eslint.org/) с конфигом `eslint-config-airbnb-base` и [Webpack](https://webpack.js.org/).
-- Приложение разбито на отдельные модули, используются возможности ES6 и новее.
+    Grid Selection: Allow users to choose grid sizes from 3x3 up to 8x8.
 
-## Чеклист приёмки
-**Базовый уровень**
-[ ] Вёрстка, дизайн и интерфейс
-[ ] Состояние поля генерируется случайно и остаётся решаемым
-[ ] Клик по соседней с пустой клеткой фишке перемещает её
-[ ] Игру можно начать заново без перезагрузки страницы
-[ ] Отображаются время игры и количество ходов
-[ ] Фишки можно перетаскивать мышью
-[ ] Состояние партии сохраняется и восстанавливается после перезагрузки
-**Продвинутый уровень**
-[ ] Можно выбрать размер поля от 3×3 до 8×8
-[ ] Есть звуковое сопровождение ходов с возможностью выключить его
-[ ] Сохраняются 10 лучших результатов в `localStorage`
-[ ] Есть анимация перемещения фишек
-[ ] После победы показывается время и число ходов
-**Сложный уровень**
-[ ] Вместо цифр используются картинки, загруженные с сети через `fetch`
-[ ] Есть лоадер на время запроса и обработка ошибки с возможностью повторить
-[ ] Список или превью картинок загружаются асинхронно, предыдущий запрос отменяется при смене картинки
-[ ] Есть автоматическое анимированное завершение игры
-[ ] Подключён и используется ESLint
-[ ] Подключён и используется Webpack
-[ ] Приложение разбито на модули, используются возможности ES6+
+    Animations: Smooth sliding animations when tiles move.
 
-### Качество
+    Win Notification: Display a congratulatory message upon winning: "Hooray! You solved the puzzle in #:## and N moves".
 
-- [ ] В консоли нет ошибок, связанных с исполняемым кодом (404 для `favicon.ico` не считается)
-- [ ] Нет ошибок ESLint
+    Sound Effects: Toggleable sound effects for tile movements (audio assets of author's choice).
 
+    Leaderboard: Save top 10 best scores in localStorage, accessible via an interface button.
+
+### Level 3: Complex (Images & AI)
+
+    Image Tiles: Display image fragments on tiles instead of numbers.
+
+    Dynamic Fetching: Images must not be bundled statically. Fetch a list of available images from a public API without keys (e.g., Lorem Picsum /v2/list) and load the selected image dynamically.
+
+    Network Resilience & Async: Use fetch and async/await. Do not rely solely on image onload callbacks for splitting. Show a loading state (loader/skeleton/text) during fetches. If a request fails, show an error message with a retry button (with a fallback to number mode).
+
+    Request Cancellation: Users can switch to another random image without reloading. Cancel pending network requests using AbortController.
+
+    Parallel Preloading: Preview thumbnails (at least 3) must be loaded in parallel using Promise.all. Clicking a thumbnail applies it to the board.
+
+    Auto-Solve Feature: An "Auto-Solve" button that automatically solves the puzzle with a visible, animated sequence of moves.
+
+    Tooling Integration: ESLint (using eslint-config-airbnb-base) and Webpack must be fully integrated and running without errors.
+
+    Modular Code: Code must be split into clean ES6+ JavaScript modules.
+
+## Acceptance Criteria Checklist
+### Basic Level
+
+    [ ] Layout, design, and UI are fully responsive
+
+    [ ] Board state is generated randomly and guaranteed to be solvable
+
+    [ ] Clicking a tile adjacent to the empty cell moves it successfully
+
+    [ ] Game can be restarted without reloading the page
+
+    [ ] Game timer (mm:ss) and move counter are displayed correctly
+
+    [ ] Tiles support mouse drag-and-drop
+
+    [ ] Game state is saved and restored properly via localStorage
+
+### Advanced Level
+
+    [ ] User can select grid dimensions from 3x3 to 8x8
+
+    [ ] Move sound effects implemented with a mute/unmute toggle
+
+    [ ] Top 10 scores persist in localStorage and can be viewed via UI
+
+    [ ] Tile movement animations are operational
+
+    [ ] Win modal displays completion time and move count
+
+### Complex Level
+
+    [ ] Images replace numbers, fetched dynamically via fetch from a public API
+
+    [ ] Loading indicators and error handling with retry mechanisms are present
+
+    [ ] Thumbnails loaded asynchronously with Promise.all; request cancellation via AbortController implemented
+
+    [ ] Animated auto-solve functionality works correctly
+
+    [ ] ESLint integrated and passing
+
+    [ ] Webpack build configured and functional
+
+    [ ] Code is modular (ES6+ architecture)
+
+### Code Quality
+
+    [ ] Zero execution/runtime errors in the console (excluding 404 for favicon.ico)
+
+    [ ] Zero ESLint errors

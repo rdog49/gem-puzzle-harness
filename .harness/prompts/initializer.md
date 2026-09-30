@@ -45,22 +45,14 @@ Based on app_spec.txt, create a file called feature_list.json with 200 detailed 
     ALL tests start with "passes": false
     Cover every feature in the spec exhaustively
 
-CRITICAL INSTRUCTION: IT IS CATASTROPHIC TO REMOVE OR EDIT FEATURES IN FUTURE SESSIONS. Features can ONLY be marked as passing (change "passes": false to "passes": true). Never remove features, never edit descriptions, never modify testing steps. This ensures no functionality is missed.
-SECOND TASK: Create init.sh
+## CRITICAL INSTRUCTION: 
+IT IS CATASTROPHIC TO REMOVE OR EDIT FEATURES IN FUTURE SESSIONS. Features can ONLY be marked as passing (change "passes": false to "passes": true). Never remove features, never edit descriptions, never modify testing steps. This ensures no functionality is missed.
 
-Create a script called init.sh that future agents can use to quickly set up and run the development environment. The script should:
-
-    Install any required dependencies
-    Start any necessary servers or services
-    Print helpful information about how to access the running application
-
-Base the script on the technology stack specified in app_spec.txt.
-THIRD TASK: Initialize Git
+## SECOND TASK: Initialize Git
 
 Create a git repository and make your first commit with:
 
     feature_list.json (complete with all 200+ features)
-    init.sh (environment setup script)
     README.md (project overview and setup instructions)
 
 Commit message: "Initial setup: feature_list.json, init.sh, and project structure"
