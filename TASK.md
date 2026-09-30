@@ -1,124 +1,58 @@
-# Project Specification: Gem Puzzle
+# Gem Puzzle
 
-## Overview
-Implement a classic browser-based [15-puzzle game](https://en.wikipedia.org/wiki/15_puzzle).
+## Продукт
+Браузерная игра «пятнашки»: игрок собирает поле, сдвигая фишки на пустую клетку. В неё играют с компьютера, планшета и телефона в актуальном Google Chrome. Начатую партию можно продолжить после обновления страницы. Демо открывается как обычная страница.
 
-## Tech Stack
-- Vanilla JavaScript (ES6+)
-- HTML5 / CSS3 (CSS frameworks or preprocessors are allowed)
-- Webpack
-- ESLint (Airbnb base config)
-- Git
+## Для кого
+Человек открыл страницу и хочет дойти до победы, сменить размер поля, поставить на фишки картинку вместо цифр и посмотреть свои лучшие результаты.
 
-## Technical Requirements
-- The application must work correctly in the latest version of Google Chrome.
-- **Forbidden:** jQuery, React, Vue, Angular, or external API wrapper libraries like Axios.
-- **Allowed:** Bootstrap, CSS frameworks, preprocessors, TypeScript, and Canvas (though not strictly required).
-- Network requests must use native `fetch`, Promises, and `async/await`.
+## Как это выглядит
+- Тёмный спокойный экран, тёплое выделение, светлые фишки. Крупное название Gem Puzzle. Поле — главный объект.
+- На широком экране действия и поле стоят рядом. Горизонтальной прокрутки нет.
+- На планшете поле и действия остаются досягаемыми, ничего не обрезается.
+- На телефоне поле помещается в ширину экрана. Действия спрятаны за кнопкой меню и открываются по нажатию.
+- Пустая клетка визуально пустая. Сдвиг фишки виден как скольжение, а не как мгновенный прыжок.
+- Победа не теряется в интерфейсе: поверх поля появляется поздравление.
 
-## Project Organization & Git Workflow
-- Work in a separate branch (`feat/some-feature-name`) and dedicated folder. Do not break the main branch or initial repository structure.
-- Commit history must reflect the actual development process (commit message format: `feat: description`).
-- The working demo must be deployable to GitHub Pages.
+## Подписи
+- Меню: Menu
+- Размер: Size, варианты от 3x3 до 8x8
+- Новая партия: New game
+- Автосбор: Auto-solve
+- Звук включён: Sound on. Звук выключен: Sound off
+- Рекорды: Scores. Заголовок списка: Top 10
+- Картинки: Images
+- Время: Time. Ходы: Moves
+- Загрузка картинки: Loading images…
+- Ошибка картинки: Could not load the image. Number tiles are shown instead.
+- Повтор: Retry
+- Победа: Hooray! You solved the puzzle in #:## and N moves
 
-## Functional Requirements
-### Level 1: Basic
+## Правила партии
+- По умолчанию поле 4×4: пятнадцать фишек с номерами и одна пустая клетка.
+- Игрок выбирает размер от 3×3 до 8×8. Смена размера начинает новую партию.
+- Новая партия перемешана случайно, и её можно собрать. Уже собранное поле на старте не выдаётся.
+- Клик по фишке рядом с пустой клеткой сдвигает её на пустое место. Клик по далёкой фишке ничего не меняет.
+- Фишку можно перетащить мышью на пустую клетку, если они соседи. Незаконный сброс поле не меняет.
+- Новую партию начинают без перезагрузки страницы: кнопкой New game и клавишей N.
+- На экране есть время партии в виде мм:сс и число удачных ходов. Оба сбрасываются с новой партией. Время растёт, пока партия идёт.
+- Обновление страницы посреди партии оставляет ту же раскладку, то же число ходов, а время продолжается, а не начинается с нуля.
+- Когда поле собрано, текст победы показывает то же время и то же число ходов, что и на экране.
+- У удачного хода есть звук. Его можно выключить и снова включить.
+- Кнопка Scores открывает не больше десяти лучших результатов. Список переживает закрытие страницы. Лучшие сверху.
+- Вместо цифр на фишки можно поставить фрагменты картинки. Картинка не вложена в игру: игрок выбирает её из набора, который игра приносит снаружи. Пустая клетка остаётся пустой, правила ходов те же.
+- Пока картинка в пути, виден текст загрузки. Если запрос не удался, видны текст ошибки, кнопка Retry и поле с цифрами.
+- Другую картинку выбирают без перезагрузки страницы. На экране сразу несколько превью, не меньше трёх. Выбор превью ставит эту картинку на поле.
+- Auto-solve сам доводит поле до победы. Ходы видны один за другим. После последнего появляется то же поздравление.
 
-    Responsive UI: Adapts to desktop, tablet, and mobile screens without overflow or layout breaks. Mobile versions can use a burger menu.
+## Как ведётся работа
+- Весь продукт разрезан на задачи доски. Закрытые все вместе, они равны этому описанию: без пропущенного поведения и без отдельного продукта сверх него.
+- Человек в одной задаче делает только это: просит посмотреть задачу на доске, при необходимости правит предложенный способ, в конце открывает и вливает pull request.
+- Описание, план, реализация и проверка проходят в одном чате.
+- Одна задача — одна ветка и один pull request.
 
-    DOM Structure: The initial index.html must have an empty ``. All markup must be generated dynamically via JavaScript.
-
-    Grid Size: Default grid size is 4x4.
-
-    Solvable State: The board must be shuffled randomly upon starting a new game, but the initial state must be mathematically solvable (Tip: generate valid states by making random legal moves backward from the solved state).
-
-    Movement: Clicking a tile adjacent to the empty cell moves it into the empty space.
-
-    Drag & Drop: Tiles can be dragged onto the empty cell using the mouse.
-
-    Restart: The game can be restarted without reloading the page via a button, menu item, or hotkey.
-
-    Stats Display: Show the elapsed time in mm:ss format and the total move count.
-
-    State Persistence: Game state must be saved in localStorage (key: gem_puzzle_state) so the game can be resumed after a page reload.
-
-### Level 2: Advanced
-
-    Grid Selection: Allow users to choose grid sizes from 3x3 up to 8x8.
-
-    Animations: Smooth sliding animations when tiles move.
-
-    Win Notification: Display a congratulatory message upon winning: "Hooray! You solved the puzzle in #:## and N moves".
-
-    Sound Effects: Toggleable sound effects for tile movements (audio assets of author's choice).
-
-    Leaderboard: Save top 10 best scores in localStorage, accessible via an interface button.
-
-### Level 3: Complex (Images & AI)
-
-    Image Tiles: Display image fragments on tiles instead of numbers.
-
-    Dynamic Fetching: Images must not be bundled statically. Fetch a list of available images from a public API without keys (e.g., Lorem Picsum /v2/list) and load the selected image dynamically.
-
-    Network Resilience & Async: Use fetch and async/await. Do not rely solely on image onload callbacks for splitting. Show a loading state (loader/skeleton/text) during fetches. If a request fails, show an error message with a retry button (with a fallback to number mode).
-
-    Request Cancellation: Users can switch to another random image without reloading. Cancel pending network requests using AbortController.
-
-    Parallel Preloading: Preview thumbnails (at least 3) must be loaded in parallel using Promise.all. Clicking a thumbnail applies it to the board.
-
-    Auto-Solve Feature: An "Auto-Solve" button that automatically solves the puzzle with a visible, animated sequence of moves.
-
-    Tooling Integration: ESLint (using eslint-config-airbnb-base) and Webpack must be fully integrated and running without errors.
-
-    Modular Code: Code must be split into clean ES6+ JavaScript modules.
-
-## Acceptance Criteria Checklist
-### Basic Level
-
-    [ ] Layout, design, and UI are fully responsive
-
-    [ ] Board state is generated randomly and guaranteed to be solvable
-
-    [ ] Clicking a tile adjacent to the empty cell moves it successfully
-
-    [ ] Game can be restarted without reloading the page
-
-    [ ] Game timer (mm:ss) and move counter are displayed correctly
-
-    [ ] Tiles support mouse drag-and-drop
-
-    [ ] Game state is saved and restored properly via localStorage
-
-### Advanced Level
-
-    [ ] User can select grid dimensions from 3x3 to 8x8
-
-    [ ] Move sound effects implemented with a mute/unmute toggle
-
-    [ ] Top 10 scores persist in localStorage and can be viewed via UI
-
-    [ ] Tile movement animations are operational
-
-    [ ] Win modal displays completion time and move count
-
-### Complex Level
-
-    [ ] Images replace numbers, fetched dynamically via fetch from a public API
-
-    [ ] Loading indicators and error handling with retry mechanisms are present
-
-    [ ] Thumbnails loaded asynchronously with Promise.all; request cancellation via AbortController implemented
-
-    [ ] Animated auto-solve functionality works correctly
-
-    [ ] ESLint integrated and passing
-
-    [ ] Webpack build configured and functional
-
-    [ ] Code is modular (ES6+ architecture)
-
-### Code Quality
-
-    [ ] Zero execution/runtime errors in the console (excluding 404 for favicon.ico)
-
-    [ ] Zero ESLint errors
+## Готово, когда
+- С широкого экрана, планшета и телефона партию можно довести до поздравления.
+- Размер, звук, рекорды, картинка и автосбор работают так, как описано выше.
+- Обновление страницы не уничтожает текущую партию.
+- На доске не осталось открытых задач этого продукта.
