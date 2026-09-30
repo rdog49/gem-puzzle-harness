@@ -1,71 +1,65 @@
 ---
 name: board-task
-description: Читает одну задачу доски GitHub, пишет план и держит человека только на согласовании и финальном pull request. Use when the user mentions a GitHub issue, board, backlog, канбан, or asks to look at a task.
+description: Reads one GitHub board task, writes a plan, and waits for approval before any code. Use when the user mentions a GitHub issue, board, backlog, kanban, or asks to look at a task.
 ---
 
-# Задача с доски
+# Board task
 
-Источник работы — issue в `rdog49/gem-puzzle-harness`. Колонки доски — метки:
+Work comes from an issue in `rdog49/gem-puzzle-harness`. Board columns are labels:
 
-- `board:backlog` — ещё не брали
-- `board:in-progress` — план согласован, идёт работа
-- `board:in-review` — проверка прошла, ждёт pull request человека
-- `board:done` — человек влил pull request
+- `board:backlog` — not started
+- `board:in-progress` — the plan is approved and work is under way
+- `board:in-review` — the check passed and the pull request is open
+- `board:done` — the person merged the pull request
 
-## Прочитать задачу
+The evaluator moves cards between backlog, in progress, and in review. The person moves a card to `board:done` and closes the issue after merging.
+
+## Read the task
 
 ```bash
 gh issue view NUMBER
 gh issue list --label board:backlog --limit 30
 ```
 
-Бери одну задачу. Если человек не назвал номер, покажи бэклог и жди номер.
+Take one task. If the person did not name a number, show the backlog and wait for a number.
 
-## Ответ до кода
+## Reply before code
 
-Пиши по этой форме и останавливайся:
+Use this shape and stop:
 
 ```markdown
-## Задача
-#NUMBER — название
+## Task
+#NUMBER — title
 
-## Описание
-Что получит игрок, своими словами.
+## Description
+What the player gets, in your own words.
 
-## Как сделаю
-1. Шаги только этого объёма.
-2. Какие скиллы применяю.
-3. Какие файлы появятся или изменятся.
+## How I will do it
+1. Steps for this scope only.
+2. Which skills apply.
+3. Which files will be added or changed.
 
-## Проверка
-- Критерии из issue, которые закроет эта работа.
+## Check
+- Issue criteria this work will satisfy.
 
-## Ветка
-feat/gp-XX-slug → pull request в ветку процесса.
+## Branch
+feat/gp-XX-slug → pull request into the process branch.
 
-Жду согласие или правки. До ответа файлы не меняю.
+Waiting for approval or edits. I will not change files until you reply.
 ```
 
-Согласие: «делай», «согласен», «ок», «поехали» и прямые синонимы. Правка без такого слова обновляет план, работа не стартует.
+Approval is "go", "approved", "ok", "do it", or "ship it", and direct synonyms. An edit without one of those words updates the plan and does not start the work.
 
-## После согласия
+## After approval
 
-1. Сними `board:backlog`, поставь `board:in-progress`.
-2. В этом же чате выполни coder, затем evaluator.
-3. После успешной проверки сними `board:in-progress`, поставь `board:in-review`.
-4. Напиши человеку базу, имя ветки, заголовок pull request и строку `Closes #NUMBER`. Дальше действует человек.
+Stay in this chat. The evaluator moves the card to `board:in-progress`, the coder implements, and the evaluator checks. On a pass, the evaluator moves the card to `board:in-review` and opens the pull request.
 
-```bash
-gh issue edit NUMBER --remove-label board:backlog --add-label board:in-progress
-gh issue edit NUMBER --remove-label board:in-progress --add-label board:in-review
-```
+Do not move cards from this role. Do not open the pull request from this role.
 
-Не ставь `board:done` и не закрывай issue. Это делает влитие pull request.
+## Limits
 
-## Границы
-
-- База ветки — `feat/single-chat-board`, пока её не влили в `main`. Потом база — `main`.
-- Не трогай `feat/cursor_work_2`, `feat/cursor_work`, `feat/Task.md_basic_project_structure`.
-- Не переноси коммиты образца и не подменяй задачу копией готовой игры.
-- Если предыдущая по порядку задача ещё открыта, напиши это в плане. Решение продолжать остаётся за человеком.
-- `TASK.md` не пополняй техническими требованиями.
+- The branch base is `feat/single-chat-board` until that branch is merged into `main`. After that, the base is `main`.
+- Do not touch `feat/cursor_work_2`, `feat/cursor_work`, or `feat/Task.md_basic_project_structure`.
+- Do not cherry-pick the reference history or replace the task with a copy of the finished game.
+- If an earlier task in order is still open, say so in the plan. The person decides whether to continue.
+- Do not add technical requirements to `TASK.md`.

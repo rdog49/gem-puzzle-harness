@@ -1,40 +1,40 @@
 ---
 name: frontend-stack
-description: Задаёт стек Gem Puzzle — Webpack, ESLint airbnb-base, ES-модули, пустой body и нативный fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
+description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, ES modules, an empty body, and native fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
 ---
 
-# Стек
+# Stack
 
-Игра работает в актуальном Google Chrome.
+The game runs in the latest Google Chrome.
 
-## Язык и границы
+## Language and boundaries
 
-- JavaScript ES6+, HTML5, CSS3. Свои файлы — ES-модули с `import` / `export`.
-- Разрешены Bootstrap, другие CSS-фреймворки, препроцессоры, TypeScript и Canvas. Они не обязательны.
-- Запрещены jQuery, React, Vue, Angular и Axios. Не добавляй обёртки над HTTP.
-- Сеть только через `fetch`, Promises и `async/await`.
+- JavaScript ES6+, HTML5, and CSS3. Project files are ES modules with `import` / `export`.
+- Bootstrap, other CSS frameworks, preprocessors, TypeScript, and Canvas are allowed. They are not required.
+- jQuery, React, Vue, Angular, and Axios are forbidden. Do not add an HTTP wrapper.
+- Network access uses only `fetch`, Promises, and `async/await`.
 
-## Страница
+## Page
 
-- `src/index.html`: пустой `<body>`. В шаблоне нет разметки игры.
-- Вся разметка создаётся из JavaScript.
-- Точка входа `src/index.js` монтирует приложение в `document.body`.
-- Логика живёт в `src/modules/`. Стили — в `src/styles/main.css`.
+- `src/index.html` has an empty `<body>`. The template contains no game markup.
+- JavaScript creates all markup.
+- The entry `src/index.js` mounts the application on `document.body`.
+- Logic lives in `src/modules/`. Styles live in `src/styles/main.css`.
 
 ## Webpack
 
-- Зависимости разработки: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`.
-- Скрипты: `start` — `webpack serve --mode development`, порт 8080; `build` — `webpack --mode production`; `lint` — `eslint src`.
-- В production `publicPath` равен `./`, чтобы страницу можно было открыть как статику, в том числе на GitHub Pages.
-- `npm run build` завершается с кодом 0 и кладёт в `dist/` `index.html` и JS-бандл. Ссылки на скрипт и стили относительные. Отдельный сервер приложению не нужен.
-- `dist/` и `node_modules/` не коммитятся.
+- Dev dependencies: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`.
+- Scripts: `start` runs `webpack serve --mode development` on port 8080; `build` runs `webpack --mode production`; `lint` runs `eslint src`.
+- In production `publicPath` is `./`, so the page can be opened as static files, including on GitHub Pages.
+- `npm run build` exits 0 and writes `index.html` and the JS bundle into `dist/`. Script and style links are relative. The app needs no separate server.
+- Do not commit `dist/` or `node_modules/`.
 
 ## ESLint
 
-- ESLint 8, конфиг `eslint-config-airbnb-base`, плагин `eslint-plugin-import`.
-- `npm run lint` по `src` завершается с кодом 0 и без ошибок.
-- Импорт CSS линтером не считается ошибкой неразрешённого модуля.
+- ESLint 8, config `eslint-config-airbnb-base`, plugin `eslint-plugin-import`.
+- `npm run lint` on `src` exits 0 with no errors.
+- A CSS import is not an unresolved-module error.
 
-## Консоль
+## Console
 
-При открытии страницы и при сценарии текущей задачи в консоли нет ошибок выполнения. Единственный допустимый шум — 404 на `favicon.ico`.
+Opening the page and playing the current task's scenario produces no runtime console errors. The only allowed noise is a 404 for `favicon.ico`.

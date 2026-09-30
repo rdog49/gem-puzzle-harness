@@ -1,38 +1,38 @@
 ---
 name: picture-tiles
-description: Картинки фишек Gem Puzzle через fetch, AbortController и Promise.all. Use when implementing image tiles, thumbnails, loading, retry, or cancelling an image request.
+description: Gem Puzzle picture tiles through fetch, AbortController, and Promise.all. Use when implementing image tiles, thumbnails, loading, retry, or cancelling an image request.
 ---
 
-# Картинки на фишках
+# Picture tiles
 
-Файлов картинок в репозитории нет. Список и сами изображения приходят по сети.
+The repository contains no picture files. The list and the images arrive over the network.
 
-## Адреса
+## Addresses
 
-- Список: `https://picsum.photos/v2/list?page=1&limit=12`
-- Превью: `https://picsum.photos/id/{id}/180/180`
-- Поле: `https://picsum.photos/id/{id}/800/800`
+- List: `https://picsum.photos/v2/list?page=1&limit=12`
+- Thumbnail: `https://picsum.photos/id/{id}/180/180`
+- Board: `https://picsum.photos/id/{id}/800/800`
 
-Оба запроса — `fetch` с `async/await`. Ответ поля читай как blob и показывай через object URL. Не режь картинку только обработчиком `onload` у тега `img`.
+Both requests use `fetch` with `async/await`. Read the board response as a blob and show it through an object URL. Do not slice the picture only with an `img` `onload` handler.
 
-## Поле
+## Board
 
-Занятая клетка показывает свой фрагмент выбранной картинки. Пустая клетка остаётся пустой. Ходы, счётчик и победа те же, что у цифрового поля.
+An occupied cell shows its fragment of the selected picture. The empty cell stays empty. Moves, the counter, and the win behave as they do for numbered tiles.
 
-Идентификаторы панели: `#image-panel`, `#image-loader`, `#image-error`, `#retry-image`, `#thumbs`. Тексты — из `TASK.md`.
+Panel identifiers: `#image-panel`, `#image-loader`, `#image-error`, `#retry-image`, `#thumbs`. Copy the texts from `TASK.md`.
 
-## Загрузка и ошибка
+## Loading and error
 
-Пока запрос списка или файла не завершён, `#image-loader` виден. После завершения он скрыт.
+While the list request or the file request is unfinished, `#image-loader` is visible. After it settles, the loader is hidden.
 
-При ошибке видны `#image-error` и `#retry-image`, фишки возвращаются к номерам. Retry повторяет тот запрос, который упал.
+On failure, `#image-error` and `#retry-image` are visible and the tiles return to numbers. Retry repeats the request that failed.
 
-## Отмена
+## Cancellation
 
-У запроса списка и у запроса файла свой `AbortController`. Новый выбор отменяет предыдущий незавершённый запрос через `abort()`. На поле остаётся последняя выбранная картинка, а не та, чей ответ пришёл позже отменённого.
+The list request and the file request each have their own `AbortController`. A new choice aborts the previous unfinished request with `abort()`. The board shows the latest selected picture, not a response that arrives after a cancelled one.
 
-`AbortError` не показывай как ошибку загрузки.
+Do not show `AbortError` as a load error.
 
-## Превью
+## Previews
 
-Возьми не меньше трёх элементов списка и загрузи их одним `Promise.all`. Превью отрисуй в `#thumbs`. Клик по превью ставит эту картинку на поле и при необходимости отменяет предыдущую загрузку файла.
+Take at least three list items and load them with one `Promise.all`. Draw the previews in `#thumbs`. A click on a preview puts that picture on the board and aborts a previous file load when one is still in flight.

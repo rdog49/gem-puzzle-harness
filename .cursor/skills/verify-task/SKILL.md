@@ -1,30 +1,52 @@
 ---
 name: verify-task
-description: Проверяет одну задачу Gem Puzzle сборкой, линтером и сценарием в браузере. Use when evaluating a finished board task before the pull request.
+description: Checks one Gem Puzzle task with the build, the linter, and a browser pass, then moves the card and opens the pull request. Use when evaluating a finished board task.
 ---
 
-# Проверка одной задачи
+# Check one task
 
-Объём — критерии открытого issue и согласованный план. Не требуй поведение из следующих задач и не отмечай его проваленным.
+The scope is the open issue's criteria and the approved plan. Do not require behavior from later tasks, and do not fail this task for lacking it.
 
-## Всегда
+## Always
 
-- `npm run lint` завершается с кодом 0, если в задаче есть исходники в `src`.
-- `npm run build` завершается с кодом 0, если задача затрагивает сборку или игровую логику.
-- В `package.json` и `src` нет jQuery, React, Vue, Angular и Axios.
-- Сетевой код использует `fetch` и `async/await`.
-- В консоли сценария нет ошибок выполнения. 404 на `favicon.ico` допустим.
+- `npm run lint` exits 0 when the task has sources under `src`.
+- `npm run build` exits 0 when the task touches the build or game logic.
+- `package.json` and `src` do not depend on jQuery, React, Vue, Angular, or Axios.
+- Network code uses `fetch` and `async/await`.
+- The scenario console has no runtime errors. A 404 for `favicon.ico` is allowed.
 
-## Экран
+## Screen
 
-Если задача видна игроку, открой `http://localhost:8080` и пройди критерии кликами, перетаскиванием и клавиатурой. Снимок экрана сам по себе не заменяет проход сценария.
+When the task is visible to the player, open `http://localhost:8080` and walk the criteria with clicks, drags, and the keyboard. A screenshot does not replace that pass.
 
-Смотри размеры, которые названы в задаче: ширина от 1280px, около 768px, 375px.
+Use the widths named in the task: at least 1280px, about 768px, and 375px.
 
-Для продолжения партии проверь ключ `gem_puzzle_state`. Для рекордов — `gem_puzzle_scores` и не больше 10 строк. Для картинок смотри сеть: список Picsum, отмену через `AbortController`, параллельную загрузку не меньше трёх превью через `Promise.all`.
+For resume, check the `gem_puzzle_state` key. For scores, check `gem_puzzle_scores` and a list of at most 10 rows. For pictures, watch the network: the Picsum list, cancellation through `AbortController`, and at least three previews loaded together with `Promise.all`.
 
-## Вердикт
+## Verdict
 
-По каждому критерию задачи напиши «прошло» или «не прошло» и что именно увидел. При провале верни coder список правок внутри этой задачи.
+For each criterion of this task, write "pass" or "fail" and what you saw. On a failure, return the coder a fix list inside this task and leave the label `board:in-progress`.
 
-Не меняй `TASK.md`, не редактируй чужие issue и не ставь метку `board:done`.
+Do not edit `TASK.md`. Do not edit other issues.
+
+## Board and pull request
+
+Only this role moves the card, and only with these commands:
+
+```bash
+gh issue edit NUMBER --remove-label board:backlog --add-label board:in-progress
+gh issue edit NUMBER --remove-label board:in-progress --add-label board:in-review
+```
+
+Move to `board:in-progress` when the approved task starts. Move to `board:in-review` only after every criterion passes.
+
+Then push the task branch and open the pull request against the process branch (`feat/single-chat-board` until it is merged, then `main`):
+
+```bash
+git push -u origin HEAD
+gh pr create --base BASE --title "GP-XX short result" --body "Summary of this task."
+```
+
+The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. The person closes the issue.
+
+Do not set `board:done`, do not close the issue, and do not merge. Tell the person the pull request URL. Their remaining steps are to review it, merge it, move the card to `board:done`, and close the issue.

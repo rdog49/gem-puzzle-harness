@@ -1,58 +1,60 @@
 # Gem Puzzle
 
-## Продукт
-Браузерная игра «пятнашки»: игрок собирает поле, сдвигая фишки на пустую клетку. В неё играют с компьютера, планшета и телефона в актуальном Google Chrome. Начатую партию можно продолжить после обновления страницы. Демо открывается как обычная страница.
+## Product
+A browser sliding puzzle. The player solves the board by moving tiles into the empty cell. It is played on a desktop, a tablet, and a phone in the latest Google Chrome. A game in progress continues after a page reload. The demo opens as an ordinary page.
 
-## Для кого
-Человек открыл страницу и хочет дойти до победы, сменить размер поля, поставить на фишки картинку вместо цифр и посмотреть свои лучшие результаты.
+## Who it is for
+Someone opens the page and wants to reach a win, change the board size, put a picture on the tiles instead of numbers, and see their best results.
 
-## Как это выглядит
-- Тёмный спокойный экран, тёплое выделение, светлые фишки. Крупное название Gem Puzzle. Поле — главный объект.
-- На широком экране действия и поле стоят рядом. Горизонтальной прокрутки нет.
-- На планшете поле и действия остаются досягаемыми, ничего не обрезается.
-- На телефоне поле помещается в ширину экрана. Действия спрятаны за кнопкой меню и открываются по нажатию.
-- Пустая клетка визуально пустая. Сдвиг фишки виден как скольжение, а не как мгновенный прыжок.
-- Победа не теряется в интерфейсе: поверх поля появляется поздравление.
+## How it looks
+- A calm dark screen, a warm accent, and light tiles. The title Gem Puzzle is large. The board is the main object.
+- On a wide screen the actions and the board sit side by side. There is no horizontal scrolling.
+- On a tablet the board and the actions stay reachable and nothing is clipped.
+- On a phone the board fits the screen width. Actions are hidden behind a menu button and open when it is pressed.
+- The empty cell looks empty. A move is a slide, not an instant jump.
+- A win is obvious: a congratulation appears over the board.
 
-## Подписи
-- Меню: Menu
-- Размер: Size, варианты от 3x3 до 8x8
-- Новая партия: New game
-- Автосбор: Auto-solve
-- Звук включён: Sound on. Звук выключен: Sound off
-- Рекорды: Scores. Заголовок списка: Top 10
-- Картинки: Images
-- Время: Time. Ходы: Moves
-- Загрузка картинки: Loading images…
-- Ошибка картинки: Could not load the image. Number tiles are shown instead.
-- Повтор: Retry
-- Победа: Hooray! You solved the puzzle in #:## and N moves
+## Labels
+- Menu: Menu
+- Size: Size, options from 3x3 to 8x8
+- New game: New game
+- Auto-solve: Auto-solve
+- Sound on: Sound on. Sound off: Sound off
+- Scores: Scores. List heading: Top 10
+- Pictures: Images
+- Time: Time. Moves: Moves
+- Image loading: Loading images…
+- Image error: Could not load the image. Number tiles are shown instead.
+- Retry: Retry
+- Win: Hooray! You solved the puzzle in #:## and N moves
 
-## Правила партии
-- По умолчанию поле 4×4: пятнадцать фишек с номерами и одна пустая клетка.
-- Игрок выбирает размер от 3×3 до 8×8. Смена размера начинает новую партию.
-- Новая партия перемешана случайно, и её можно собрать. Уже собранное поле на старте не выдаётся.
-- Клик по фишке рядом с пустой клеткой сдвигает её на пустое место. Клик по далёкой фишке ничего не меняет.
-- Фишку можно перетащить мышью на пустую клетку, если они соседи. Незаконный сброс поле не меняет.
-- Новую партию начинают без перезагрузки страницы: кнопкой New game и клавишей N.
-- На экране есть время партии в виде мм:сс и число удачных ходов. Оба сбрасываются с новой партией. Время растёт, пока партия идёт.
-- Обновление страницы посреди партии оставляет ту же раскладку, то же число ходов, а время продолжается, а не начинается с нуля.
-- Когда поле собрано, текст победы показывает то же время и то же число ходов, что и на экране.
-- У удачного хода есть звук. Его можно выключить и снова включить.
-- Кнопка Scores открывает не больше десяти лучших результатов. Список переживает закрытие страницы. Лучшие сверху.
-- Вместо цифр на фишки можно поставить фрагменты картинки. Картинка не вложена в игру: игрок выбирает её из набора, который игра приносит снаружи. Пустая клетка остаётся пустой, правила ходов те же.
-- Пока картинка в пути, виден текст загрузки. Если запрос не удался, видны текст ошибки, кнопка Retry и поле с цифрами.
-- Другую картинку выбирают без перезагрузки страницы. На экране сразу несколько превью, не меньше трёх. Выбор превью ставит эту картинку на поле.
-- Auto-solve сам доводит поле до победы. Ходы видны один за другим. После последнего появляется то же поздравление.
+## Rules of a game
+- The default board is 4×4: fifteen numbered tiles and one empty cell.
+- The player chooses a size from 3×3 to 8×8. Changing the size starts a new game.
+- A new game is shuffled at random and can be solved. A solved board is not dealt at the start.
+- A click on a tile next to the empty cell slides that tile into the gap. A click on a distant tile changes nothing.
+- A tile can be dragged onto the empty cell when the two cells share an edge. An illegal drop does not change the board.
+- A new game starts without reloading the page: the New game button and the N key.
+- The screen shows the elapsed time as mm:ss and the number of successful moves. Both reset when a new game starts. Time increases while the game is in progress.
+- Reloading the page in the middle of a game keeps the same layout, the same move count, and the elapsed time. Time does not start over at zero.
+- When the board is solved, the win text shows the same time and the same move count as the screen.
+- A successful move plays a sound. The sound can be turned off and on again.
+- The Scores button opens at most ten best results. The list survives closing the page. The best results are on top.
+- Tiles can show fragments of a picture instead of numbers. The picture is not packaged with the game: the player picks it from a set the game fetches. The empty cell stays empty, and the move rules stay the same.
+- While a picture is on the way, a loading message is visible. If the request fails, the error text, the Retry button, and numbered tiles are shown.
+- Another picture can be chosen without reloading the page. At least three previews are on screen at once. Choosing a preview puts that picture on the board.
+- Auto-solve finishes the board by itself. The moves are visible one after another. After the last move the same congratulation appears.
 
-## Как ведётся работа
-- Весь продукт разрезан на задачи доски. Закрытые все вместе, они равны этому описанию: без пропущенного поведения и без отдельного продукта сверх него.
-- Человек в одной задаче делает только это: просит посмотреть задачу на доске, при необходимости правит предложенный способ, в конце открывает и вливает pull request.
-- Описание, план, реализация и проверка проходят в одном чате.
-- Одна задача — одна ветка и один pull request.
+## How work is run
+- The whole product is split into board tasks. Closing all of them equals this description: no missing behavior and no extra product beyond it.
+- The person asks to look at one board task and may edit the proposed way of doing it.
+- The description, the plan, the implementation, and the check happen in one chat.
+- One task is one branch and one pull request.
+- The evaluator moves the issue card across the board and opens the pull request.
+- After the task is done, the person only reviews the pull request, merges it, moves the card to Done, and closes the issue.
 
-## Готово, когда
-- С широкого экрана, планшета и телефона партию можно довести до поздравления.
-- Размер, звук, рекорды, картинка и автосбор работают так, как описано выше.
-- Обновление страницы не уничтожает текущую партию.
-- На доске не осталось открытых задач этого продукта.
+## Done when
+- A game can be played through to the congratulation on a wide screen, a tablet, and a phone.
+- Size, sound, scores, pictures, and auto-solve behave as described above.
+- Reloading the page does not wipe the current game.
+- The board has no open tasks for this product.

@@ -1,22 +1,22 @@
 ---
 name: initializer
-description: Читает одну задачу с доски GitHub, пишет описание и план и ждёт человека. Use when the user asks to look at a GitHub issue, board task, backlog item, or канбан card.
+description: Reads one GitHub board task, writes a description and a plan, and waits for the person. Use when the user asks to look at a GitHub issue, board task, backlog item, or kanban card.
 model: inherit
 readonly: false
 is_background: false
 ---
 
-Ты начинаешь одну задачу в текущем чате. Ты не пишешь код и не проверяешь сборку, пока человек не согласился с планом.
+You start one task in the current chat. You do not write code and you do not run the build until the person has agreed to the plan.
 
-Прочитай скилл `board-task` и следуй ему.
+Read the `board-task` skill and follow it.
 
-Сделай так:
+Do this:
 
-1. Возьми номер или ссылку задачи из сообщения человека. Если номера нет, покажи открытый бэклог и спроси, какую карточку открыть. Это единственный уточняющий вопрос.
-2. Прочитай задачу через `gh`. Сверь её с продуктовым описанием в `TASK.md`. Технические ограничения прочитай в скиллах coder и evaluator, но в план перенеси только те, без которых эту задачу нельзя принять.
-3. Ответь в этом чате описанием задачи своими словами и планом выполнения. Форма ответа — в скилле `board-task`.
-4. Остановись. Не создавай ветку, не меняй файлы и не двигай карточку, пока человек не согласится или не пришлёт правки.
-5. Правки человека заменяют соответствующие пункты плана. Если в том же сообщении есть согласие выполнять, начинай. Если правок нет согласия, покажи обновлённый план и снова жди.
-6. После согласия в этом же чате перейди к роли coder, затем к роли evaluator. Не проси человека открыть другой чат. Субагента можно вызвать только отсюда, и его итог должен вернуться сюда до следующего шага. Фоновый субагент не используется.
+1. Take the task number or link from the person's message. If there is no number, show the open backlog and ask which card to open. That is the only clarifying question.
+2. Read the task with `gh`. Compare it with the product description in `TASK.md`. Read the coder and evaluator skills for technical constraints, and put into the plan only the constraints this task needs in order to be accepted.
+3. Reply in this chat with a description in your own words and an execution plan. The reply shape is in the `board-task` skill.
+4. Stop. Do not create a branch, change files, or move the card until the person agrees or sends edits.
+5. The person's edits replace the matching parts of the plan. If the same message also says to proceed, start. If the edits do not include agreement, show the updated plan and wait again.
+6. After agreement, stay in this chat. The evaluator moves the card to `board:in-progress`, then the coder role runs, then the evaluator role runs. Do not ask the person to open another chat. A subagent may be called only from here, and its result must return here before the next step. Do not use a background subagent.
 
-Не делай вторую задачу. Не вливай чужие ветки. Pull request не открывай.
+Do not take a second task. Do not merge other branches. Do not move board cards and do not open the pull request. Those belong to the evaluator.

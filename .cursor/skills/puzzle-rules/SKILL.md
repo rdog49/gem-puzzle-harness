@@ -1,42 +1,42 @@
 ---
 name: puzzle-rules
-description: Правила поля Gem Puzzle — решаемое перемешивание, ходы, размеры, скольжение и автосбор. Use when implementing the board, shuffle, clicks, drag-and-drop, grid size, animation, or auto-solve.
+description: Gem Puzzle board rules — solvable shuffle, moves, sizes, sliding, and auto-solve. Use when implementing the board, shuffle, clicks, drag-and-drop, grid size, animation, or auto-solve.
 ---
 
-# Правила поля
+# Board rules
 
-Размер `N` от 3 до 8. Клеток `N * N`. Фишки — числа `1 … N*N-1`. Пустая клетка — `0`. По умолчанию `N = 4`.
+Size `N` is from 3 to 8. There are `N * N` cells. Tiles are the numbers `1 … N*N-1`. The empty cell is `0`. The default `N` is 4.
 
-Собранное поле: числа по порядку слева направо, сверху вниз, ноль в последней клетке.
+A solved board reads left to right, top to bottom, with zero in the last cell.
 
-## Соседство и ход
+## Neighbors and moves
 
-Две клетки — соседи, если расстояние по строке и столбцу равно 1. Ход меняет местами фишку и ноль только для соседей.
+Two cells are neighbors when the row distance plus the column distance is 1. A move swaps a tile with zero only when they are neighbors.
 
-- Клик по соседней фишке делает ход и увеличивает счётчик на 1.
-- Клик по несоседней фишке не меняет поле и счётчик.
-- Перетаскивание соседней фишки на пустую клетку делает тот же ход.
-- Сброс несоседней фишки на пустую клетку ничего не меняет.
+- A click on a neighboring tile makes the move and increases the move count by 1.
+- A click on a non-neighboring tile changes neither the board nor the count.
+- Dragging a neighboring tile onto the empty cell makes the same move.
+- Dropping a non-neighboring tile on the empty cell changes nothing.
 
-## Решаемость
+## Solvability
 
-Перестановка решаема, если `(inversions + taxicab) % 2 === 0`.
+A permutation is solvable when `(inversions + taxicab) % 2 === 0`.
 
-- Ноль в подсчёте инверсий заменяется на `N * N`, чтобы пустая клетка была больше любой фишки.
-- `taxicab` — сумма модулей разницы строки и столбца нуля с нижней правой клеткой.
+- While counting inversions, replace zero with `N * N`, so the empty cell is greater than every tile.
+- `taxicab` is the sum of the absolute row and column differences between the empty cell and the bottom-right cell.
 
-Новая партия строится из собранного поля серией случайных легальных ходов нуля (`N * N * 12` шагов). Если поле случайно осталось собранным, сделай ещё один легальный ход. Не выдавай случайную перестановку с последующей отбраковкой как единственный способ.
+A new game is built from the solved board by a series of random legal blank moves (`N * N * 12` steps). If the board is still solved, make one more legal move. Do not deal a random permutation and then reject unsolvable ones as the only method.
 
-Две новые партии могут отличаться. Стартовая партия не собрана.
+Two new games may differ. The starting game is not solved.
 
-## Размер
+## Size
 
-В выборе есть 3x3, 4x4, 5x5, 6x6, 7x7, 8x8. Смена размера начинает новую решаемую партию этого размера. У 3x3 девять клеток и одна пустая, у 8x8 — 64 клетки и одна пустая.
+The selector offers 3x3, 4x4, 5x5, 6x6, 7x7, and 8x8. Changing the size starts a new solvable game of that size. 3x3 has nine cells and one empty cell. 8x8 has 64 cells and one empty cell.
 
-## Скольжение
+## Sliding
 
-Удачный ход по клику и удачный drop длятся около 200 мс: фишка визуально едет в пустую клетку. Мгновенная смена координат без перехода не подходит.
+A successful click and a successful drop last about 200 ms: the tile visibly travels into the empty cell. An instant coordinate change with no transition does not qualify.
 
-## Автосбор
+## Auto-solve
 
-Кнопка Auto-solve проигрывает последовательность только легальных ходов до собранного поля. Каждый ход виден. Поле не прыгает в собранное состояние одним присваиванием. Когда последовательность кончилась, показывается обычное поздравление с итоговыми временем и числом ходов.
+The Auto-solve button plays a sequence of legal moves only, until the board is solved. Each move is visible. The board does not jump to the solved state in one assignment. When the sequence ends, the normal win message shows the resulting time and move count.
