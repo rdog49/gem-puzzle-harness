@@ -6,21 +6,21 @@ The game is built from GitHub board tasks. Every task together equals the finish
 
 ## One chat
 
-The person names a board task in the current chat. The agent reads it, proposes a description and a plan, and waits. After approval or edits, the initializer, coder, and evaluator roles work in that same chat. The evaluator moves the card and opens the pull request.
+The person names a board task in the current chat. The agent reads it, proposes a description and a plan, and waits. After approval or edits, the initializer, coder, and evaluator roles work in that same chat. They move the card on the issue and on the project board, and the evaluator opens the pull request.
 
 Another chat per role is not needed.
 
-After the task is done, the person only reviews the pull request, merges it, moves the card to Done, and closes the issue.
+After the task is done, the person only reviews the pull request, merges it, moves the card to Done on the issue and on the project, and closes the issue.
 
 ## Roles
 
-- `.cursor/agents/initializer.md` — reads the task and agrees the plan
+- `.cursor/agents/initializer.md` — reads the task, sets project Status `Todo`, and agrees the plan
 - `.cursor/agents/coder.md` — builds the agreed scope
-- `.cursor/agents/evaluator.md` — checks that scope, moves the card, and opens the pull request
+- `.cursor/agents/evaluator.md` — checks that scope, moves the card through `In progress` and `In review`, and opens the pull request
 
 ## Board
 
-Tasks are labeled `board:backlog`, `board:in-progress`, `board:in-review`, and `board:done`.
+Tasks are labeled `board:backlog`, `board:in-progress`, `board:in-review`, and `board:done`. The user project `harness for gem-puzzle` keeps the same card in Status: No Status, then `Todo`, `In progress`, and `In review`. Agents stop at `In review`. The person sets `Done` after review and merge. `gh` needs the `project` scope (`gh auth refresh -s project`).
 
 ```bash
 gh issue list --label board:backlog --limit 30

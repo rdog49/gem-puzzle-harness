@@ -25,20 +25,44 @@ For resume, check the `gem_puzzle_state` key. For scores, check `gem_puzzle_scor
 
 ## Verdict
 
-For each criterion of this task, write "pass" or "fail" and what you saw. On a failure, return the coder a fix list inside this task and leave the label `board:in-progress`.
+For each criterion of this task, write "pass" or "fail" and what you saw. On a failure, return the coder a fix list inside this task and leave the label `board:in-progress` and the project Status `In progress`. Do not move that card to `In review` or `Done`.
 
 Do not edit `TASK.md`. Do not edit other issues.
 
 ## Board and pull request
 
-Only this role moves the card, and only with these commands:
+This role moves the issue label and the Status field on the user project `harness for gem-puzzle` (owner `rdog49`). Do not use any other project. The initializer already sets Status `Todo` when the task is taken. This role does not set `Todo`, and it does not set `Done`.
+
+`gh` needs the `project` scope. If a project command reports a missing scope, run `gh auth refresh -s project` and retry the same move.
+
+```bash
+gh project list --owner rdog49 --limit 30
+```
+
+`PROJECT` is the number whose title is `harness for gem-puzzle`. `ISSUE_URL` is `https://github.com/rdog49/gem-puzzle-harness/issues/NUMBER`.
+
+Issue label, same moment as the project Status:
 
 ```bash
 gh issue edit NUMBER --remove-label board:backlog --add-label board:in-progress
 gh issue edit NUMBER --remove-label board:in-progress --add-label board:in-review
 ```
 
-Move to `board:in-progress` when the approved task starts. Move to `board:in-review` only after every criterion passes.
+Add the issue when it is not already on the project. If add reports that the item already exists, continue and set Status.
+
+```bash
+gh project item-add PROJECT --owner rdog49 --url ISSUE_URL
+gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "In progress"
+gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "In review"
+```
+
+When the approved task starts, set `board:in-progress` and Status `In progress` (work is under way). When every criterion passes, set `board:in-review` and Status `In review` (the pull request is waiting for the person). On a failure, leave both on in progress.
+
+If a Status value is rejected, list the options and use the name of that column:
+
+```bash
+gh project field-list PROJECT --owner rdog49
+```
 
 Then push the task branch and open the pull request against the process branch (`feat/single-chat-board` until it is merged, then `main`):
 
@@ -49,4 +73,4 @@ gh pr create --base BASE --title "GP-XX short result" --body "Summary of this ta
 
 The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. The person closes the issue.
 
-Do not set `board:done`, do not close the issue, and do not merge. Tell the person the pull request URL. Their remaining steps are to review it, merge it, move the card to `board:done`, and close the issue.
+Do not set `board:done` or project Status `Done`. Do not close the issue, and do not merge. Tell the person the pull request URL. Their remaining steps are to review it, merge it, move the card to `board:done` and Status `Done`, and close the issue.
