@@ -10,17 +10,17 @@ The person names a board task in the current chat. The agent reads it, proposes 
 
 Another chat per role is not needed.
 
-After the task is done, the person only reviews the pull request, merges it, moves the card to Done on the issue and on the project, and closes the issue.
+After the task is done, the person only reviews the pull request and merges it. The evaluator then moves the card to Done on the issue and on the project, closes the issue, and records the task in `docs/progress.md`.
 
 ## Roles
 
 - `.cursor/agents/initializer.md` — reads the task, sets project Status `Todo`, and agrees the plan
 - `.cursor/agents/coder.md` — builds the agreed scope
-- `.cursor/agents/evaluator.md` — checks that scope, moves the card through `In progress` and `In review`, and opens the pull request
+- `.cursor/agents/evaluator.md` — checks that scope, moves the card through `In progress` and `In review`, opens the pull request, and after the merge sets `Done`, closes the issue, and updates `docs/progress.md`
 
 ## Board
 
-Tasks are labeled `board:backlog`, `board:in-progress`, `board:in-review`, and `board:done`. The user project `harness for gem-puzzle` keeps the same card in Status: No Status, then `Todo`, `In progress`, and `In review`. Agents stop at `In review`. The person sets `Done` after review and merge. `gh` needs the `project` scope (`gh auth refresh -s project`).
+Tasks are labeled `board:backlog`, `board:in-progress`, `board:in-review`, and `board:done`. The user project `harness for gem-puzzle` keeps the same card in Status: No Status, then `Todo`, `In progress`, `In review`, and `Done`. The person merges the pull request. The evaluator sets `Done` after that merge. A new task chat checks out `main` and pulls when the latest merged GP is not already there. `gh` needs the `project` scope (`gh auth refresh -s project`).
 
 ```bash
 gh issue list --label board:backlog --limit 30

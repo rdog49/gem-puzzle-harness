@@ -19,7 +19,7 @@ Only the rules named in the approved plan belong to this task.
 
 Then:
 
-1. Branch from the branch that already contains this process. Until `feat/single-chat-board` is merged into `main`, that branch is the base. After the merge, the base is `main`. Branch name: `feat/gp-XX-short-slug`.
+1. Branch from `main`. Before the branch, follow "Start from main" in the `board-task` skill: local `main` must already contain the latest merged GP pull request. If it does not, pull `main` first. Branch name: `feat/gp-XX-short-slug`. The pull request targets `main`.
 2. Do not check out `feat/cursor_work_2`, `feat/cursor_work`, or `feat/Task.md_basic_project_structure`. Do not cherry-pick their commits or copy the finished game from them. You may read a behavior detail with `git show` only when the plan asks for it.
 3. Build the task scope. Take labels and behavior from `TASK.md`. Take the implementation method from the skills.
 4. Check the affected behavior in the browser when the task is visible on screen. For the shell, the build and the linter are enough.

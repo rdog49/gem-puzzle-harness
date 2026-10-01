@@ -31,7 +31,7 @@ Do not edit `TASK.md`. Do not edit other issues.
 
 ## Board and pull request
 
-This role moves the issue label and the Status field on the user project `harness for gem-puzzle` (owner `rdog49`). Do not use any other project. The initializer already sets Status `Todo` when the task is taken. This role does not set `Todo`, and it does not set `Done`.
+This role moves the issue label and the Status field on the user project `harness for gem-puzzle` (owner `rdog49`). Do not use any other project. The initializer already sets Status `Todo` when the task is taken. This role does not set `Todo`. It sets `Done` only in "After the person merges".
 
 `gh` needs the `project` scope. If a project command reports a missing scope, run `gh auth refresh -s project` and retry the same move.
 
@@ -64,13 +64,50 @@ If a Status value is rejected, list the options and use the name of that column:
 gh project field-list PROJECT --owner rdog49
 ```
 
-Then push the task branch and open the pull request against the process branch (`feat/single-chat-board` until it is merged, then `main`):
+Then push the task branch and open the pull request against `main`:
 
 ```bash
 git push -u origin HEAD
-gh pr create --base BASE --title "GP-XX short result" --body "Summary of this task."
+gh pr create --base main --title "GP-XX short result" --body "Summary of this task."
 ```
 
-The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. The person closes the issue.
+The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. Merging must leave the issue open so this role can close it after the board move.
 
-Do not set `board:done` or project Status `Done`. Do not close the issue, and do not merge. Tell the person the pull request URL. Their remaining steps are to review it, merge it, move the card to `board:done` and Status `Done`, and close the issue.
+Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Tell the person the pull request URL. Their remaining step is to review it and merge it.
+
+## After the person merges
+
+Run this only when the pull request `state` is `MERGED`. If it is still open, stop. Do not merge it yourself.
+
+```bash
+gh pr view PR --json state,mergedAt,title,url
+```
+
+When it is merged, move the card and close the issue:
+
+```bash
+gh issue edit NUMBER --remove-label board:in-review --add-label board:done
+gh project item-add PROJECT --owner rdog49 --url ISSUE_URL
+gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "Done"
+gh issue close NUMBER --reason completed
+```
+
+If the issue still has `board:in-progress` or `board:backlog`, remove that label in the same `gh issue edit`. If a Status value is rejected, list the field options and use the done column's name.
+
+Skip this move when the issue is already `board:done` and closed.
+
+Then append one section to `docs/progress.md`. Keep every earlier section. The file is the whole project record: what each finished task added and how it was built. Product behavior stays in `TASK.md`.
+
+```markdown
+## GP-XX — title
+
+- Issue: #NUMBER
+- Pull request: #PR
+- Merged: YYYY-MM-DD
+- What: what the player or the build gained, from the issue and the approved plan.
+- How: the files and the method that landed. No behavior from a later task.
+```
+
+If that GP heading is already in the file, do not add a second copy.
+
+A new chat runs this section for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task.
