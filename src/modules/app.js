@@ -1,5 +1,15 @@
 import renderBoard from './board';
 
+const TICK_MS = 1000;
+
+function formatElapsed(elapsedMs) {
+  const totalSeconds = Math.floor(elapsedMs / TICK_MS);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
 function createButton(id, text) {
   const button = document.createElement('button');
   button.type = 'button';
@@ -79,13 +89,24 @@ export default function mountApp(root) {
   const movesStat = createStat('Moves', 'move-count', '0');
   const moveCount = movesStat.querySelector('#move-count');
 
+  let clockId = 0;
+
   function countMove() {
     moveCount.textContent = String(Number(moveCount.textContent) + 1);
   }
 
-  function startGame() {
+  function startClock() {
+    window.clearInterval(clockId);
+    const startedAt = Date.now();
     timer.textContent = '00:00';
+    clockId = window.setInterval(() => {
+      timer.textContent = formatElapsed(Date.now() - startedAt);
+    }, TICK_MS);
+  }
+
+  function startGame() {
     moveCount.textContent = '0';
+    startClock();
     renderBoard(board, countMove, size);
   }
 

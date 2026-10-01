@@ -55,3 +55,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: New game and the N key deal a new solvable 4×4 layout without reloading the page. Time returns to 00:00 and the move count returns to 0. N does nothing while the size selector is focused.
 - How: `src/modules/board.js` deals again with the same shuffle, using the size already on the board. `src/modules/app.js` wires `#new-game` and the N key to that deal and resets `#timer` and `#move-count`. The clock does not tick yet, and changing the size stays out of this task.
+
+## GP-08 — Timer and move count
+
+- Issue: #14
+- Merged: 2026-10-01
+- What: The player sees the elapsed time as mm:ss while the game is in progress, and the move count rises only after a successful move. New game and the N key return the time to 00:00 and the count to 0.
+- How: `src/modules/app.js` starts a one-second interval from the moment a game starts and writes minutes and seconds, each at least two digits, into `#timer`. The same start clears the previous interval. `#move-count` still updates only from the successful-move callback in `src/modules/board.js`. The win text, the score list, and resume after reload stay out of this task.
