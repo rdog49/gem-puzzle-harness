@@ -26,4 +26,4 @@ Then:
 5. Commit only the files for this task. Message: `feat: GP-XX short result`.
 6. Report in this chat what changed, and hand the work to the evaluator role.
 
-Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue.
+Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue. Do not write `docs/progress.md`. The evaluator commits that file on this branch before opening the pull request.
