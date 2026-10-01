@@ -2,6 +2,7 @@ import renderBoard from './board';
 import { readSavedGame, writeSavedGame } from './session';
 
 const TICK_MS = 1000;
+const SIZES = [3, 4, 5, 6, 7, 8];
 
 function formatElapsed(elapsedMs) {
   const totalSeconds = Math.floor(elapsedMs / TICK_MS);
@@ -29,7 +30,7 @@ function createSizeSelect() {
   const sizeSelect = document.createElement('select');
   sizeSelect.id = 'size-select';
 
-  [3, 4, 5, 6, 7, 8].forEach((size) => {
+  SIZES.forEach((size) => {
     const option = document.createElement('option');
     option.value = String(size);
     option.textContent = `${size}x${size}`;
@@ -149,6 +150,18 @@ export default function mountApp(root) {
     startClock(0);
     showBoard();
   }
+
+  sizeSelect.addEventListener('change', () => {
+    const nextSize = Number(sizeSelect.value);
+
+    if (!SIZES.includes(nextSize)) {
+      sizeSelect.value = String(size);
+      return;
+    }
+
+    size = nextSize;
+    startGame();
+  });
 
   function resumeGame(record) {
     size = record.size;
