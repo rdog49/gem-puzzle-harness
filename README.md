@@ -10,13 +10,13 @@ The person names a board task in the current chat. The agent reads it, proposes 
 
 Another chat per role is not needed.
 
-When the check passes, the evaluator records the task in `docs/progress.md` on the task branch and commits that file before opening the pull request. The person only reviews the pull request and merges it. The evaluator then moves the card to Done on the issue and on the project and closes the issue. `main` is not edited to record the task.
+When the check passes, the evaluator records the task in `docs/progress.md` and makes one commit that also contains the task changes, then opens the pull request. The person only reviews the pull request and merges it. The evaluator then moves the card to Done on the issue and on the project and closes the issue. `main` is not edited to record the task.
 
 ## Roles
 
 - `.cursor/agents/initializer.md` — reads the task, sets project Status `Todo`, and agrees the plan
 - `.cursor/agents/coder.md` — builds the agreed scope
-- `.cursor/agents/evaluator.md` — checks that scope, commits `docs/progress.md` on the task branch, moves the card through `In progress` and `In review`, opens the pull request, and after the merge sets `Done` and closes the issue
+- `.cursor/agents/evaluator.md` — checks that scope, puts `docs/progress.md` into the task's one commit, moves the card through `In progress` and `In review`, opens the pull request, and after the merge sets `Done` and closes the issue
 
 ## Board
 

@@ -49,9 +49,9 @@ Someone opens the page and wants to reach a win, change the board size, put a pi
 - The whole product is split into board tasks. Closing all of them equals this description: no missing behavior and no extra product beyond it.
 - The person asks to look at one board task and may edit the proposed way of doing it.
 - The description, the plan, the implementation, and the check happen in one chat.
-- One task is one branch and one pull request.
+- One task is one branch, one commit, and one pull request.
 - The evaluator moves the issue card across the board and opens the pull request.
-- When the check passes, the evaluator records the task in `docs/progress.md` on that task's branch, before the pull request is offered for review. The person reviews the pull request and merges it. The evaluator then moves the card to Done and closes the issue. `main` is not edited for that record.
+- When the check passes, the evaluator records the task in `docs/progress.md` inside that one commit, before the pull request is offered for review. The person reviews the pull request and merges it. The evaluator then moves the card to Done and closes the issue. `main` is not edited for that record.
 
 ## Done when
 - A game can be played through to the congratulation on a wide screen, a tablet, and a phone.
