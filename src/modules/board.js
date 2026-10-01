@@ -93,21 +93,45 @@ function shuffledTiles(size) {
   return tiles;
 }
 
-function paintTiles(board, tiles) {
+function moveTile(tiles, index, size) {
+  const blankIndex = tiles.indexOf(0);
+
+  if (!neighborIndexes(blankIndex, size).includes(index)) {
+    return null;
+  }
+
+  const next = tiles.slice();
+  next[blankIndex] = next[index];
+  next[index] = 0;
+  return next;
+}
+
+function paintTiles(board, tiles, size, onMove) {
   board.replaceChildren();
 
-  tiles.forEach((value) => {
-    const cell = document.createElement('div');
+  tiles.forEach((value, index) => {
     const isEmpty = value === 0;
+    const cell = document.createElement(isEmpty ? 'div' : 'button');
 
     cell.className = isEmpty ? 'tile tile--empty' : 'tile';
     if (!isEmpty) {
+      cell.type = 'button';
       cell.textContent = String(value);
+      cell.addEventListener('click', () => {
+        const next = moveTile(tiles, index, size);
+
+        if (!next) {
+          return;
+        }
+
+        paintTiles(board, next, size, onMove);
+        onMove();
+      });
     }
     board.append(cell);
   });
 }
 
-export default function renderBoard(board) {
-  paintTiles(board, shuffledTiles(DEFAULT_SIZE));
+export default function renderBoard(board, onMove = () => {}) {
+  paintTiles(board, shuffledTiles(DEFAULT_SIZE), DEFAULT_SIZE, onMove);
 }

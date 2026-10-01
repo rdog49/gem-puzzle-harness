@@ -34,3 +34,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: A new 4×4 game is shuffled, unsolved, and solvable. Loading the page again can show a different order.
 - How: `src/modules/board.js` starts from the solved board and applies `N * N * 12` random legal moves of the empty cell. If the board is still solved, it makes one more legal move. The parity check treats the empty cell as `N * N` and adds its taxicab distance to the bottom-right cell. `src/modules/app.js` paints that layout into `#board`. Clicks, dragging, and other sizes stay out of this task.
+
+## GP-05 — Click to move
+
+- Issue: #11
+- Merged: 2026-10-01
+- What: A click on a tile that shares an edge with the empty cell swaps the two cells and raises the move count by 1. A click on any other tile leaves the board and the count unchanged.
+- How: `src/modules/board.js` accepts the click only when the row distance plus the column distance is 1, then swaps that tile with the empty cell and redraws. `src/modules/app.js` updates `#move-count` after that swap. `src/styles/main.css` draws numbered tiles as buttons that fill the cell. Dragging, the slide animation, and sound stay out of this task.
