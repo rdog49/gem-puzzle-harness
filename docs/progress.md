@@ -69,3 +69,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: Reloading the page keeps the same board, the same move count, and the elapsed time. The clock continues from the saved milliseconds. A broken saved record starts a new 4×4 game.
 - How: `src/modules/session.js` reads and writes `gem_puzzle_state`: size, tiles, moves, and elapsed milliseconds. `src/modules/board.js` paints a saved layout and reports the tiles after a successful move. `src/modules/app.js` restores that layout, the move count, and the clock, and writes the record after a new game, after a move, and when the page is left. Scores and pictures stay out of this task.
+
+## GP-10 — Grid size from 3x3 to 8x8
+
+- Issue: #16
+- Merged: 2026-10-01
+- What: The player chooses 3x3, 4x4, 5x5, 6x6, 7x7, or 8x8. Each choice starts a new solvable game of that size without reloading the page. 3×3 has nine cells and one empty cell. 8×8 has 64 cells and one empty cell.
+- How: `src/modules/app.js` listens to `#size-select` and starts a new game through the existing shuffle, which already deals any size from 3 to 8 by moving the empty cell. The move count and the timer return to zero. Pictures stay out of this task.
