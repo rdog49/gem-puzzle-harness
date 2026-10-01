@@ -45,7 +45,13 @@ function createStat(label, id, value) {
   return stat;
 }
 
+function isTypingTarget(target) {
+  return target instanceof HTMLElement
+    && target.closest('input, textarea, select, [contenteditable]') !== null;
+}
+
 export default function mountApp(root) {
+  const size = 4;
   const app = document.createElement('div');
   app.className = 'app';
 
@@ -68,11 +74,38 @@ export default function mountApp(root) {
   board.id = 'board';
   board.className = 'board';
 
+  const timeStat = createStat('Time', 'timer', '00:00');
+  const timer = timeStat.querySelector('#timer');
   const movesStat = createStat('Moves', 'move-count', '0');
   const moveCount = movesStat.querySelector('#move-count');
 
-  renderBoard(board, () => {
+  function countMove() {
     moveCount.textContent = String(Number(moveCount.textContent) + 1);
+  }
+
+  function startGame() {
+    timer.textContent = '00:00';
+    moveCount.textContent = '0';
+    renderBoard(board, countMove, size);
+  }
+
+  const newGame = createButton('new-game', 'New game');
+  newGame.addEventListener('click', startGame);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) {
+      return;
+    }
+
+    if (event.key !== 'n' && event.key !== 'N') {
+      return;
+    }
+
+    if (isTypingTarget(event.target)) {
+      return;
+    }
+
+    startGame();
   });
 
   const controls = document.createElement('div');
@@ -89,15 +122,16 @@ export default function mountApp(root) {
 
   controls.append(
     createSizeSelect(),
-    createButton('new-game', 'New game'),
+    newGame,
     createButton('auto-solve', 'Auto-solve'),
     soundToggle,
     createButton('scores-toggle', 'Scores'),
     createButton('images-toggle', 'Images'),
-    createStat('Time', 'timer', '00:00'),
+    timeStat,
     movesStat,
   );
   layout.append(board, controls);
   app.append(title, menuToggle, layout);
   root.append(app);
+  startGame();
 }

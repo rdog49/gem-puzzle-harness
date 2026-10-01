@@ -48,3 +48,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: Dragging a tile onto the empty cell moves it when the two cells share an edge, and the move count rises by 1. Dropping a tile that does not share an edge leaves the board and the count unchanged. A click on a neighbor still makes the same move.
 - How: `src/modules/board.js` makes numbered tiles draggable and accepts a drop only on the empty cell, through the same neighbor check as a click. A drop that is not a neighbor does not redraw and does not call the move callback. `src/modules/app.js` still updates `#move-count` from that callback. `src/styles/main.css` uses a grab cursor on numbered tiles. The slide animation and auto-solve stay out of this task.
+
+## GP-07 — Restart without reload
+
+- Issue: #13
+- Merged: 2026-10-01
+- What: New game and the N key deal a new solvable 4×4 layout without reloading the page. Time returns to 00:00 and the move count returns to 0. N does nothing while the size selector is focused.
+- How: `src/modules/board.js` deals again with the same shuffle, using the size already on the board. `src/modules/app.js` wires `#new-game` and the N key to that deal and resets `#timer` and `#move-count`. The clock does not tick yet, and changing the size stays out of this task.
