@@ -105,7 +105,11 @@ select {
   color: #2a2118;
   font: inherit;
   font-size: clamp(1rem, 3.5vw, 1.75rem);
-  cursor: pointer;
+  cursor: grab;
+}
+
+.tile:active {
+  cursor: grabbing;
 }
 
 .tile--empty {

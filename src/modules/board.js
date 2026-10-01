@@ -106,8 +106,23 @@ function moveTile(tiles, index, size) {
   return next;
 }
 
+let suppressClick = false;
+
 function paintTiles(board, tiles, size, onMove) {
   board.replaceChildren();
+
+  let draggedIndex = null;
+
+  function commitMove(index) {
+    const next = moveTile(tiles, index, size);
+
+    if (!next) {
+      return;
+    }
+
+    paintTiles(board, next, size, onMove);
+    onMove();
+  }
 
   tiles.forEach((value, index) => {
     const isEmpty = value === 0;
@@ -116,16 +131,41 @@ function paintTiles(board, tiles, size, onMove) {
     cell.className = isEmpty ? 'tile tile--empty' : 'tile';
     if (!isEmpty) {
       cell.type = 'button';
+      cell.draggable = true;
       cell.textContent = String(value);
+      cell.addEventListener('dragstart', (event) => {
+        draggedIndex = index;
+        suppressClick = true;
+        event.dataTransfer.setData('text/plain', String(index));
+      });
+      cell.addEventListener('dragend', () => {
+        draggedIndex = null;
+        window.setTimeout(() => {
+          suppressClick = false;
+        }, 0);
+      });
       cell.addEventListener('click', () => {
-        const next = moveTile(tiles, index, size);
-
-        if (!next) {
+        if (suppressClick) {
+          suppressClick = false;
           return;
         }
 
-        paintTiles(board, next, size, onMove);
-        onMove();
+        commitMove(index);
+      });
+    } else {
+      cell.addEventListener('dragover', (event) => {
+        event.preventDefault();
+      });
+      cell.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const fromIndex = draggedIndex;
+        draggedIndex = null;
+
+        if (fromIndex === null) {
+          return;
+        }
+
+        commitMove(fromIndex);
       });
     }
     board.append(cell);

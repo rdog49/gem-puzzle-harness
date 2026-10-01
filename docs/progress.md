@@ -41,3 +41,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: A click on a tile that shares an edge with the empty cell swaps the two cells and raises the move count by 1. A click on any other tile leaves the board and the count unchanged.
 - How: `src/modules/board.js` accepts the click only when the row distance plus the column distance is 1, then swaps that tile with the empty cell and redraws. `src/modules/app.js` updates `#move-count` after that swap. `src/styles/main.css` draws numbered tiles as buttons that fill the cell. Dragging, the slide animation, and sound stay out of this task.
+
+## GP-06 — Drag and drop
+
+- Issue: #12
+- Merged: 2026-10-01
+- What: Dragging a tile onto the empty cell moves it when the two cells share an edge, and the move count rises by 1. Dropping a tile that does not share an edge leaves the board and the count unchanged. A click on a neighbor still makes the same move.
+- How: `src/modules/board.js` makes numbered tiles draggable and accepts a drop only on the empty cell, through the same neighbor check as a click. A drop that is not a neighbor does not redraw and does not call the move callback. `src/modules/app.js` still updates `#move-count` from that callback. `src/styles/main.css` uses a grab cursor on numbered tiles. The slide animation and auto-solve stay out of this task.
