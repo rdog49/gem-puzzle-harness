@@ -8,10 +8,95 @@ function solvedTiles(size) {
   ));
 }
 
-export default function renderSolvedBoard(board) {
+function sameOrder(left, right) {
+  return left.every((value, index) => value === right[index]);
+}
+
+function neighborIndexes(index, size) {
+  const row = Math.floor(index / size);
+  const column = index % size;
+  const indexes = [];
+
+  if (row > 0) {
+    indexes.push(index - size);
+  }
+  if (row < size - 1) {
+    indexes.push(index + size);
+  }
+  if (column > 0) {
+    indexes.push(index - 1);
+  }
+  if (column < size - 1) {
+    indexes.push(index + 1);
+  }
+
+  return indexes;
+}
+
+function slideBlank(tiles, size) {
+  const blankIndex = tiles.indexOf(0);
+  const options = neighborIndexes(blankIndex, size);
+  const choice = options[Math.floor(Math.random() * options.length)];
+  const next = tiles.slice();
+
+  next[blankIndex] = next[choice];
+  next[choice] = 0;
+  return next;
+}
+
+function inversionCount(tiles, size) {
+  const blankRank = size * size;
+  const ranked = tiles.map((value) => (value === 0 ? blankRank : value));
+  let inversions = 0;
+
+  for (let leftIndex = 0; leftIndex < ranked.length; leftIndex += 1) {
+    for (let rightIndex = leftIndex + 1; rightIndex < ranked.length; rightIndex += 1) {
+      if (ranked[leftIndex] > ranked[rightIndex]) {
+        inversions += 1;
+      }
+    }
+  }
+
+  return inversions;
+}
+
+function taxicab(tiles, size) {
+  const blankIndex = tiles.indexOf(0);
+  const row = Math.floor(blankIndex / size);
+  const column = blankIndex % size;
+  const corner = size - 1;
+
+  return Math.abs(row - corner) + Math.abs(column - corner);
+}
+
+function isSolvable(tiles, size) {
+  return (inversionCount(tiles, size) + taxicab(tiles, size)) % 2 === 0;
+}
+
+function shuffledTiles(size) {
+  const solved = solvedTiles(size);
+  const steps = size * size * 12;
+  let tiles = solved.slice();
+
+  for (let step = 0; step < steps; step += 1) {
+    tiles = slideBlank(tiles, size);
+  }
+
+  if (sameOrder(tiles, solved)) {
+    tiles = slideBlank(tiles, size);
+  }
+
+  if (!isSolvable(tiles, size)) {
+    throw new Error('Shuffled board is not solvable');
+  }
+
+  return tiles;
+}
+
+function paintTiles(board, tiles) {
   board.replaceChildren();
 
-  solvedTiles(DEFAULT_SIZE).forEach((value) => {
+  tiles.forEach((value) => {
     const cell = document.createElement('div');
     const isEmpty = value === 0;
 
@@ -21,4 +106,8 @@ export default function renderSolvedBoard(board) {
     }
     board.append(cell);
   });
+}
+
+export default function renderBoard(board) {
+  paintTiles(board, shuffledTiles(DEFAULT_SIZE));
 }
