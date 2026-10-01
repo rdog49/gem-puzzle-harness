@@ -12,7 +12,7 @@ Issue labels:
 - `board:backlog` — not started
 - `board:in-progress` — the plan is approved and work is under way
 - `board:in-review` — the check passed and the pull request is open
-- `board:done` — the person merged the pull request
+- `board:done` — the person merged the pull request, and the evaluator then closed the card
 
 Project Status, in order:
 
@@ -20,9 +20,35 @@ Project Status, in order:
 - `Todo` — the task is taken into work. This role sets it when it takes one task. The issue label stays `board:backlog`.
 - `In progress` — work is under way. The evaluator sets it when the approved task starts, together with `board:in-progress`.
 - `In review` — the work is done and the pull request is open, waiting for the person. The evaluator sets it only after every criterion passes, together with `board:in-review`.
-- `Done` — the person, after review and merge, together with `board:done`. Agents do not set this.
+- `Done` — the evaluator sets it after the person has merged the pull request, together with `board:done`, and then closes the issue.
 
-The evaluator moves issue labels from backlog to in progress to in review. Agents stop at `In review`. The person moves the card to `Done` and closes the issue after merging.
+The evaluator moves issue labels from backlog to in progress to in review. The person reviews the pull request and merges it. After that merge, the evaluator sets `board:done` and `Done` and closes the issue. Do not set `Done` while the pull request is still open.
+
+## Start from main
+
+A new chat does this before it reads the new task, and the coder does it again before creating the branch. The base is `main`. The pull request targets `main`.
+
+```bash
+git checkout main
+git fetch origin
+gh pr list --base main --state merged --limit 1 --json number,title,mergeCommit
+```
+
+`MERGE_SHA` is `mergeCommit.oid` of that latest merged pull request (the finished GP).
+
+```bash
+git merge-base --is-ancestor MERGE_SHA HEAD
+```
+
+Exit 0 means local `main` already contains that pull request. Continue.
+
+Any other result means it is not pulled yet, including a non-zero `git rev-list --count HEAD..origin/main`:
+
+```bash
+git pull --ff-only origin main
+```
+
+Run the ancestor check again. Continue only after it exits 0. If there is no merged pull request yet, pull `main` when it is behind `origin/main`, then continue.
 
 ## Read the task
 
@@ -53,7 +79,7 @@ What the player gets, in your own words.
 - Issue criteria this work will satisfy.
 
 ## Branch
-feat/gp-XX-slug → pull request into the process branch.
+feat/gp-XX-slug → pull request into `main`.
 
 Waiting for approval or edits. I will not change files until you reply.
 ```
@@ -83,17 +109,17 @@ If the value is rejected, list the options and use the name of the to-do column:
 gh project field-list PROJECT --owner rdog49
 ```
 
-Do not change issue labels from this role. Do not set `In progress`, `In review`, or `Done`.
+Do not change issue labels from this role. Do not set `In progress`, `In review`, or `Done` on the task just taken. `Done` after a merge belongs to the evaluator.
 
 ## After approval
 
-Stay in this chat. The evaluator moves the issue to `board:in-progress` and the project Status to `In progress`, the coder implements, and the evaluator checks. On a pass, the evaluator moves the issue to `board:in-review` and the project Status to `In review`, and opens the pull request.
+Stay in this chat. The evaluator moves the issue to `board:in-progress` and the project Status to `In progress`, the coder implements, and the evaluator checks. On a pass, the evaluator moves the issue to `board:in-review` and the project Status to `In review`, and opens the pull request. The person reviews it and merges it. The evaluator then sets `board:done` and Status `Done`, closes the issue, and appends `docs/progress.md`.
 
-Do not open the pull request from this role.
+Do not open the pull request from this role. Do not set `Done` on the task just taken.
 
 ## Limits
 
-- The branch base is `feat/single-chat-board` until that branch is merged into `main`. After that, the base is `main`.
+- The branch base is `main`, after "Start from main". The pull request targets `main`.
 - Do not touch `feat/cursor_work_2`, `feat/cursor_work`, or `feat/Task.md_basic_project_structure`.
 - Do not cherry-pick the reference history or replace the task with a copy of the finished game.
 - If an earlier task in order is still open, say so in the plan. The person decides whether to continue.
