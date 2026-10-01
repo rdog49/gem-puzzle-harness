@@ -23,7 +23,7 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 ## GP-03 — Default 4x4 board
 
 - Issue: #9
-- Pull request: #PR
+- Pull request: #32
 - Merged: 2026-10-01
 - What: Without choosing another size, the player sees a 4×4 board: tiles 1–15 in order and one empty cell.
 - How: `src/modules/board.js` builds the solved order, with 0 as the empty cell, and `src/modules/app.js` paints it into `#board`. `src/styles/main.css` lays the cells out as a 4×4 grid. Numbered tiles are light. The empty cell has no number. Shuffle, clicks, and other sizes stay out of this task.
