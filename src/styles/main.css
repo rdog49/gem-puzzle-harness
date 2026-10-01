@@ -1,21 +1,127 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
 body {
   margin: 0;
+  max-width: 100%;
+}
+
+body {
   background: #14110e;
   color: #f6f1e7;
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+button,
+select {
+  font: inherit;
+  color: #2a2118;
+}
+
 .app {
   min-height: 100vh;
+  width: 100%;
+  padding: 1.25rem 1rem 2rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 1.25rem;
 }
 
 .title {
   margin: 0;
+  max-width: 100%;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 4rem;
+  font-size: clamp(2.25rem, 6vw, 4rem);
   font-weight: 400;
+  line-height: 1.1;
+  text-align: center;
   color: #e07a3d;
+}
+
+.menu-toggle,
+.control,
+.field select {
+  border: 0;
+  border-radius: 0.25rem;
+  background: #e07a3d;
+  cursor: pointer;
+}
+
+.menu-toggle,
+.control {
+  padding: 0.65rem 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #f6f1e7;
+}
+
+.field select {
+  padding: 0.55rem 0.75rem;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 72rem;
+}
+
+.board {
+  width: min(100%, 34rem);
+  aspect-ratio: 1;
+  background: #1c1814;
+  border: 1px solid #3a322b;
+  border-radius: 0.25rem;
+}
+
+.controls {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(100%, 16rem);
+}
+
+.controls.is-open {
+  display: flex;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .menu-toggle {
+    display: none;
+  }
+
+  .controls,
+  .controls.is-open {
+    display: flex;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .board {
+    width: min(36rem, calc(100% - 18rem));
+  }
 }
