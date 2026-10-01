@@ -121,7 +121,7 @@ function paintTiles(board, tiles, size, onMove) {
     }
 
     paintTiles(board, next, size, onMove);
-    onMove();
+    onMove(next);
   }
 
   tiles.forEach((value, index) => {
@@ -172,6 +172,14 @@ function paintTiles(board, tiles, size, onMove) {
   });
 }
 
-export default function renderBoard(board, onMove = () => {}, size = DEFAULT_SIZE) {
-  paintTiles(board, shuffledTiles(size), size, onMove);
+export default function renderBoard(
+  board,
+  onMove = () => {},
+  size = DEFAULT_SIZE,
+  initialTiles = null,
+) {
+  const tiles = Array.isArray(initialTiles) ? initialTiles.slice() : shuffledTiles(size);
+
+  paintTiles(board, tiles, size, onMove);
+  return tiles.slice();
 }
