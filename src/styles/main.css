@@ -78,11 +78,32 @@ select {
 }
 
 .board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
   width: min(100%, 34rem);
   aspect-ratio: 1;
+  padding: 0.45rem;
   background: #1c1814;
   border: 1px solid #3a322b;
   border-radius: 0.25rem;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 0.2rem;
+  background: #f3e6cf;
+  color: #2a2118;
+  font-size: clamp(1rem, 3.5vw, 1.75rem);
+}
+
+.tile--empty {
+  background: transparent;
 }
 
 .controls {
