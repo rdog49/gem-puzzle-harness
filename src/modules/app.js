@@ -1,3 +1,5 @@
+import renderSolvedBoard from './board';
+
 function createButton(id, text) {
   const button = document.createElement('button');
   button.type = 'button';
@@ -65,6 +67,7 @@ export default function mountApp(root) {
   const board = document.createElement('div');
   board.id = 'board';
   board.className = 'board';
+  renderSolvedBoard(board);
 
   const controls = document.createElement('div');
   controls.id = 'controls';
