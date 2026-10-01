@@ -1,4 +1,4 @@
-import renderSolvedBoard from './board';
+import renderShuffledBoard from './board';
 
 function createButton(id, text) {
   const button = document.createElement('button');
@@ -67,7 +67,7 @@ export default function mountApp(root) {
   const board = document.createElement('div');
   board.id = 'board';
   board.className = 'board';
-  renderSolvedBoard(board);
+  renderShuffledBoard(board);
 
   const controls = document.createElement('div');
   controls.id = 'controls';
