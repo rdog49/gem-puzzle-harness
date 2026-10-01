@@ -31,7 +31,7 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 ## GP-04 — Solvable shuffle
 
 - Issue: #10
-- Pull request:
+- Pull request: #33
 - Merged: 2026-10-01
 - What: On load the 4×4 board is shuffled, unsolved, and solvable. Reloading the page can produce a different order.
 - How: `src/modules/board.js` starts from the solved board and applies `N * N * 12` random legal blank moves. If that layout is still solved, it makes one more legal move. Solvability is the parity of inversions (the empty cell counts as `N * N`) plus the taxicab distance of the empty cell to the bottom-right corner. `src/modules/app.js` paints that layout into `#board`. Clicks, drag, and other sizes stay out of this task.
