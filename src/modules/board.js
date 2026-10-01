@@ -172,6 +172,6 @@ function paintTiles(board, tiles, size, onMove) {
   });
 }
 
-export default function renderBoard(board, onMove = () => {}) {
-  paintTiles(board, shuffledTiles(DEFAULT_SIZE), DEFAULT_SIZE, onMove);
+export default function renderBoard(board, onMove = () => {}, size = DEFAULT_SIZE) {
+  paintTiles(board, shuffledTiles(size), size, onMove);
 }
