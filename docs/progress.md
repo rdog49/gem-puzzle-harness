@@ -27,3 +27,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: Without choosing another size, the player sees a 4×4 board: tiles 1–15 in order and one empty cell.
 - How: `src/modules/board.js` builds the solved order, with 0 as the empty cell, and `src/modules/app.js` paints it into `#board`. `src/styles/main.css` lays the cells out as a 4×4 grid. Numbered tiles are light. The empty cell has no number. Shuffle, clicks, and other sizes stay out of this task.
+
+## GP-04 — Solvable shuffle
+
+- Issue: #10
+- Merged: 2026-10-01
+- What: A new 4×4 game is shuffled, unsolved, and solvable. Loading the page again can show a different order.
+- How: `src/modules/board.js` starts from the solved board and applies `N * N * 12` random legal moves of the empty cell. If the board is still solved, it makes one more legal move. The parity check treats the empty cell as `N * N` and adds its taxicab distance to the bottom-right cell. `src/modules/app.js` paints that layout into `#board`. Clicks, dragging, and other sizes stay out of this task.
