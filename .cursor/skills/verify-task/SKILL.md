@@ -72,22 +72,25 @@ Append one section to `docs/progress.md` on that branch before the pull request.
 ## GP-XX — title
 
 - Issue: #NUMBER
-- Pull request: #PR
 - Merged: YYYY-MM-DD
 - What: what the player or the build gained, from the issue and the approved plan.
 - How: the files and the method that landed. No behavior from a later task.
 ```
 
-`Merged` is the date this section is committed. Do not edit the file again after the person merges to replace that date. If that GP heading is already in the file, do not add a second copy.
+`Merged` is the date of the one task commit. Do not put a pull request number in the section: that number does not exist until after the commit, and writing it back would be a second commit. Do not edit the file again after the person merges. If that GP heading is already in the file, do not add a second copy.
 
-Commit the file on the task branch. The pull request number is filled in the follow-up commit below when it is not known yet.
+The coder left the task uncommitted. One commit contains every change for this task, including `docs/progress.md`. Do not commit that file alone. Do not use a `docs:` message.
 
 ```bash
 git add docs/progress.md
-git commit -m "docs: record GP-XX"
+git add path/to/each/task/file
+git commit -m "feat: GP-XX short result"
+git log --oneline main..HEAD
 ```
 
-Then push the task branch and open the pull request against `main`:
+`git log --oneline main..HEAD` shows exactly one commit. If it shows more, stop and do not push. Do not add another commit to repair it.
+
+Then push that commit and open the pull request against `main`:
 
 ```bash
 git push -u origin HEAD
@@ -96,15 +99,7 @@ gh pr create --base main --title "GP-XX short result" --body "Summary of this ta
 
 The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. Merging must leave the issue open so this role can close it after the board move.
 
-If the new section does not name that pull request yet, put the number in `docs/progress.md`, commit, and push again to the same branch:
-
-```bash
-git add docs/progress.md
-git commit -m "docs: record GP-XX"
-git push
-```
-
-Tell the person the pull request URL only after that section on the task branch names the pull request. Their remaining step is to review it and merge it.
+Do not commit again after the pull request exists. Do not push a follow-up that only updates `docs/progress.md`. Tell the person the pull request URL. Their remaining step is to review it and merge it.
 
 Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Do not write `docs/progress.md` on `main`.
 
@@ -129,6 +124,6 @@ If the issue still has `board:in-progress` or `board:backlog`, remove that label
 
 Skip this move when the issue is already `board:done` and closed.
 
-Do not append `docs/progress.md` here, and do not edit it on `main`. The section was committed on the task branch before the pull request.
+Do not append `docs/progress.md` here, and do not edit it on `main`. The section is already inside the one commit on the task branch.
 
 A new chat runs this board close for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task. It does not write `docs/progress.md`.

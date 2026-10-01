@@ -23,7 +23,7 @@ Then:
 2. Do not check out `feat/cursor_work_2`, `feat/cursor_work`, or `feat/Task.md_basic_project_structure`. Do not cherry-pick their commits or copy the finished game from them. You may read a behavior detail with `git show` only when the plan asks for it.
 3. Build the task scope. Take labels and behavior from `TASK.md`. Take the implementation method from the skills.
 4. Check the affected behavior in the browser when the task is visible on screen. For the shell, the build and the linter are enough.
-5. Commit only the files for this task. Message: `feat: GP-XX short result`.
+5. Do not commit. Leave every change for this task uncommitted.
 6. Report in this chat what changed, and hand the work to the evaluator role.
 
-Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue. Do not write `docs/progress.md`. The evaluator commits that file on this branch before opening the pull request.
+Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue. Do not write `docs/progress.md`. After the check passes, the evaluator adds that file and makes the one commit for this task. That commit holds the task files and `docs/progress.md` together.
