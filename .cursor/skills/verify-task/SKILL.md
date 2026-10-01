@@ -64,6 +64,29 @@ If a Status value is rejected, list the options and use the name of that column:
 gh project field-list PROJECT --owner rdog49
 ```
 
+Stay on the task branch. Do not check out `main` to record the task.
+
+Append one section to `docs/progress.md` on that branch before the pull request. Keep every earlier section. The file is the whole project record: what each finished task added and how it was built. Product behavior stays in `TASK.md`.
+
+```markdown
+## GP-XX — title
+
+- Issue: #NUMBER
+- Pull request: #PR
+- Merged: YYYY-MM-DD
+- What: what the player or the build gained, from the issue and the approved plan.
+- How: the files and the method that landed. No behavior from a later task.
+```
+
+`Merged` is the date this section is committed. Do not edit the file again after the person merges to replace that date. If that GP heading is already in the file, do not add a second copy.
+
+Commit the file on the task branch. The pull request number is filled in the follow-up commit below when it is not known yet.
+
+```bash
+git add docs/progress.md
+git commit -m "docs: record GP-XX"
+```
+
 Then push the task branch and open the pull request against `main`:
 
 ```bash
@@ -73,7 +96,17 @@ gh pr create --base main --title "GP-XX short result" --body "Summary of this ta
 
 The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. Merging must leave the issue open so this role can close it after the board move.
 
-Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Tell the person the pull request URL. Their remaining step is to review it and merge it.
+If the new section does not name that pull request yet, put the number in `docs/progress.md`, commit, and push again to the same branch:
+
+```bash
+git add docs/progress.md
+git commit -m "docs: record GP-XX"
+git push
+```
+
+Tell the person the pull request URL only after that section on the task branch names the pull request. Their remaining step is to review it and merge it.
+
+Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Do not write `docs/progress.md` on `main`.
 
 ## After the person merges
 
@@ -96,18 +129,6 @@ If the issue still has `board:in-progress` or `board:backlog`, remove that label
 
 Skip this move when the issue is already `board:done` and closed.
 
-Then append one section to `docs/progress.md`. Keep every earlier section. The file is the whole project record: what each finished task added and how it was built. Product behavior stays in `TASK.md`.
+Do not append `docs/progress.md` here, and do not edit it on `main`. The section was committed on the task branch before the pull request.
 
-```markdown
-## GP-XX — title
-
-- Issue: #NUMBER
-- Pull request: #PR
-- Merged: YYYY-MM-DD
-- What: what the player or the build gained, from the issue and the approved plan.
-- How: the files and the method that landed. No behavior from a later task.
-```
-
-If that GP heading is already in the file, do not add a second copy.
-
-A new chat runs this section for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task.
+A new chat runs this board close for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task. It does not write `docs/progress.md`.

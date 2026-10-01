@@ -113,7 +113,7 @@ Do not change issue labels from this role. Do not set `In progress`, `In review`
 
 ## After approval
 
-Stay in this chat. The evaluator moves the issue to `board:in-progress` and the project Status to `In progress`, the coder implements, and the evaluator checks. On a pass, the evaluator moves the issue to `board:in-review` and the project Status to `In review`, and opens the pull request. The person reviews it and merges it. The evaluator then sets `board:done` and Status `Done`, closes the issue, and appends `docs/progress.md`.
+Stay in this chat. The evaluator moves the issue to `board:in-progress` and the project Status to `In progress`, the coder implements, and the evaluator checks. On a pass, the evaluator appends `docs/progress.md` on the task branch and commits it, then moves the issue to `board:in-review` and the project Status to `In review`, and opens the pull request. The person reviews it and merges it. The evaluator then sets `board:done` and Status `Done` and closes the issue. That close does not edit `docs/progress.md`. Do not check out `main` to record the task.
 
 Do not open the pull request from this role. Do not set `Done` on the task just taken.
 

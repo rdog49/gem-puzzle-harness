@@ -1,6 +1,6 @@
 # Project progress
 
-This file is the record of finished Gem Puzzle board tasks. The evaluator appends one section when a pull request has been merged, the card is `board:done`, the project Status is `Done`, and the issue is closed. Older sections stay. Do not rewrite them.
+This file is the record of finished Gem Puzzle board tasks. The evaluator appends one section on the task branch, and commits it, before the pull request is offered for review. Older sections stay. Do not rewrite them. Do not add a section on `main` after the merge.
 
 Product behavior stays in `TASK.md`. This file says what each finished task added and how it was built.
 
