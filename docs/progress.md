@@ -62,3 +62,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: The player sees the elapsed time as mm:ss while the game is in progress, and the move count rises only after a successful move. New game and the N key return the time to 00:00 and the count to 0.
 - How: `src/modules/app.js` starts a one-second interval from the moment a game starts and writes minutes and seconds, each at least two digits, into `#timer`. The same start clears the previous interval. `#move-count` still updates only from the successful-move callback in `src/modules/board.js`. The win text, the score list, and resume after reload stay out of this task.
+
+## GP-09 — Resume after reload
+
+- Issue: #15
+- Merged: 2026-10-01
+- What: Reloading the page keeps the same board, the same move count, and the elapsed time. The clock continues from the saved milliseconds. A broken saved record starts a new 4×4 game.
+- How: `src/modules/session.js` reads and writes `gem_puzzle_state`: size, tiles, moves, and elapsed milliseconds. `src/modules/board.js` paints a saved layout and reports the tiles after a successful move. `src/modules/app.js` restores that layout, the move count, and the clock, and writes the record after a new game, after a move, and when the page is left. Scores and pictures stay out of this task.

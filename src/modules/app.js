@@ -1,4 +1,5 @@
 import renderBoard from './board';
+import { readSavedGame, writeSavedGame } from './session';
 
 const TICK_MS = 1000;
 
@@ -61,7 +62,11 @@ function isTypingTarget(target) {
 }
 
 export default function mountApp(root) {
-  const size = 4;
+  const saved = readSavedGame();
+  let size = saved ? saved.size : 4;
+  let tiles = [];
+  let moves = 0;
+  let startedAt = 0;
   const app = document.createElement('div');
   app.className = 'app';
 
@@ -90,24 +95,67 @@ export default function mountApp(root) {
   const moveCount = movesStat.querySelector('#move-count');
 
   let clockId = 0;
+  const sizeField = createSizeSelect();
+  const sizeSelect = sizeField.querySelector('#size-select');
 
-  function countMove() {
-    moveCount.textContent = String(Number(moveCount.textContent) + 1);
+  function elapsedNow() {
+    return Date.now() - startedAt;
   }
 
-  function startClock() {
+  function persist() {
+    writeSavedGame({
+      size,
+      tiles,
+      moves,
+      elapsed: elapsedNow(),
+    });
+  }
+
+  function countMove(nextTiles) {
+    tiles = nextTiles.slice();
+    moves += 1;
+    moveCount.textContent = String(moves);
+    persist();
+  }
+
+  function startClock(elapsedMs) {
+    window.clearTimeout(clockId);
     window.clearInterval(clockId);
-    const startedAt = Date.now();
-    timer.textContent = '00:00';
-    clockId = window.setInterval(() => {
-      timer.textContent = formatElapsed(Date.now() - startedAt);
-    }, TICK_MS);
+    startedAt = Date.now() - elapsedMs;
+    timer.textContent = formatElapsed(elapsedMs);
+
+    const remainder = elapsedMs % TICK_MS;
+    const delay = remainder === 0 ? TICK_MS : TICK_MS - remainder;
+
+    clockId = window.setTimeout(() => {
+      timer.textContent = formatElapsed(elapsedNow());
+      clockId = window.setInterval(() => {
+        timer.textContent = formatElapsed(elapsedNow());
+      }, TICK_MS);
+    }, delay);
+  }
+
+  function showBoard(initialTiles) {
+    sizeSelect.value = String(size);
+    board.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
+    board.style.gridTemplateRows = `repeat(${size}, minmax(0, 1fr))`;
+    tiles = renderBoard(board, countMove, size, initialTiles);
+    persist();
   }
 
   function startGame() {
+    moves = 0;
     moveCount.textContent = '0';
-    startClock();
-    renderBoard(board, countMove, size);
+    startClock(0);
+    showBoard();
+  }
+
+  function resumeGame(record) {
+    size = record.size;
+    moves = record.moves;
+    moveCount.textContent = String(moves);
+    startClock(record.elapsed);
+    showBoard(record.tiles);
   }
 
   const newGame = createButton('new-game', 'New game');
@@ -142,7 +190,7 @@ export default function mountApp(root) {
   });
 
   controls.append(
-    createSizeSelect(),
+    sizeField,
     newGame,
     createButton('auto-solve', 'Auto-solve'),
     soundToggle,
@@ -154,5 +202,11 @@ export default function mountApp(root) {
   layout.append(board, controls);
   app.append(title, menuToggle, layout);
   root.append(app);
-  startGame();
+  window.addEventListener('pagehide', persist);
+
+  if (saved) {
+    resumeGame(saved);
+  } else {
+    startGame();
+  }
 }
