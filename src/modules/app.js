@@ -67,7 +67,13 @@ export default function mountApp(root) {
   const board = document.createElement('div');
   board.id = 'board';
   board.className = 'board';
-  renderBoard(board);
+
+  const movesStat = createStat('Moves', 'move-count', '0');
+  const moveCount = movesStat.querySelector('#move-count');
+
+  renderBoard(board, () => {
+    moveCount.textContent = String(Number(moveCount.textContent) + 1);
+  });
 
   const controls = document.createElement('div');
   controls.id = 'controls';
@@ -89,7 +95,7 @@ export default function mountApp(root) {
     createButton('scores-toggle', 'Scores'),
     createButton('images-toggle', 'Images'),
     createStat('Time', 'timer', '00:00'),
-    createStat('Moves', 'move-count', '0'),
+    movesStat,
   );
   layout.append(board, controls);
   app.append(title, menuToggle, layout);
