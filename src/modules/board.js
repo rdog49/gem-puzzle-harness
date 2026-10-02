@@ -153,7 +153,22 @@ function slideIntoBlank(tileElement, blankElement, generation, done) {
   window.setTimeout(slide.finish, SLIDE_MS + 50);
 }
 
-function paintTiles(board, tiles, size, onMove) {
+function paintPicture(cell, value, size, pictureUrl) {
+  const tile = cell;
+  const solvedIndex = value - 1;
+  const column = solvedIndex % size;
+  const row = Math.floor(solvedIndex / size);
+  const span = size - 1;
+
+  tile.classList.add('tile--picture');
+  tile.style.backgroundImage = `url("${pictureUrl}")`;
+  tile.style.backgroundSize = `${size * 100}% ${size * 100}%`;
+  tile.style.backgroundPosition = `${(column / span) * 100}% ${(row / span) * 100}%`;
+  tile.textContent = '';
+  tile.setAttribute('aria-label', String(value));
+}
+
+function paintTiles(board, tiles, size, onMove, pictureUrl) {
   slideGeneration += 1;
   sliding = false;
   board.classList.remove('board--sliding');
@@ -178,7 +193,7 @@ function paintTiles(board, tiles, size, onMove) {
     sliding = true;
     board.classList.add('board--sliding');
     slideIntoBlank(board.children[index], board.children[blankIndex], generation, () => {
-      paintTiles(board, next, size, onMove);
+      paintTiles(board, next, size, onMove, pictureUrl);
       onMove(next);
     });
   }
@@ -191,7 +206,11 @@ function paintTiles(board, tiles, size, onMove) {
     if (!isEmpty) {
       cell.type = 'button';
       cell.draggable = true;
-      cell.textContent = String(value);
+      if (pictureUrl) {
+        paintPicture(cell, value, size, pictureUrl);
+      } else {
+        cell.textContent = String(value);
+      }
       cell.addEventListener('dragstart', (event) => {
         draggedIndex = index;
         suppressClick = true;
@@ -236,9 +255,10 @@ export default function renderBoard(
   onMove = () => {},
   size = DEFAULT_SIZE,
   initialTiles = null,
+  pictureUrl = null,
 ) {
   const tiles = Array.isArray(initialTiles) ? initialTiles.slice() : shuffledTiles(size);
 
-  paintTiles(board, tiles, size, onMove);
+  paintTiles(board, tiles, size, onMove, pictureUrl);
   return tiles.slice();
 }

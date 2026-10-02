@@ -1,4 +1,5 @@
 import renderBoard, { isSolved } from './board';
+import loadFirstBoardImage from './images';
 import {
   addScore,
   readSavedGame,
@@ -72,6 +73,8 @@ export default function mountApp(root) {
   const saved = readSavedGame();
   let size = saved ? saved.size : 4;
   let tiles = [];
+  let pictureUrl = null;
+  let pictureLoading = false;
   let moves = 0;
   let startedAt = 0;
   const app = document.createElement('div');
@@ -204,8 +207,32 @@ export default function mountApp(root) {
     sizeSelect.value = String(size);
     board.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
     board.style.gridTemplateRows = `repeat(${size}, minmax(0, 1fr))`;
-    tiles = renderBoard(board, countMove, size, initialTiles);
+    tiles = renderBoard(board, countMove, size, initialTiles, pictureUrl);
     persist();
+  }
+
+  async function showFirstPicture() {
+    if (pictureLoading) {
+      return;
+    }
+
+    pictureLoading = true;
+    const nextUrl = await loadFirstBoardImage();
+    pictureLoading = false;
+
+    if (!nextUrl || tiles.length !== size * size) {
+      if (nextUrl) {
+        URL.revokeObjectURL(nextUrl);
+      }
+      return;
+    }
+
+    if (pictureUrl) {
+      URL.revokeObjectURL(pictureUrl);
+    }
+
+    pictureUrl = nextUrl;
+    showBoard(tiles);
   }
 
   function startGame() {
@@ -332,6 +359,9 @@ export default function mountApp(root) {
     menuToggle.setAttribute('aria-expanded', String(open));
   });
 
+  const imagesToggle = createButton('images-toggle', 'Images');
+  imagesToggle.addEventListener('click', showFirstPicture);
+
   controls.append(
     sizeField,
     newGame,
@@ -339,7 +369,7 @@ export default function mountApp(root) {
     soundToggle,
     scoresToggle,
     scoresPanel,
-    createButton('images-toggle', 'Images'),
+    imagesToggle,
     timeStat,
     movesStat,
   );

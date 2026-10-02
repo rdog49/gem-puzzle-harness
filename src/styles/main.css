@@ -162,6 +162,11 @@ select {
   cursor: grab;
 }
 
+.tile--picture {
+  background-repeat: no-repeat;
+  color: transparent;
+}
+
 .tile:active {
   cursor: grabbing;
 }
