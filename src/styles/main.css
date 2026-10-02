@@ -167,6 +167,22 @@ select {
   color: transparent;
 }
 
+.image-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.image-status {
+  margin: 0;
+  color: #f6f1e7;
+}
+
+.image-status[hidden],
+#retry-image[hidden] {
+  display: none;
+}
+
 .tile:active {
   cursor: grabbing;
 }
