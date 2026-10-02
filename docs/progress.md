@@ -76,3 +76,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: The player chooses 3x3, 4x4, 5x5, 6x6, 7x7, or 8x8. Each choice starts a new solvable game of that size without reloading the page. 3×3 has nine cells and one empty cell. 8×8 has 64 cells and one empty cell.
 - How: `src/modules/app.js` listens to `#size-select` and starts a new game through the existing shuffle, which already deals any size from 3 to 8 by moving the empty cell. The move count and the timer return to zero. Pictures stay out of this task.
+
+## GP-11 — Sliding animation
+
+- Issue: #17
+- Merged: 2026-10-01
+- What: A successful click and a legal drop slide that tile into the empty cell over about 200 ms. An illegal click or drop leaves the board where it is and does not animate another tile.
+- How: `src/modules/board.js` measures the chosen tile and the empty cell, translates only that tile, then redraws and reports the move. `src/styles/main.css` runs that translation for 200 ms. Auto-solve stays out of this task.

@@ -106,22 +106,77 @@ function moveTile(tiles, index, size) {
   return next;
 }
 
+const SLIDE_MS = 200;
+
 let suppressClick = false;
+let sliding = false;
+let slideGeneration = 0;
+
+function slideIntoBlank(tileElement, blankElement, generation, done) {
+  const tile = tileElement;
+  const blank = blankElement;
+  const tileRect = tile.getBoundingClientRect();
+  const blankRect = blank.getBoundingClientRect();
+  const deltaX = blankRect.left - tileRect.left;
+  const deltaY = blankRect.top - tileRect.top;
+  const slide = {
+    settled: false,
+    onEnd(event) {
+      if (event.propertyName !== 'transform') {
+        return;
+      }
+
+      slide.finish();
+    },
+    finish() {
+      if (slide.settled) {
+        return;
+      }
+
+      slide.settled = true;
+      tile.removeEventListener('transitionend', slide.onEnd);
+
+      if (generation === slideGeneration) {
+        done();
+      }
+    },
+  };
+
+  tile.classList.add('tile--sliding');
+  tile.getBoundingClientRect();
+  tile.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+  tile.addEventListener('transitionend', slide.onEnd);
+  window.setTimeout(slide.finish, SLIDE_MS + 50);
+}
 
 function paintTiles(board, tiles, size, onMove) {
+  slideGeneration += 1;
+  sliding = false;
+  board.classList.remove('board--sliding');
   board.replaceChildren();
 
   let draggedIndex = null;
 
   function commitMove(index) {
+    if (sliding) {
+      return;
+    }
+
     const next = moveTile(tiles, index, size);
 
     if (!next) {
       return;
     }
 
-    paintTiles(board, next, size, onMove);
-    onMove(next);
+    const blankIndex = tiles.indexOf(0);
+    const generation = slideGeneration;
+
+    sliding = true;
+    board.classList.add('board--sliding');
+    slideIntoBlank(board.children[index], board.children[blankIndex], generation, () => {
+      paintTiles(board, next, size, onMove);
+      onMove(next);
+    });
   }
 
   tiles.forEach((value, index) => {

@@ -112,6 +112,16 @@ select {
   cursor: grabbing;
 }
 
+.board--sliding {
+  pointer-events: none;
+}
+
+.tile--sliding {
+  position: relative;
+  z-index: 1;
+  transition: transform 200ms linear;
+}
+
 .tile--empty {
   background: transparent;
   cursor: default;
