@@ -1,5 +1,10 @@
 import renderBoard, { isSolved } from './board';
-import { readSavedGame, writeSavedGame } from './session';
+import {
+  addScore,
+  readSavedGame,
+  readScores,
+  writeSavedGame,
+} from './session';
 import { playMoveSound, setSoundOn, unlockSound } from './sound';
 
 const TICK_MS = 1000;
@@ -152,6 +157,8 @@ export default function mountApp(root) {
     persist();
   }
 
+  let recordWin = () => {};
+
   function countMove(nextTiles) {
     tiles = nextTiles.slice();
     moves += 1;
@@ -160,6 +167,7 @@ export default function mountApp(root) {
 
     if (isSolved(tiles, size)) {
       showWin();
+      recordWin();
       return;
     }
 
@@ -262,6 +270,50 @@ export default function mountApp(root) {
   controls.id = 'controls';
   controls.className = 'controls';
 
+  const scoresToggle = createButton('scores-toggle', 'Scores');
+  scoresToggle.setAttribute('aria-expanded', 'false');
+  scoresToggle.setAttribute('aria-controls', 'scores-panel');
+
+  const scoresPanel = document.createElement('section');
+  scoresPanel.id = 'scores-panel';
+  scoresPanel.className = 'scores-panel';
+  scoresPanel.hidden = true;
+
+  const scoresHeading = document.createElement('h2');
+  scoresHeading.className = 'scores-heading';
+  scoresHeading.textContent = 'Top 10';
+
+  const scoreList = document.createElement('ol');
+  scoreList.id = 'score-list';
+  scoreList.className = 'score-list';
+
+  scoresPanel.append(scoresHeading, scoreList);
+
+  function renderScores(scores) {
+    const rows = scores.map((score) => {
+      const item = document.createElement('li');
+      item.textContent = `${formatElapsed(score.elapsed)}, ${score.moves} moves`;
+      return item;
+    });
+
+    scoreList.replaceChildren(...rows);
+  }
+
+  recordWin = () => {
+    renderScores(addScore({
+      moves,
+      elapsed: elapsedNow(),
+    }));
+  };
+
+  scoresToggle.addEventListener('click', () => {
+    const open = scoresPanel.hidden;
+    scoresPanel.hidden = !open;
+    scoresToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  renderScores(readScores());
+
   const soundToggle = createButton('sound-toggle', 'Sound on');
   soundToggle.setAttribute('aria-pressed', 'true');
   soundToggle.addEventListener('click', () => {
@@ -285,7 +337,8 @@ export default function mountApp(root) {
     newGame,
     createButton('auto-solve', 'Auto-solve'),
     soundToggle,
-    createButton('scores-toggle', 'Scores'),
+    scoresToggle,
+    scoresPanel,
     createButton('images-toggle', 'Images'),
     timeStat,
     movesStat,
