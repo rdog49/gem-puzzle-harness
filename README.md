@@ -14,11 +14,6 @@ On a wide screen the board and the actions sit side by side. On a tablet both st
 
 How the game should behave is in `TASK.md`. What each card already added is in `docs/progress.md`.
 
-```bash
-npm install
-npm start
-```
-
 The development server listens on port 8080. `npm run lint` checks `src`. `npm run build` writes `dist` with relative paths. The page is JavaScript (ES modules), HTML, and CSS. Webpack builds it. Network calls use `fetch`. The page markup is empty: the script draws the game.
 
 ## The harness
@@ -56,9 +51,5 @@ One task is one branch, one commit, and one pull request.
 ### Board
 
 Tasks are issues in `rdog49/gem-puzzle-harness`. Issue labels are `board:backlog`, `board:in-progress`, `board:in-review`, and `board:done`. The same card on the project `harness for gem-puzzle` (owner `rdog49`) moves through Status: No Status, then `Todo`, `In progress`, `In review`, and `Done`. Project commands need the `project` scope on `gh` (`gh auth refresh -s project`).
-
-```bash
-gh issue list --label board:backlog --limit 30
-```
 
 The branch `feat/cursor_work_2` keeps a finished game as a behavior reference. It is not merged into tasks, and task code is not copied from it.
