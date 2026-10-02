@@ -1,4 +1,4 @@
-import renderBoard from './board';
+import renderBoard, { isSolved } from './board';
 import { readSavedGame, writeSavedGame } from './session';
 
 const TICK_MS = 1000;
@@ -86,9 +86,19 @@ export default function mountApp(root) {
   const layout = document.createElement('div');
   layout.className = 'layout';
 
+  const boardFrame = document.createElement('div');
+  boardFrame.className = 'board-frame';
+
   const board = document.createElement('div');
   board.id = 'board';
   board.className = 'board';
+
+  const winMessage = document.createElement('p');
+  winMessage.id = 'win-message';
+  winMessage.className = 'win-message';
+  winMessage.hidden = true;
+
+  boardFrame.append(board, winMessage);
 
   const timeStat = createStat('Time', 'timer', '00:00');
   const timer = timeStat.querySelector('#timer');
@@ -96,11 +106,33 @@ export default function mountApp(root) {
   const moveCount = movesStat.querySelector('#move-count');
 
   let clockId = 0;
+  let frozenElapsed = null;
   const sizeField = createSizeSelect();
   const sizeSelect = sizeField.querySelector('#size-select');
 
   function elapsedNow() {
+    if (frozenElapsed !== null) {
+      return frozenElapsed;
+    }
+
     return Date.now() - startedAt;
+  }
+
+  function hideWin() {
+    winMessage.hidden = true;
+    winMessage.textContent = '';
+  }
+
+  function stopClock() {
+    window.clearTimeout(clockId);
+    window.clearInterval(clockId);
+    clockId = 0;
+
+    if (frozenElapsed === null) {
+      frozenElapsed = Date.now() - startedAt;
+    }
+
+    timer.textContent = formatElapsed(frozenElapsed);
   }
 
   function persist() {
@@ -112,16 +144,30 @@ export default function mountApp(root) {
     });
   }
 
+  function showWin() {
+    stopClock();
+    winMessage.textContent = `Hooray! You solved the puzzle in ${timer.textContent} and ${moveCount.textContent} moves.`;
+    winMessage.hidden = false;
+    persist();
+  }
+
   function countMove(nextTiles) {
     tiles = nextTiles.slice();
     moves += 1;
     moveCount.textContent = String(moves);
+
+    if (isSolved(tiles, size)) {
+      showWin();
+      return;
+    }
+
     persist();
   }
 
   function startClock(elapsedMs) {
     window.clearTimeout(clockId);
     window.clearInterval(clockId);
+    frozenElapsed = null;
     startedAt = Date.now() - elapsedMs;
     timer.textContent = formatElapsed(elapsedMs);
 
@@ -129,8 +175,16 @@ export default function mountApp(root) {
     const delay = remainder === 0 ? TICK_MS : TICK_MS - remainder;
 
     clockId = window.setTimeout(() => {
+      if (frozenElapsed !== null) {
+        return;
+      }
+
       timer.textContent = formatElapsed(elapsedNow());
       clockId = window.setInterval(() => {
+        if (frozenElapsed !== null) {
+          return;
+        }
+
         timer.textContent = formatElapsed(elapsedNow());
       }, TICK_MS);
     }, delay);
@@ -147,6 +201,7 @@ export default function mountApp(root) {
   function startGame() {
     moves = 0;
     moveCount.textContent = '0';
+    hideWin();
     startClock(0);
     showBoard();
   }
@@ -167,6 +222,17 @@ export default function mountApp(root) {
     size = record.size;
     moves = record.moves;
     moveCount.textContent = String(moves);
+
+    if (isSolved(record.tiles, size)) {
+      frozenElapsed = record.elapsed;
+      startedAt = Date.now() - record.elapsed;
+      timer.textContent = formatElapsed(record.elapsed);
+      showBoard(record.tiles);
+      showWin();
+      return;
+    }
+
+    hideWin();
     startClock(record.elapsed);
     showBoard(record.tiles);
   }
@@ -212,7 +278,7 @@ export default function mountApp(root) {
     timeStat,
     movesStat,
   );
-  layout.append(board, controls);
+  layout.append(boardFrame, controls);
   app.append(title, menuToggle, layout);
   root.append(app);
   window.addEventListener('pagehide', persist);
