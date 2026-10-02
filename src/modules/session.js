@@ -85,3 +85,80 @@ export function writeSavedGame(state) {
     // The board still plays when storage is unavailable.
   }
 }
+
+const SCORES_KEY = 'gem_puzzle_scores';
+const MAX_SCORES = 10;
+
+function parseScore(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return null;
+  }
+
+  const { moves, elapsed } = value;
+
+  if (!Number.isInteger(moves) || moves < 0) {
+    return null;
+  }
+
+  if (!Number.isInteger(elapsed) || elapsed < 0) {
+    return null;
+  }
+
+  return { moves, elapsed };
+}
+
+function byBestScore(left, right) {
+  if (left.moves !== right.moves) {
+    return left.moves - right.moves;
+  }
+
+  return left.elapsed - right.elapsed;
+}
+
+function keepBest(scores) {
+  return scores
+    .filter((score) => score !== null)
+    .sort(byBestScore)
+    .slice(0, MAX_SCORES);
+}
+
+export function readScores() {
+  try {
+    const raw = localStorage.getItem(SCORES_KEY);
+
+    if (raw === null) {
+      return [];
+    }
+
+    const parsed = JSON.parse(raw);
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return keepBest(parsed.map(parseScore));
+  } catch {
+    return [];
+  }
+}
+
+export function addScore(entry) {
+  const score = parseScore({
+    moves: entry.moves,
+    elapsed: Math.floor(entry.elapsed),
+  });
+
+  if (score === null) {
+    return readScores();
+  }
+
+  const next = keepBest(readScores().concat(score));
+
+  try {
+    localStorage.setItem(SCORES_KEY, JSON.stringify(next));
+  } catch {
+    // The list still updates on screen when storage is unavailable.
+  }
+
+  return next;
+}

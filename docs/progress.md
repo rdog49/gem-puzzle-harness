@@ -97,3 +97,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-02
 - What: A successful move plays a short cue. The button switches between Sound on and Sound off. Sound off keeps the next successful move quiet, and Sound on brings the cue back. A click that does not move a tile stays silent. The toggle is not kept after a reload.
 - How: src/modules/sound.js plays a short Web Audio oscillator and adds no audio file. src/modules/app.js wires #sound-toggle and aria-pressed, and plays the cue from the successful-move callback. The saved game still stores only size, tiles, moves, and elapsed milliseconds. Scores and pictures stay out of this task.
+
+## GP-14 — Top 10 scores
+
+- Issue: #20
+- Merged: 2026-10-02
+- What: The Scores button opens and hides a Top 10 list. A win adds the move count and the time. The list keeps at most ten results, with fewer moves first and then less time. The list remains after a reload. Opening a saved solved game does not add that result again.
+- How: `src/modules/session.js` reads and writes `gem_puzzle_scores`. `src/modules/app.js` records a result only when a move first solves the board, and `#scores-toggle` shows and hides `#scores-panel` with `#score-list`. `src/styles/main.css` places the list in the actions column. Pictures and auto-solve stay out of this task.
