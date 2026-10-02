@@ -12,6 +12,10 @@ function sameOrder(left, right) {
   return left.every((value, index) => value === right[index]);
 }
 
+export function isSolved(tiles, size) {
+  return sameOrder(tiles, solvedTiles(size));
+}
+
 function neighborIndexes(index, size) {
   const row = Math.floor(index / size);
   const column = index % size;

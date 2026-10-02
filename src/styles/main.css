@@ -77,17 +77,43 @@ select {
   max-width: 72rem;
 }
 
+.board-frame {
+  position: relative;
+  width: min(100%, 34rem);
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(4, minmax(0, 1fr));
   gap: 0.45rem;
-  width: min(100%, 34rem);
+  width: 100%;
   aspect-ratio: 1;
   padding: 0.45rem;
   background: #1c1814;
   border: 1px solid #3a322b;
   border-radius: 0.25rem;
+}
+
+.win-message {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 1.25rem;
+  text-align: center;
+  background: rgba(20, 17, 14, 0.86);
+  color: #f6f1e7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.15rem, 3vw, 1.75rem);
+  line-height: 1.35;
+}
+
+.win-message[hidden] {
+  display: none;
 }
 
 .tile {
@@ -163,7 +189,7 @@ select {
     justify-content: center;
   }
 
-  .board {
+  .board-frame {
     width: min(36rem, calc(100% - 18rem));
   }
 }

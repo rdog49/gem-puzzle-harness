@@ -83,3 +83,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-01
 - What: A successful click and a legal drop slide that tile into the empty cell over about 200 ms. An illegal click or drop leaves the board where it is and does not animate another tile.
 - How: `src/modules/board.js` measures the chosen tile and the empty cell, translates only that tile, then redraws and reports the move. `src/styles/main.css` runs that translation for 200 ms. Auto-solve stays out of this task.
+
+## GP-12 — Win message
+
+- Issue: #18
+- Merged: 2026-10-02
+- What: A solved board shows `Hooray! You solved the puzzle in #:## and N moves.` over the board. The time and the move count match the screen, and the timer stops. A saved solved game shows the same message and does not restart the clock. New game and a size change hide the message and start the clock from zero.
+- How: `src/modules/board.js` exports `isSolved`. `src/modules/app.js` shows `#win-message` after the slide that finishes the board, freezes the saved milliseconds, and stops the clock. `src/styles/main.css` places that text over the board. Scores and auto-solve stay out of this task.
