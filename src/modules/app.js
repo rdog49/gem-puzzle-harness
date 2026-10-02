@@ -1,5 +1,5 @@
 import renderBoard, { isSolved } from './board';
-import loadBoardImage from './images';
+import { loadBoardImage, loadPreviews } from './images';
 import {
   addScore,
   readSavedGame,
@@ -74,8 +74,10 @@ export default function mountApp(root) {
   let size = saved ? saved.size : 4;
   let tiles = [];
   let pictureUrl = null;
-  let pictureLoading = false;
   let imageFailure = null;
+  let imageGeneration = 0;
+  let selectedId = null;
+  let previewUrls = [];
 
   const imagePanel = document.createElement('div');
   imagePanel.id = 'image-panel';
@@ -95,7 +97,11 @@ export default function mountApp(root) {
 
   const retryImage = createButton('retry-image', 'Retry');
   retryImage.hidden = true;
-  imagePanel.append(imageLoader, imageError, retryImage);
+
+  const thumbs = document.createElement('div');
+  thumbs.id = 'thumbs';
+
+  imagePanel.append(imageLoader, imageError, retryImage, thumbs);
   let moves = 0;
   let startedAt = 0;
   const app = document.createElement('div');
@@ -249,31 +255,31 @@ export default function mountApp(root) {
     }
   }
 
-  async function requestPicture(fromRetry) {
-    if (pictureLoading) {
-      return;
-    }
+  function revokePreviewUrls(urls) {
+    urls.forEach((url) => {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    });
+  }
 
-    pictureLoading = true;
-    showImageState('loading');
-    const retry = fromRetry ? imageFailure : null;
-    const result = await loadBoardImage(retry);
-    pictureLoading = false;
+  function clearPreviews() {
+    revokePreviewUrls(previewUrls);
+    previewUrls = [];
+    thumbs.replaceChildren();
+  }
 
-    if (!result.ok) {
-      imageFailure = result.stage === 'file'
-        ? { stage: 'file', id: result.id }
-        : { stage: 'list' };
-      clearPicture();
-      showImageState('error');
-      return;
-    }
+  function markSelected(id) {
+    thumbs.querySelectorAll('.thumb').forEach((button) => {
+      const selected = button.dataset.id === String(id);
+      button.classList.toggle('is-selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+  }
 
-    imageFailure = null;
-    showImageState('idle');
-
+  function applyPicture(url) {
     if (tiles.length !== size * size) {
-      URL.revokeObjectURL(result.url);
+      URL.revokeObjectURL(url);
       return;
     }
 
@@ -281,8 +287,94 @@ export default function mountApp(root) {
       URL.revokeObjectURL(pictureUrl);
     }
 
-    pictureUrl = result.url;
+    pictureUrl = url;
     showBoard(tiles);
+  }
+
+  async function requestPicture(imageId) {
+    imageGeneration += 1;
+    const generation = imageGeneration;
+    selectedId = imageId;
+    markSelected(imageId);
+    showImageState('loading');
+    const result = await loadBoardImage(imageId);
+
+    if (result.aborted || generation !== imageGeneration) {
+      if (result.url) {
+        URL.revokeObjectURL(result.url);
+      }
+
+      return;
+    }
+
+    if (!result.ok) {
+      imageFailure = { stage: 'file', id: result.id };
+      clearPicture();
+      showImageState('error');
+      return;
+    }
+
+    if (selectedId !== imageId) {
+      URL.revokeObjectURL(result.url);
+      return;
+    }
+
+    imageFailure = null;
+    showImageState('idle');
+    applyPicture(result.url);
+  }
+
+  function drawPreviews(previews) {
+    clearPreviews();
+
+    const buttons = previews.map((preview, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'thumb';
+      button.dataset.id = String(preview.id);
+      button.setAttribute('aria-label', `Picture ${index + 1}`);
+      button.setAttribute('aria-pressed', 'false');
+
+      const image = document.createElement('img');
+      image.src = preview.url;
+      image.alt = '';
+      button.append(image);
+      button.addEventListener('click', () => {
+        requestPicture(preview.id);
+      });
+
+      return button;
+    });
+
+    previewUrls = previews.map((preview) => preview.url);
+    thumbs.append(...buttons);
+  }
+
+  async function showPreviews() {
+    imageGeneration += 1;
+    const generation = imageGeneration;
+    showImageState('loading');
+    const result = await loadPreviews();
+
+    if (result.aborted || generation !== imageGeneration) {
+      if (result.previews) {
+        revokePreviewUrls(result.previews.map((preview) => preview.url));
+      }
+
+      return;
+    }
+
+    if (!result.ok) {
+      imageFailure = { stage: 'list' };
+      clearPreviews();
+      clearPicture();
+      showImageState('error');
+      return;
+    }
+
+    imageFailure = null;
+    drawPreviews(result.previews);
+    requestPicture(result.previews[0].id);
   }
 
   function startGame() {
@@ -411,10 +503,15 @@ export default function mountApp(root) {
 
   const imagesToggle = createButton('images-toggle', 'Images');
   imagesToggle.addEventListener('click', () => {
-    requestPicture(false);
+    showPreviews();
   });
   retryImage.addEventListener('click', () => {
-    requestPicture(true);
+    if (imageFailure && imageFailure.stage === 'file') {
+      requestPicture(imageFailure.id);
+      return;
+    }
+
+    showPreviews();
   });
 
   controls.append(
