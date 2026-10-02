@@ -104,3 +104,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-02
 - What: The Scores button opens and hides a Top 10 list. A win adds the move count and the time. The list keeps at most ten results, with fewer moves first and then less time. The list remains after a reload. Opening a saved solved game does not add that result again.
 - How: `src/modules/session.js` reads and writes `gem_puzzle_scores`. `src/modules/app.js` records a result only when a move first solves the board, and `#scores-toggle` shows and hides `#scores-panel` with `#score-list`. `src/styles/main.css` places the list in the actions column. Pictures and auto-solve stay out of this task.
+
+## GP-15 — Picture tiles
+
+- Issue: #21
+- Merged: 2026-10-02
+- What: Images loads the first picture from a keyless Picsum list and lays its fragments on the occupied tiles. The empty cell stays empty. A neighboring move still slides that fragment into the gap. A new game and a size change keep the same picture.
+- How: `src/modules/images.js` fetches `https://picsum.photos/v2/list?page=1&limit=12`, then fetches `https://picsum.photos/id/{id}/800/800` with `fetch`, reads a blob, and shows it through an object URL. `src/modules/board.js` paints each occupied cell with `background-size` and `background-position` from the tile number. `src/modules/app.js` wires `#images-toggle`. `src/styles/main.css` stops the picture from repeating. The error screen, request cancellation, and the preview row stay out of this task.
