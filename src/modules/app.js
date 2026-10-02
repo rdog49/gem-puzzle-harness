@@ -1,4 +1,5 @@
-import renderBoard, { isSolved } from './board';
+import renderBoard, { isSolved, lockBoard, playBoardMove } from './board';
+import solutionMoves from './solver';
 import { loadBoardImage, loadPreviews } from './images';
 import {
   addScore,
@@ -103,6 +104,8 @@ export default function mountApp(root) {
 
   imagePanel.append(imageLoader, imageError, retryImage, thumbs);
   let moves = 0;
+  let solving = false;
+  let solveToken = 0;
   let startedAt = 0;
   const app = document.createElement('div');
   app.className = 'app';
@@ -230,7 +233,54 @@ export default function mountApp(root) {
     }, delay);
   }
 
+  function stopSolve() {
+    solveToken += 1;
+    solving = false;
+    lockBoard(false);
+  }
+
+  function beginSolve() {
+    if (solving || isSolved(tiles, size)) {
+      return;
+    }
+
+    const steps = solutionMoves(tiles, size);
+
+    if (steps.length === 0) {
+      return;
+    }
+
+    solving = true;
+    solveToken += 1;
+    const token = solveToken;
+    lockBoard(true);
+
+    const stepAt = (index) => {
+      if (token !== solveToken) {
+        return;
+      }
+
+      if (index >= steps.length || isSolved(tiles, size)) {
+        solving = false;
+        lockBoard(false);
+        return;
+      }
+
+      const started = playBoardMove(steps[index], () => {
+        stepAt(index + 1);
+      });
+
+      if (!started) {
+        solving = false;
+        lockBoard(false);
+      }
+    };
+
+    stepAt(0);
+  }
+
   function showBoard(initialTiles) {
+    stopSolve();
     sizeSelect.value = String(size);
     board.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
     board.style.gridTemplateRows = `repeat(${size}, minmax(0, 1fr))`;
@@ -419,6 +469,9 @@ export default function mountApp(root) {
   const newGame = createButton('new-game', 'New game');
   newGame.addEventListener('click', startGame);
 
+  const autoSolve = createButton('auto-solve', 'Auto-solve');
+  autoSolve.addEventListener('click', beginSolve);
+
   document.addEventListener('keydown', (event) => {
     if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) {
       return;
@@ -517,7 +570,7 @@ export default function mountApp(root) {
   controls.append(
     sizeField,
     newGame,
-    createButton('auto-solve', 'Auto-solve'),
+    autoSolve,
     soundToggle,
     scoresToggle,
     scoresPanel,
