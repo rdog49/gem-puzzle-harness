@@ -115,6 +115,24 @@ const SLIDE_MS = 200;
 let suppressClick = false;
 let sliding = false;
 let slideGeneration = 0;
+let boardLocked = false;
+let afterMove = null;
+let playMove = () => false;
+
+export function lockBoard(locked) {
+  boardLocked = locked;
+}
+
+export function playBoardMove(index, done) {
+  afterMove = done;
+  const started = playMove(index);
+
+  if (!started) {
+    afterMove = null;
+  }
+
+  return started;
+}
 
 function slideIntoBlank(tileElement, blankElement, generation, done) {
   const tile = tileElement;
@@ -171,20 +189,21 @@ function paintPicture(cell, value, size, pictureUrl) {
 function paintTiles(board, tiles, size, onMove, pictureUrl) {
   slideGeneration += 1;
   sliding = false;
+  afterMove = null;
   board.classList.remove('board--sliding');
   board.replaceChildren();
 
   let draggedIndex = null;
 
-  function commitMove(index) {
+  function runMove(index) {
     if (sliding) {
-      return;
+      return false;
     }
 
     const next = moveTile(tiles, index, size);
 
     if (!next) {
-      return;
+      return false;
     }
 
     const blankIndex = tiles.indexOf(0);
@@ -193,9 +212,26 @@ function paintTiles(board, tiles, size, onMove, pictureUrl) {
     sliding = true;
     board.classList.add('board--sliding');
     slideIntoBlank(board.children[index], board.children[blankIndex], generation, () => {
+      const follow = afterMove;
+      afterMove = null;
       paintTiles(board, next, size, onMove, pictureUrl);
       onMove(next);
+
+      if (follow) {
+        follow();
+      }
     });
+    return true;
+  }
+
+  playMove = runMove;
+
+  function commitMove(index) {
+    if (boardLocked) {
+      return;
+    }
+
+    runMove(index);
   }
 
   tiles.forEach((value, index) => {

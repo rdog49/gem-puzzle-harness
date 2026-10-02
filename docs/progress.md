@@ -125,3 +125,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-02
 - What: The player sees three picture previews and can put another picture on the tiles without waiting for the previous load. The board keeps the latest choice. A cancelled request does not show the error screen. Loading, the error text, and Retry stay as they were.
 - How: `src/modules/images.js` loads the Picsum list and three `180/180` previews with one `Promise.all`, and loads the `800/800` file as a blob. The list request and the file request each have an `AbortController`. A new choice calls `abort()`, and `AbortError` is not treated as a load error. `src/modules/app.js` draws the previews in `#thumbs` and applies only the latest picture. `src/styles/main.css` lays the previews in a row. Auto-solve stays out of this task.
+
+## GP-18 — Auto-solve
+
+- Issue: #24
+- Merged: 2026-10-02
+- What: Auto-solve finishes a shuffled board by sliding one neighboring tile at a time. The board is solved at the end, and the usual congratulation shows the same time and the same move count as the screen. A press on an already solved board does nothing. New game stops a solve that is still running.
+- How: `src/modules/solver.js` finds a chain of legal moves that places the tiles in order. `src/modules/board.js` plays each move with the existing slide and ignores tile clicks while that chain runs. `src/modules/app.js` wires `#auto-solve` through the move counter, the cue, and the win message.
