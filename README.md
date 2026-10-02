@@ -14,7 +14,7 @@ On a wide screen the board and the actions sit side by side. On a tablet both st
 
 How the game should behave is in `TASK.md`. What each card already added is in `docs/progress.md`.
 
-The development server listens on port 8080. `npm run lint` checks `src`. `npm run build` writes `dist` with relative paths. The page is JavaScript (ES modules), HTML, and CSS. Webpack builds it. Network calls use `fetch`. The page markup is empty: the script draws the game.
+The development server listens on port 8080. `npm run lint` checks `src`. `npm run build` writes `dist` with relative paths. A push to `main` publishes that build to GitHub Pages: https://rdog49.github.io/gem-puzzle-harness/. The page is JavaScript (ES modules), HTML, and CSS. Webpack builds it. Network calls use `fetch`. The page markup is empty: the script draws the game.
 
 ## The harness
 
