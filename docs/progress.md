@@ -90,3 +90,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-02
 - What: A solved board shows `Hooray! You solved the puzzle in #:## and N moves.` over the board. The time and the move count match the screen, and the timer stops. A saved solved game shows the same message and does not restart the clock. New game and a size change hide the message and start the clock from zero.
 - How: `src/modules/board.js` exports `isSolved`. `src/modules/app.js` shows `#win-message` after the slide that finishes the board, freezes the saved milliseconds, and stops the clock. `src/styles/main.css` places that text over the board. Scores and auto-solve stay out of this task.
+
+## GP-13 — Move sound
+
+- Issue: #19
+- Merged: 2026-10-02
+- What: A successful move plays a short cue. The button switches between Sound on and Sound off. Sound off keeps the next successful move quiet, and Sound on brings the cue back. A click that does not move a tile stays silent. The toggle is not kept after a reload.
+- How: src/modules/sound.js plays a short Web Audio oscillator and adds no audio file. src/modules/app.js wires #sound-toggle and aria-pressed, and plays the cue from the successful-move callback. The saved game still stores only size, tiles, moves, and elapsed milliseconds. Scores and pictures stay out of this task.

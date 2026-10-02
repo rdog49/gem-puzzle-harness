@@ -1,5 +1,6 @@
 import renderBoard, { isSolved } from './board';
 import { readSavedGame, writeSavedGame } from './session';
+import { playMoveSound, setSoundOn, unlockSound } from './sound';
 
 const TICK_MS = 1000;
 const SIZES = [3, 4, 5, 6, 7, 8];
@@ -155,6 +156,7 @@ export default function mountApp(root) {
     tiles = nextTiles.slice();
     moves += 1;
     moveCount.textContent = String(moves);
+    playMoveSound();
 
     if (isSolved(tiles, size)) {
       showWin();
@@ -262,6 +264,16 @@ export default function mountApp(root) {
 
   const soundToggle = createButton('sound-toggle', 'Sound on');
   soundToggle.setAttribute('aria-pressed', 'true');
+  soundToggle.addEventListener('click', () => {
+    const next = soundToggle.getAttribute('aria-pressed') !== 'true';
+    soundToggle.setAttribute('aria-pressed', String(next));
+    soundToggle.textContent = next ? 'Sound on' : 'Sound off';
+    setSoundOn(next);
+  });
+
+  board.addEventListener('pointerdown', () => {
+    unlockSound();
+  });
 
   menuToggle.addEventListener('click', () => {
     const open = controls.classList.toggle('is-open');
