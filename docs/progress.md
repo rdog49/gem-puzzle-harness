@@ -111,3 +111,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-02
 - What: Images loads the first picture from a keyless Picsum list and lays its fragments on the occupied tiles. The empty cell stays empty. A neighboring move still slides that fragment into the gap. A new game and a size change keep the same picture.
 - How: `src/modules/images.js` fetches `https://picsum.photos/v2/list?page=1&limit=12`, then fetches `https://picsum.photos/id/{id}/800/800` with `fetch`, reads a blob, and shows it through an object URL. `src/modules/board.js` paints each occupied cell with `background-size` and `background-position` from the tile number. `src/modules/app.js` wires `#images-toggle`. `src/styles/main.css` stops the picture from repeating. The error screen, request cancellation, and the preview row stay out of this task.
+
+## GP-16 — Loading, error, and retry
+
+- Issue: #22
+- Merged: 2026-10-02
+- What: While the picture list or the picture file is still on the way, the player sees Loading images…. After the request settles, that message is hidden. A failed request shows Could not load the image. Number tiles are shown instead., the Retry button, and numbered tiles. Retry sends the failed request again: the list when the list failed, or the file when the file failed.
+- How: `src/modules/images.js` reports which request failed and skips the list when only the file needs another try. `src/modules/app.js` shows `#image-loader`, `#image-error`, and `#retry-image` inside `#image-panel`, and returns the tiles to numbers on failure. `src/styles/main.css` hides those messages when they are not in use. Request cancellation and the preview row stay out of this task.

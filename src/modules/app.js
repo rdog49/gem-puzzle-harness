@@ -1,5 +1,5 @@
 import renderBoard, { isSolved } from './board';
-import loadFirstBoardImage from './images';
+import loadBoardImage from './images';
 import {
   addScore,
   readSavedGame,
@@ -75,6 +75,27 @@ export default function mountApp(root) {
   let tiles = [];
   let pictureUrl = null;
   let pictureLoading = false;
+  let imageFailure = null;
+
+  const imagePanel = document.createElement('div');
+  imagePanel.id = 'image-panel';
+  imagePanel.className = 'image-panel';
+
+  const imageLoader = document.createElement('p');
+  imageLoader.id = 'image-loader';
+  imageLoader.className = 'image-status';
+  imageLoader.textContent = 'Loading images…';
+  imageLoader.hidden = true;
+
+  const imageError = document.createElement('p');
+  imageError.id = 'image-error';
+  imageError.className = 'image-status';
+  imageError.textContent = 'Could not load the image. Number tiles are shown instead.';
+  imageError.hidden = true;
+
+  const retryImage = createButton('retry-image', 'Retry');
+  retryImage.hidden = true;
+  imagePanel.append(imageLoader, imageError, retryImage);
   let moves = 0;
   let startedAt = 0;
   const app = document.createElement('div');
@@ -211,19 +232,48 @@ export default function mountApp(root) {
     persist();
   }
 
-  async function showFirstPicture() {
+  function showImageState(state) {
+    imageLoader.hidden = state !== 'loading';
+    imageError.hidden = state !== 'error';
+    retryImage.hidden = state !== 'error';
+  }
+
+  function clearPicture() {
+    if (pictureUrl) {
+      URL.revokeObjectURL(pictureUrl);
+      pictureUrl = null;
+    }
+
+    if (tiles.length === size * size) {
+      showBoard(tiles);
+    }
+  }
+
+  async function requestPicture(fromRetry) {
     if (pictureLoading) {
       return;
     }
 
     pictureLoading = true;
-    const nextUrl = await loadFirstBoardImage();
+    showImageState('loading');
+    const retry = fromRetry ? imageFailure : null;
+    const result = await loadBoardImage(retry);
     pictureLoading = false;
 
-    if (!nextUrl || tiles.length !== size * size) {
-      if (nextUrl) {
-        URL.revokeObjectURL(nextUrl);
-      }
+    if (!result.ok) {
+      imageFailure = result.stage === 'file'
+        ? { stage: 'file', id: result.id }
+        : { stage: 'list' };
+      clearPicture();
+      showImageState('error');
+      return;
+    }
+
+    imageFailure = null;
+    showImageState('idle');
+
+    if (tiles.length !== size * size) {
+      URL.revokeObjectURL(result.url);
       return;
     }
 
@@ -231,7 +281,7 @@ export default function mountApp(root) {
       URL.revokeObjectURL(pictureUrl);
     }
 
-    pictureUrl = nextUrl;
+    pictureUrl = result.url;
     showBoard(tiles);
   }
 
@@ -360,7 +410,12 @@ export default function mountApp(root) {
   });
 
   const imagesToggle = createButton('images-toggle', 'Images');
-  imagesToggle.addEventListener('click', showFirstPicture);
+  imagesToggle.addEventListener('click', () => {
+    requestPicture(false);
+  });
+  retryImage.addEventListener('click', () => {
+    requestPicture(true);
+  });
 
   controls.append(
     sizeField,
@@ -370,6 +425,7 @@ export default function mountApp(root) {
     scoresToggle,
     scoresPanel,
     imagesToggle,
+    imagePanel,
     timeStat,
     movesStat,
   );
