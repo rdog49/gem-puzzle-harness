@@ -118,3 +118,10 @@ Product behavior stays in `TASK.md`. This file says what each finished task adde
 - Merged: 2026-10-02
 - What: While the picture list or the picture file is still on the way, the player sees Loading images…. After the request settles, that message is hidden. A failed request shows Could not load the image. Number tiles are shown instead., the Retry button, and numbered tiles. Retry sends the failed request again: the list when the list failed, or the file when the file failed.
 - How: `src/modules/images.js` reports which request failed and skips the list when only the file needs another try. `src/modules/app.js` shows `#image-loader`, `#image-error`, and `#retry-image` inside `#image-panel`, and returns the tiles to numbers on failure. `src/styles/main.css` hides those messages when they are not in use. Request cancellation and the preview row stay out of this task.
+
+## GP-17 — Image switch and thumbnails
+
+- Issue: #23
+- Merged: 2026-10-02
+- What: The player sees three picture previews and can put another picture on the tiles without waiting for the previous load. The board keeps the latest choice. A cancelled request does not show the error screen. Loading, the error text, and Retry stay as they were.
+- How: `src/modules/images.js` loads the Picsum list and three `180/180` previews with one `Promise.all`, and loads the `800/800` file as a blob. The list request and the file request each have an `AbortController`. A new choice calls `abort()`, and `AbortError` is not treated as a load error. `src/modules/app.js` draws the previews in `#thumbs` and applies only the latest picture. `src/styles/main.css` lays the previews in a row. Auto-solve stays out of this task.

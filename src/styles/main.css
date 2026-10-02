@@ -183,6 +183,34 @@ select {
   display: none;
 }
 
+#thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.thumb {
+  width: 4.5rem;
+  height: 4.5rem;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 0.25rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.thumb.is-selected {
+  border-color: #e07a3d;
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.15rem;
+}
+
 .tile:active {
   cursor: grabbing;
 }
