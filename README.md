@@ -1,64 +1,64 @@
 # Gem Puzzle Harness
 
-Этот репозиторий — харнесс-оболочка для ИИ-агентов в Cursor. Игра Gem Puzzle — продукт, который оболочка собирает по карточкам доски. Назначение репозитория — сама оболочка: роли, навыки, одно правило чата и проведение карточки до pull request.
+This repository is a harness shell for AI agents in Cursor. Gem Puzzle is the product the shell builds from board cards. The repository itself is the shell: roles, skills, one chat rule, and the path of a card through to a pull request.
 
-## Игра
+## The game
 
-В дереве уже собраны браузерные пятнашки. Игрок сдвигает плитку в пустую клетку. Поле по умолчанию 4×4 (плитки 1–15 и одна пустая клетка), размер выбирается от 3×3 до 8×8. Новая партия перемешана случайно и при этом решаема.
+The tree already contains a browser sliding puzzle. The player slides a tile into the empty cell. The default board is 4×4 (tiles 1–15 and one empty cell). The size can be chosen from 3×3 to 8×8. A new game is shuffled at random and can be solved.
 
-Соседнюю плитку можно сдвинуть кликом или перетаскиванием на пустую клетку. Ход — это сдвиг примерно на 200 мс. На экране идут время `mm:ss` и число успешных ходов. Перезагрузка страницы сохраняет расклад, число ходов и прошедшее время. Когда поле собрано, поверх доски появляется поздравление с тем же временем и тем же числом ходов.
+A tile that shares an edge with the empty cell can be moved by a click or by a drag onto that cell. A move is a slide of about 200 ms. The screen shows the time as `mm:ss` and the number of successful moves. Reloading the page keeps the layout, the move count, and the elapsed time. When the board is solved, a congratulation appears over the board with the same time and the same move count.
 
-Есть звук хода, список Top 10, картинки вместо цифр и авторешение. Картинку игра забирает по сети (Picsum): пока файл в пути, видна загрузка; при ошибке остаются цифры и кнопка повтора; на экране сразу три превью, и другую картинку можно выбрать без перезагрузки. Авторешение само доводит поле до победы, ход за ходом.
+The game has a move sound, a Top 10 list, pictures instead of numbers, and auto-solve. The picture is fetched over the network (Picsum): while the file is on the way, a loading message is visible; on failure the numbered tiles and a retry button remain; three previews are on screen at once, and another picture can be chosen without reloading. Auto-solve finishes the board by itself, one move after another.
 
-На широком экране поле и действия стоят рядом. На планшете оба блока остаются доступны. На телефоне поле умещается в ширину экрана, а действия открываются кнопкой Menu.
+On a wide screen the board and the actions sit side by side. On a tablet both stay reachable. On a phone the board fits the screen width, and the actions open from the Menu button.
 
-Как игра должна себя вести, записано в `TASK.md`. Что уже сделала каждая карточка — в `docs/progress.md`.
+How the game should behave is in `TASK.md`. What each card already added is in `docs/progress.md`.
 
 ```bash
 npm install
 npm start
 ```
 
-Сервер разработки слушает порт 8080. `npm run lint` проверяет `src`. `npm run build` пишет `dist` с относительными путями. Страница на JavaScript (ES-модули), HTML и CSS. Сборку делает Webpack. Сеть ходит через `fetch`. Разметка страницы пустая: игру рисует скрипт.
+The development server listens on port 8080. `npm run lint` checks `src`. `npm run build` writes `dist` with relative paths. The page is JavaScript (ES modules), HTML, and CSS. Webpack builds it. Network calls use `fetch`. The page markup is empty: the script draws the game.
 
-## Харнесс
+## The harness
 
-Оболочка проводит одну карточку GitHub-доски через три роли в одном чате. Человек называет задачу в текущем чате. Агент читает её, предлагает план и ждёт. После согласия или правок те же три роли продолжают эту карточку здесь: код, проверка, движение по доске и pull request. Отдельный чат на роль не открывают.
+The shell takes one GitHub board card through three roles in one chat. The person names a task in the current chat. The agent reads it, proposes a plan, and waits. After approval or edits, the same three roles continue that card here: code, the check, the board move, and the pull request. A separate chat per role is not opened.
 
-Роли лежат в `.cursor/agents/`:
+The roles live in `.cursor/agents/`:
 
-1. **Initializer** читает одну issue, сверяет её с `TASK.md` и ставит на проекте `harness for gem-puzzle` статус `Todo`. В чат возвращаются описание и план. Файлы не меняются, пока человек не согласится или не поправит план.
-2. После согласия **evaluator** переводит метку issue в `board:in-progress` и статус проекта в `In progress`.
-3. **Coder** отрезает от актуального `main` ветку `feat/gp-XX-slug` и пишет только согласованный объём. Подписи и поведение берёт из `TASK.md`, способ сборки — из навыков. Коммит не делает.
-4. **Evaluator** прогоняет линтер, сборку и сценарий в браузере по критериям этой карточки. Если что-то ломается, карточка остаётся `In progress`, и coder чинит её в том же чате.
-5. Когда проверка проходит, evaluator дописывает секцию в `docs/progress.md` и делает один коммит: изменения задачи и этот файл, сообщение `feat: GP-XX short result`. Карточка переходит в `board:in-review` и статус `In review`, открывается pull request в `main`. Человек смотрит pull request и вливает его. Агент не вливает.
-6. После вливания evaluator ставит `board:done` и статус `Done` и закрывает issue. Запись в `docs/progress.md` уже лежит в смерженном коммите, на `main` её отдельно не правят.
+1. **Initializer** reads one issue, compares it with `TASK.md`, and sets Status `Todo` on the project `harness for gem-puzzle`. The chat gets a description and a plan. Files stay unchanged until the person agrees or edits the plan.
+2. After agreement, the **evaluator** moves the issue label to `board:in-progress` and the project Status to `In progress`.
+3. **Coder** cuts the branch `feat/gp-XX-slug` from an up-to-date `main` and writes only the agreed scope. Labels and behavior come from `TASK.md`. The implementation method comes from the skills. The coder does not commit.
+4. **Evaluator** runs the linter, the build, and a browser pass against this card's criteria. If something breaks, the card stays `In progress`, and the coder fixes it in the same chat.
+5. When the check passes, the evaluator appends a section to `docs/progress.md` and makes one commit: the task changes and that file, message `feat: GP-XX short result`. The card moves to `board:in-review` and Status `In review`, and a pull request into `main` is opened. The person reviews the pull request and merges it. The agent does not merge.
+6. After the merge, the evaluator sets `board:done` and Status `Done` and closes the issue. The `docs/progress.md` section is already inside the merged commit. It is not edited again on `main`.
 
-Следующий чат начинается с `main`. Если последний смерженный pull request ещё не в локальном `main`, его сначала подтягивают, и только потом режут новую ветку.
+The next chat starts on `main`. If the latest merged pull request is not yet in local `main`, it is pulled first, and only then is the new branch cut.
 
-Одна задача — одна ветка, один коммит, один pull request.
+One task is one branch, one commit, and one pull request.
 
-### Из чего оболочка состоит
+### What the shell is made of
 
-- `.cursor/rules/single-chat.mdc` — правило на все чаты: одна карточка, три роли, один чат.
-- `.cursor/agents/initializer.md` — план и статус `Todo`.
-- `.cursor/agents/coder.md` — код согласованного объёма.
-- `.cursor/agents/evaluator.md` — проверка, единственный коммит задачи, доска и pull request.
-- `.cursor/skills/board-task` — как прочитать карточку, поставить `Todo` и остановиться на плане.
-- `.cursor/skills/frontend-stack` — Webpack, ESLint (airbnb-base), ES-модули, пустой `body`, сеть через `fetch`.
-- `.cursor/skills/puzzle-rules` — поле, перемешивание, ходы, размеры, анимация, авторешение.
-- `.cursor/skills/play-session` — оболочка страницы, подписи, таймер, ходы, сохранение, звук, Top 10.
-- `.cursor/skills/picture-tiles` — картинки, превью, загрузка, повтор, отмена запроса.
-- `.cursor/skills/verify-task` — lint, сборка, проход в браузере, запись прогресса, движение карточки, pull request.
-- `TASK.md` — только описание продукта. Технические ограничения остаются в навыках.
-- `docs/progress.md` — журнал закрытых карточек: что появилось у игрока и как это собрано.
+- `.cursor/rules/single-chat.mdc` — the rule for every chat: one card, three roles, one chat.
+- `.cursor/agents/initializer.md` — the plan and Status `Todo`.
+- `.cursor/agents/coder.md` — the code for the agreed scope.
+- `.cursor/agents/evaluator.md` — the check, the task's single commit, the board, and the pull request.
+- `.cursor/skills/board-task` — how to read a card, set `Todo`, and stop at the plan.
+- `.cursor/skills/frontend-stack` — Webpack, ESLint (airbnb-base), ES modules, an empty `body`, and network calls through `fetch`.
+- `.cursor/skills/puzzle-rules` — the board, the shuffle, moves, sizes, animation, and auto-solve.
+- `.cursor/skills/play-session` — the page shell, labels, timer, moves, saved game, sound, and Top 10.
+- `.cursor/skills/picture-tiles` — pictures, previews, loading, retry, and request cancellation.
+- `.cursor/skills/verify-task` — lint, the build, a browser pass, the progress record, the card move, and the pull request.
+- `TASK.md` — the product description only. Technical constraints stay in the skills.
+- `docs/progress.md` — the record of closed cards: what the player gained and how it was built.
 
-### Доска
+### Board
 
-Задачи — issue в `rdog49/gem-puzzle-harness`. У issue метки `board:backlog`, `board:in-progress`, `board:in-review`, `board:done`. Та же карточка на проекте `harness for gem-puzzle` (владелец `rdog49`) идёт по статусам: No Status, затем `Todo`, `In progress`, `In review`, `Done`. Для команд проекта у `gh` нужен scope `project` (`gh auth refresh -s project`).
+Tasks are issues in `rdog49/gem-puzzle-harness`. Issue labels are `board:backlog`, `board:in-progress`, `board:in-review`, and `board:done`. The same card on the project `harness for gem-puzzle` (owner `rdog49`) moves through Status: No Status, then `Todo`, `In progress`, `In review`, and `Done`. Project commands need the `project` scope on `gh` (`gh auth refresh -s project`).
 
 ```bash
 gh issue list --label board:backlog --limit 30
 ```
 
-Ветка `feat/cursor_work_2` хранит готовую игру как образец поведения. В задачи её не вливают и с неё не копируют код.
+The branch `feat/cursor_work_2` keeps a finished game as a behavior reference. It is not merged into tasks, and task code is not copied from it.
