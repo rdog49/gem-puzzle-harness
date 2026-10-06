@@ -19,7 +19,9 @@ The game runs in the latest Google Chrome.
 - `src/index.html` has one empty mount container in `<body>`: `<div id="app"></div>`. The template contains no game markup.
 - JavaScript creates all markup inside that container.
 - The entry `src/index.js` mounts the application on `document.getElementById('app')`.
-- Logic lives in `src/modules/`. Styles live in `src/styles/main.css`.
+- Logic lives in `src/modules/`. Each module owns the stylesheet next to its script and imports that file. Example: `src/modules/board/board.js` imports `./board.css`.
+- Rules shared by every screen (reset, page background, type) live in `src/styles/base.css`. The entry imports that file once.
+- Do not gather every rule into one `src/styles/main.css` or `style.css`.
 
 ## Webpack
 
