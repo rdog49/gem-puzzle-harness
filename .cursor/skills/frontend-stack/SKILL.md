@@ -1,6 +1,6 @@
 ---
 name: frontend-stack
-description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, ES modules, an empty body, and native fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
+description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, ES modules, a mount point, and native fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
 ---
 
 # Stack
@@ -16,9 +16,9 @@ The game runs in the latest Google Chrome.
 
 ## Page
 
-- `src/index.html` has an empty `<body>`. The template contains no game markup.
-- JavaScript creates all markup.
-- The entry `src/index.js` mounts the application on `document.body`.
+- `src/index.html` has one empty mount container in `<body>`: `<div id="app"></div>`. The template contains no game markup.
+- JavaScript creates all markup inside that container.
+- The entry `src/index.js` mounts the application on `document.getElementById('app')`.
 - Logic lives in `src/modules/`. Styles live in `src/styles/main.css`.
 
 ## Webpack
