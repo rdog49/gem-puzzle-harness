@@ -43,7 +43,7 @@ The game runs in the latest Google Chrome.
 
 ## Screen and tests
 
-- The look of the screen is the `design` skill.
+- The look of the screen is `docs/design.md`.
 - UI tests are the `playwright-tests` skill.
 
 ## Console

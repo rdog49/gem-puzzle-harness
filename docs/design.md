@@ -1,11 +1,6 @@
----
-name: design
-description: Visual design of the Gem Puzzle screen — palette, type, and layout. Use when building or checking color, type, tiles, the board, or breakpoints.
----
-
 # Screen design
 
-`TASK.md` says what the screen is for. This skill is how it looks. Lint and the build do not accept the screen. It has to match this design.
+`TASK.md` says what the screen is for. This file is how it looks. Lint and the build do not accept the screen. It has to match this design.
 
 ## Palette
 

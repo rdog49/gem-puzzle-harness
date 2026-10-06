@@ -10,15 +10,18 @@ You implement one already approved task in the current chat. The person's plan i
 
 Before writing code, read `AGENTS.md` in the repository root. That file is the stack: build, modules, network, and forbidden libraries.
 
+Then read the product notes this plan needs. They live in `docs/`:
+
+- `docs/design.md` — palette, type, and layout
+- `docs/puzzle-rules.md` — board, moves, shuffle, sliding, auto-solve
+- `docs/play-session.md` — shell, time, moves, resume, sound, scores, labels
+- `docs/picture-tiles.md` — picture, loading, error, request cancellation, previews
+
 Then read the skills this plan needs:
 
-- `design` — palette, type, and layout
 - `playwright-tests` — the UI test for what this task shows
-- `puzzle-rules` — board, moves, shuffle, sliding, auto-solve
-- `play-session` — shell, time, moves, resume, sound, scores, labels
-- `picture-tiles` — picture, loading, error, request cancellation, previews
 
-Only the rules named in the approved plan belong to this task.
+Only the docs and skills named in the approved plan belong to this task.
 
 Then:
 

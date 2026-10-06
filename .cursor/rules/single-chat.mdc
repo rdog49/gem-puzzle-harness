@@ -16,4 +16,4 @@ The person asks to look at a task on the GitHub board. Stay in this chat. Do not
 
 6. A new chat for a new task starts on `main`. Check out `main`, fetch, and see whether the latest merged pull request (the finished GP) is already in local `main`. If it is, follow the plan for the new GP. If it is not, pull `main` first, then follow the plan. The new branch is cut from that updated `main`.
 
-`TASK.md` is the product description. The stack is `AGENTS.md`. Take other technical constraints from the agent skills. Do not add them to `TASK.md`.
+`TASK.md` is the product description. The stack is `AGENTS.md`. Game behavior and the screen live in `docs/`. Take procedures from the agent skills. Do not add them to `TASK.md`.

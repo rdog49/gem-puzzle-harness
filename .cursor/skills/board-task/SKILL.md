@@ -72,7 +72,7 @@ What the player gets, in your own words.
 
 ## How I will do it
 1. Steps for this scope only.
-2. Which skills apply.
+2. Which files in `docs/` apply, and which skills apply.
 3. Which files will be added or changed.
 
 ## Check

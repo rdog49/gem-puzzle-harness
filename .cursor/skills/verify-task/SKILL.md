@@ -12,7 +12,7 @@ The scope is the open issue's criteria and the approved plan. Do not require beh
 - `npm run format:check` exits 0.
 - `npm run lint` exits 0 when the task has sources under `src`.
 - `npm run build` exits 0 when the task touches the build or game logic.
-- `npm test` exits 0. UI tests follow the `playwright-tests` skill. The screen matches the `design` skill.
+- `npm test` exits 0. UI tests follow the `playwright-tests` skill. The screen matches `docs/design.md`.
 - The same checks run in CI. Follow the `ci-cd` skill. A red check fails the task.
 - `package.json` and `src` do not depend on jQuery, React, Vue, Angular, or Axios.
 - Network code uses `fetch` and `async/await`.

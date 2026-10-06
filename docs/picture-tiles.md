@@ -1,8 +1,3 @@
----
-name: picture-tiles
-description: Gem Puzzle picture tiles through fetch, AbortController, and Promise.all. Use when implementing image tiles, thumbnails, loading, retry, or cancelling an image request.
----
-
 # Picture tiles
 
 The repository contains no picture files. The list and the images arrive over the network.

@@ -22,7 +22,7 @@ Find a control with `getByRole`. Find text with `getByText`. The mount point `#a
 
 Assert with an async matcher: `await expect(locator).toBeVisible()`, `toHaveTitle`, `toHaveText`, `toHaveCount`. Do not call `page.waitForTimeout`.
 
-A task the player can see adds or updates a test for the behavior it introduces. Use the widths from the task, 1280, 768, and 375, through `page.setViewportSize`. The screen also has to match the `design` skill.
+A task the player can see adds or updates a test for the behavior it introduces. Use the widths from the task, 1280, 768, and 375, through `page.setViewportSize`. The screen also has to match `docs/design.md`.
 
 ## CI
 
