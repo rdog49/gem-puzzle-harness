@@ -1,6 +1,6 @@
 ---
 name: frontend-stack
-description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, ES modules, a mount point, and native fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
+description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, ES modules, classes, a mount point, and native fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
 ---
 
 # Stack
@@ -10,6 +10,7 @@ The game runs in the latest Google Chrome.
 ## Language and boundaries
 
 - JavaScript ES6+, HTML5, and CSS3. Project files are ES modules with `import` / `export`.
+- Each module exports a class. Fields hold that module's state. Methods perform its behavior. `src/index.js` constructs those objects and mounts the root one. Do not write a module as free functions that share closed-over variables.
 - Bootstrap, other CSS frameworks, preprocessors, TypeScript, and Canvas are allowed. They are not required.
 - jQuery, React, Vue, Angular, and Axios are forbidden. Do not add an HTTP wrapper.
 - Network access uses only `fetch`, Promises, and `async/await`.
