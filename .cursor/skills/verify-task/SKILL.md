@@ -64,25 +64,12 @@ If a Status value is rejected, list the options and use the name of that column:
 gh project field-list PROJECT --owner rdog49
 ```
 
-Stay on the task branch. Do not check out `main` to record the task.
+Stay on the task branch. Follow the `keep-changelog` skill for `CHANGELOG.md`, then commit.
 
-Append one section to `docs/progress.md` on that branch before the pull request. Keep every earlier section. The file is the whole project record: what each finished task added and how it was built. Product behavior stays in `TASK.md`.
-
-```markdown
-## GP-XX — title
-
-- Issue: #NUMBER
-- Merged: YYYY-MM-DD
-- What: what the player or the build gained, from the issue and the approved plan.
-- How: the files and the method that landed. No behavior from a later task.
-```
-
-`Merged` is the date of the one task commit. Do not put a pull request number in the section: that number does not exist until after the commit, and writing it back would be a second commit. Do not edit the file again after the person merges. If that GP heading is already in the file, do not add a second copy.
-
-The coder left the task uncommitted. One commit contains every change for this task, including `docs/progress.md`. Do not commit that file alone. Do not use a `docs:` message.
+The coder left the task uncommitted. One commit contains every change for this task, including `CHANGELOG.md`. Do not use a `docs:` message.
 
 ```bash
-git add docs/progress.md
+git add CHANGELOG.md
 git add path/to/each/task/file
 git commit -m "feat: GP-XX short result"
 git log --oneline main..HEAD
@@ -99,9 +86,9 @@ gh pr create --base main --title "GP-XX short result" --body "Summary of this ta
 
 The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. Merging must leave the issue open so this role can close it after the board move.
 
-Do not commit again after the pull request exists. Do not push a follow-up that only updates `docs/progress.md`. Tell the person the pull request URL. Their remaining step is to review it and merge it.
+Do not commit again after the pull request exists. Tell the person the pull request URL. Their remaining step is to review it and merge it.
 
-Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Do not write `docs/progress.md` on `main`.
+Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
 
 ## After the person merges
 
@@ -124,6 +111,6 @@ If the issue still has `board:in-progress` or `board:backlog`, remove that label
 
 Skip this move when the issue is already `board:done` and closed.
 
-Do not append `docs/progress.md` here, and do not edit it on `main`. The section is already inside the one commit on the task branch.
+Leave `CHANGELOG.md` untouched. The `keep-changelog` skill already finished that entry.
 
-A new chat runs this board close for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task. It does not write `docs/progress.md`.
+A new chat runs this board close for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task. It does not write `CHANGELOG.md`.

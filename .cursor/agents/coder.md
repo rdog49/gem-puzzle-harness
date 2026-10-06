@@ -26,4 +26,4 @@ Then:
 5. Do not commit. Leave every change for this task uncommitted.
 6. Report in this chat what changed, and hand the work to the evaluator role.
 
-Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue. Do not write `docs/progress.md`. After the check passes, the evaluator adds that file and makes the one commit for this task. That commit holds the task files and `docs/progress.md` together.
+Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue. Do not write `CHANGELOG.md`. The `keep-changelog` skill does that after the check passes, inside the one commit for this task.
