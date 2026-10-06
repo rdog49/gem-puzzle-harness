@@ -1,8 +1,3 @@
----
-name: frontend-stack
-description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, Prettier, ES modules, classes, a mount point, and native fetch. Use when adding or changing the build, linter, formatter, src entry, modules, or network calls.
----
-
 # Stack
 
 The game runs in the latest Google Chrome.

@@ -1,6 +1,6 @@
 # Gem Puzzle
 
-A browser sliding puzzle. How the game should look and behave is in `TASK.md`. That file is the product description. The build and the technical constraints live in the agents and their skills under `.cursor/`.
+A browser sliding puzzle. How the game should look and behave is in `TASK.md`. That file is the product description. The stack is in `AGENTS.md`. The agents and their skills live under `.cursor/`.
 
 The game is built from GitHub board tasks. Every task together equals the finished product.
 

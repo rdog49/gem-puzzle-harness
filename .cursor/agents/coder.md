@@ -8,9 +8,10 @@ is_background: false
 
 You implement one already approved task in the current chat. The person's plan is the scope. Do not add neighboring tasks.
 
-Before writing code, read the skills this plan needs:
+Before writing code, read `AGENTS.md` in the repository root. That file is the stack: build, modules, network, and forbidden libraries.
 
-- `frontend-stack` — build, modules, network, forbidden libraries
+Then read the skills this plan needs:
+
 - `design` — palette, type, and layout
 - `playwright-tests` — the UI test for what this task shows
 - `puzzle-rules` — board, moves, shuffle, sliding, auto-solve
