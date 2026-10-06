@@ -28,6 +28,7 @@ The game runs in the latest Google Chrome.
 
 - Dev dependencies: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`.
 - Scripts: `start` runs `webpack serve --mode development` on port 8080; `build` runs `webpack --mode production`; `lint` runs `eslint src`.
+- Pull requests and `main` run lint and build in GitHub Actions. Deploy to GitHub Pages follows the `ci-cd` skill.
 - In production `publicPath` is `./`, so the page can be opened as static files, including on GitHub Pages.
 - `npm run build` exits 0 and writes `index.html` and the JS bundle into `dist/`. Script and style links are relative. The app needs no separate server.
 - Do not commit `dist/` or `node_modules/`.

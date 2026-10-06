@@ -11,6 +11,7 @@ The scope is the open issue's criteria and the approved plan. Do not require beh
 
 - `npm run lint` exits 0 when the task has sources under `src`.
 - `npm run build` exits 0 when the task touches the build or game logic.
+- The same lint and build run in CI. Follow the `ci-cd` skill. A red check fails the task.
 - `package.json` and `src` do not depend on jQuery, React, Vue, Angular, or Axios.
 - Network code uses `fetch` and `async/await`.
 - The scenario console has no runtime errors. A 404 for `favicon.ico` is allowed.
