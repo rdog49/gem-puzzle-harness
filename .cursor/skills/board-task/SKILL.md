@@ -50,6 +50,8 @@ git pull --ff-only origin main
 
 Run the ancestor check again. Continue only after it exits 0. If there is no merged pull request yet, pull `main` when it is behind `origin/main`, then continue.
 
+Then read what already shipped. Open `CHANGELOG.md` and run `git log -8 --oneline`. Do not plan or build a task that repeats a finished entry.
+
 ## Read the task
 
 ```bash

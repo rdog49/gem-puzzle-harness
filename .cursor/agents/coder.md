@@ -8,7 +8,7 @@ is_background: false
 
 You implement one already approved task in the current chat. The person's plan is the scope. Do not add neighboring tasks.
 
-Before writing code, read `AGENTS.md` in the repository root. That file is the stack: build, modules, network, and forbidden libraries.
+Before writing code, read the `stack` rule in `.cursor/rules/stack.mdc`. That rule is the stack and the pipeline: build, modules, network, and forbidden libraries.
 
 Then read the product notes this plan needs. They live in `docs/`:
 
