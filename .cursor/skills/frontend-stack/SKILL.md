@@ -1,6 +1,6 @@
 ---
 name: frontend-stack
-description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, ES modules, classes, a mount point, and native fetch. Use when adding or changing the build, linter, src entry, modules, or network calls.
+description: Sets the Gem Puzzle stack — Webpack, ESLint airbnb-base, Prettier, ES modules, classes, a mount point, and native fetch. Use when adding or changing the build, linter, formatter, src entry, modules, or network calls.
 ---
 
 # Stack
@@ -14,6 +14,7 @@ The game runs in the latest Google Chrome.
 - Bootstrap, other CSS frameworks, preprocessors, TypeScript, and Canvas are allowed. They are not required.
 - jQuery, React, Vue, Angular, and Axios are forbidden. Do not add an HTTP wrapper.
 - Network access uses only `fetch`, Promises, and `async/await`.
+- Do not add `harness.js`. Cursor is the model. The repository does not ship a model runner.
 
 ## Page
 
@@ -26,8 +27,8 @@ The game runs in the latest Google Chrome.
 
 ## Webpack
 
-- Dev dependencies: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`.
-- Scripts: `start` runs `webpack serve --mode development` on port 8080; `build` runs `webpack --mode production`; `lint` runs `eslint src`.
+- Dev dependencies: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`, `prettier`, `eslint-config-prettier`, `@playwright/test`.
+- Scripts: `start` runs `webpack serve --mode development` on port 8080; `build` runs `webpack --mode production`; `lint` runs `eslint src`; `format:check` runs Prettier; `test` runs Playwright.
 - Pull requests and `main` run lint and build in GitHub Actions. Deploy to GitHub Pages follows the `ci-cd` skill.
 - In production `publicPath` is `./`, so the page can be opened as static files, including on GitHub Pages.
 - `npm run build` exits 0 and writes `index.html` and the JS bundle into `dist/`. Script and style links are relative. The app needs no separate server.
@@ -35,9 +36,20 @@ The game runs in the latest Google Chrome.
 
 ## ESLint
 
-- ESLint 8, config `eslint-config-airbnb-base`, plugin `eslint-plugin-import`.
+- ESLint 8, config `eslint-config-airbnb-base`, then `eslint-config-prettier`, plugin `eslint-plugin-import`.
 - `npm run lint` on `src` exits 0 with no errors.
 - A CSS import is not an unresolved-module error.
+
+## Prettier
+
+- `.prettierrc.json` uses single quotes and ES5 trailing commas.
+- `npm run format:check` exits 0.
+- Prettier owns formatting. ESLint does not.
+
+## Screen and tests
+
+- The look of the screen is the `design` skill.
+- UI tests are the `playwright-tests` skill.
 
 ## Console
 

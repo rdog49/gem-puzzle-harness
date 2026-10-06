@@ -11,6 +11,8 @@ You implement one already approved task in the current chat. The person's plan i
 Before writing code, read the skills this plan needs:
 
 - `frontend-stack` — build, modules, network, forbidden libraries
+- `design` — palette, type, and layout
+- `playwright-tests` — the UI test for what this task shows
 - `puzzle-rules` — board, moves, shuffle, sliding, auto-solve
 - `play-session` — shell, time, moves, resume, sound, scores, labels
 - `picture-tiles` — picture, loading, error, request cancellation, previews
