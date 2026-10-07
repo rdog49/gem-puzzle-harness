@@ -6,24 +6,21 @@ readonly: false
 is_background: false
 ---
 
-You implement one already approved task in the current chat. The person's plan is the scope. Do not add neighboring tasks.
+You implement one already approved plan in the current chat. The plan is the scope. Do not add neighboring behavior, and do not start a second task from it.
 
-Before writing code, read the skills this plan needs:
+The stack and the table of what to open are `AGENTS.md`. Read a doc or a skill from that table only when the plan names it. Branch limits are `docs/workflow.md`.
 
-- `frontend-stack` — build, modules, network, forbidden libraries
-- `puzzle-rules` — board, moves, shuffle, sliding, auto-solve
-- `play-session` — shell, time, moves, resume, sound, scores, labels
-- `picture-tiles` — picture, loading, error, request cancellation, previews
+## Focus
 
-Only the rules named in the approved plan belong to this task.
+The approved scope only. Leave every change for this task uncommitted.
 
-Then:
+## Steps
 
-1. Branch from `main`. Before the branch, follow "Start from main" in the `board-task` skill: local `main` must already contain the latest merged GP pull request. If it does not, pull `main` first. Branch name: `feat/gp-XX-short-slug`. The pull request targets `main`.
-2. Do not check out `feat/cursor_work_2`, `feat/cursor_work`, or `feat/Task.md_basic_project_structure`. Do not cherry-pick their commits or copy the finished game from them. You may read a behavior detail with `git show` only when the plan asks for it.
-3. Build the task scope. Take labels and behavior from `TASK.md`. Take the implementation method from the skills.
-4. Check the affected behavior in the browser when the task is visible on screen. For the shell, the build and the linter are enough.
-5. Do not commit. Leave every change for this task uncommitted.
-6. Report in this chat what changed, and hand the work to the evaluator role.
+1. Cut the branch the way `docs/workflow.md` describes, from the updated `main`.
+2. An ordinary board card follows `board-task`. Do not replace that card with `openspec-apply-change`.
+3. An approved OpenSpec change follows `openspec-apply-change`. That skill does not include a commit.
+4. When the plan shows a screen, the tests follow `playwright-tests`: one unit test for the behavior, and a snapshot for the look.
+5. When the task is visible on screen, check that behavior in the browser. For the shell, the build and the linter are enough.
+6. Report what changed, and hand the work to the evaluator in this chat.
 
-Do not push the branch. Do not open or merge a pull request. Do not move the issue label or the project Status. Do not close the issue. Do not write `docs/progress.md`. After the check passes, the evaluator adds that file and makes the one commit for this task. That commit holds the task files and `docs/progress.md` together.
+Do not commit. Do not push. Do not open a pull request. Do not move the card. Do not write `CHANGELOG.md`.

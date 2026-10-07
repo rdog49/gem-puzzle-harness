@@ -1,4 +1,8 @@
-import './styles/main.css';
-import mountApp from './modules/app';
+class App {
+  constructor(root) {
+    this.root = root;
+    this.root.style.minHeight = '100vh';
+  }
+}
 
-mountApp(document.body);
+export default new App(document.getElementById('app'));

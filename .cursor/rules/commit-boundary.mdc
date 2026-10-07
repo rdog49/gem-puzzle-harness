@@ -1,0 +1,10 @@
+---
+description: The role that writes a change does not commit it
+alwaysApply: true
+---
+
+# Commit boundary
+
+The role that writes a change does not commit, does not push, and does not open a pull request.
+
+The role that checks the change does that once, after the check succeeds. That role does not merge.

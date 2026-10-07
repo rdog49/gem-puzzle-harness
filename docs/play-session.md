@@ -1,8 +1,3 @@
----
-name: play-session
-description: Gem Puzzle shell, labels, timer, move count, saved game, sound, and top 10. Use when implementing layout, menu, timer, moves, localStorage, sound, leaderboard, or the win message.
----
-
 # Play session
 
 Copy labels from `TASK.md` exactly. Below is how they are wired into markup and storage.

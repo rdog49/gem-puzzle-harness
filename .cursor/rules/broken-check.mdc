@@ -1,0 +1,12 @@
+---
+description: A red check is investigated before it is changed
+alwaysApply: true
+---
+
+# Broken check
+
+When a check is red or behavior is unexpected, read the `systematic-debugging` skill before changing anything.
+
+Do not delete a check or skip it to make the result green.
+
+When review comments arrive, read the `receiving-code-review` skill before applying them.

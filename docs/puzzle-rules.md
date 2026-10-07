@@ -1,8 +1,3 @@
----
-name: puzzle-rules
-description: Gem Puzzle board rules — solvable shuffle, moves, sizes, sliding, and auto-solve. Use when implementing the board, shuffle, clicks, drag-and-drop, grid size, animation, or auto-solve.
----
-
 # Board rules
 
 Size `N` is from 3 to 8. There are `N * N` cells. Tiles are the numbers `1 … N*N-1`. The empty cell is `0`. The default `N` is 4.
