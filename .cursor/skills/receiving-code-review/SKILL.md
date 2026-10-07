@@ -49,7 +49,7 @@ WHY: Items may be related. Partial understanding = wrong implementation.
 
 **Example:**
 ```
-your human partner: "Fix 1-6"
+the person: "Fix 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
 
 ❌ WRONG: Implement 1,2,3,6 now, ask about 4,5 later
@@ -58,7 +58,7 @@ You understand 1,2,3,6. Unclear on 4,5.
 
 ## Source-Specific Handling
 
-### From your human partner
+### From the person
 - **Trusted** - implement after understanding
 - **Still ask** if scope unclear
 - **No performative agreement**
@@ -70,8 +70,7 @@ BEFORE implementing:
   1. Check: Technically correct for THIS codebase?
   2. Check: Breaks existing functionality?
   3. Check: Reason for current implementation?
-  4. Check: Works on all platforms/versions?
-  5. Check: Does reviewer understand full context?
+  4. Check: Does reviewer understand full context?
 
 IF suggestion seems wrong:
   Push back with technical reasoning
@@ -79,11 +78,11 @@ IF suggestion seems wrong:
 IF can't easily verify:
   Say so: "I can't verify this without [X]. Should I [investigate/ask/proceed]?"
 
-IF conflicts with your human partner's prior decisions:
-  Stop and discuss with your human partner first
+IF conflicts with the person's prior decisions:
+  Stop and discuss with the person first
 ```
 
-**your human partner's rule:** "External feedback - be skeptical, but check carefully"
+External feedback needs the same checks. Be skeptical, and check carefully.
 
 ## YAGNI Check for "Professional" Features
 
@@ -91,11 +90,11 @@ IF conflicts with your human partner's prior decisions:
 IF reviewer suggests "implementing properly":
   grep codebase for actual usage
 
-  IF unused: "This endpoint isn't called. Remove it (YAGNI)?"
+  IF unused: ask whether to remove it
   IF used: Then implement properly
 ```
 
-**your human partner's rule:** "You and reviewer both report to me. If we don't need this feature, don't add it."
+If the suggestion adds a feature nothing calls, do not add it.
 
 ## Implementation Order
 
@@ -118,15 +117,15 @@ Push back when:
 - Violates YAGNI (unused feature)
 - Technically incorrect for this stack
 - Legacy/compatibility reasons exist
-- Conflicts with your human partner's architectural decisions
+- Conflicts with the person's architectural decisions
 
 **How to push back:**
 - Use technical reasoning, not defensiveness
 - Ask specific questions
 - Reference working tests/code
-- Involve your human partner if architectural
+- Involve the person if architectural
 
-**If you're uncomfortable pushing back out loud:** Name that tension, then tell your partner about the issue you've seen. They'll appreciate your honesty.
+**If you're uncomfortable pushing back out loud:** Name that tension, then tell the person about the issue you've seen.
 
 ## Acknowledging Correct Feedback
 
@@ -184,18 +183,18 @@ Reviewer: "Remove legacy code"
 **Technical Verification (Good):**
 ```
 Reviewer: "Remove legacy code"
-✅ "Checking... build target is 10.15+, this API needs 13+. Need legacy for backward compat. Current impl has wrong bundle ID - fix it or drop pre-13 support?"
+✅ "Checking where this is still called. If nothing uses it, remove it. If a current path needs it, say which path and what the change would break."
 ```
 
 **YAGNI (Good):**
 ```
-Reviewer: "Implement proper metrics tracking with database, date filters, CSV export"
-✅ "Grepped codebase - nothing calls this endpoint. Remove it (YAGNI)? Or is there usage I'm missing?"
+Reviewer: "Add a larger feature around this"
+✅ "Nothing in the current task calls for that. Leave it out unless the approved plan includes it."
 ```
 
 **Unclear Item (Good):**
 ```
-your human partner: "Fix items 1-6"
+The person: "Fix items 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
 ✅ "Understand 1,2,3,6. Need clarification on 4 and 5 before implementing."
 ```

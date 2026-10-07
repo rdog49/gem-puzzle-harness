@@ -32,100 +32,28 @@ digraph when_to_use {
 ## The Tracing Process
 
 ### 1. Observe the Symptom
-```
-Error: git init failed in ~/project/packages/core
-```
+
+Write the error, the file, and the line. Do not skip past it.
 
 ### 2. Find Immediate Cause
-**What code directly causes this?**
-```typescript
-await execFileAsync('git', ['init'], { cwd: projectDir });
-```
+
+What code directly produces the error? Name the function and the argument it used.
 
 ### 3. Ask: What Called This?
-```typescript
-WorktreeManager.createSessionWorktree(projectDir, sessionId)
-  → called by Session.initializeWorkspace()
-  → called by Session.create()
-  → called by test at Project.create()
-```
+
+Walk one caller up. Write the call chain as you go.
 
 ### 4. Keep Tracing Up
-**What value was passed?**
-- `projectDir = ''` (empty string!)
-- Empty string as `cwd` resolves to `process.cwd()`
-- That's the source code directory!
+
+What value was passed? Where was it set? An empty string, a default, or a value read too early is a source, not a symptom.
 
 ### 5. Find Original Trigger
-**Where did empty string come from?**
-```typescript
-const context = setupCoreTest(); // Returns { tempDir: '' }
-Project.create('name', context.tempDir); // Accessed before beforeEach!
-```
+
+Stop at the first place the bad value is created. Fix that place.
 
 ## Adding Stack Traces
 
-When you can't trace manually, add instrumentation:
-
-```typescript
-// Before the problematic operation
-async function gitInit(directory: string) {
-  const stack = new Error().stack;
-  console.error('DEBUG git init:', {
-    directory,
-    cwd: process.cwd(),
-    nodeEnv: process.env.NODE_ENV,
-    stack,
-  });
-
-  await execFileAsync('git', ['init'], { cwd: directory });
-}
-```
-
-**Critical:** Use `console.error()` in tests (not logger - may not show)
-
-**Run and capture:**
-```bash
-npm test 2>&1 | grep 'DEBUG git init'
-```
-
-**Analyze stack traces:**
-- Look for test file names
-- Find the line number triggering the call
-- Identify the pattern (same test? same parameter?)
-
-## Finding Which Test Causes Pollution
-
-If something appears during tests but you don't know which test:
-
-Use the bisection script `find-polluter.sh` in this directory:
-
-```bash
-bash ./find-polluter.sh '.git' 'src/**/*.test.ts'
-```
-
-Runs tests one-by-one, stops at first polluter. See script for usage.
-
-## Real Example: Empty projectDir
-
-**Symptom:** `.git` created in `packages/core/` (source code)
-
-**Trace chain:**
-1. `git init` runs in `process.cwd()` ← empty cwd parameter
-2. WorktreeManager called with empty projectDir
-3. Session.create() passed empty string
-4. Test accessed `context.tempDir` before beforeEach
-5. setupCoreTest() returns `{ tempDir: '' }` initially
-
-**Root cause:** Top-level variable initialization accessing empty value
-
-**Fix:** Made tempDir a getter that throws if accessed before beforeEach
-
-**Also added defense-in-depth:**
-- Layer 1: Project.create() validates directory
-- Layer 2: WorkspaceManager validates not empty
-- Layer 3: NODE_ENV guard refuses git init outside tmpdir
-- Layer 4: Stack trace logging before git init
+When you can't trace manually, log `new Error().stack` and the inputs before the operation. Use `console.error()` in tests so the log is not swallowed. Then read the stack for the test file, the line, and the bad value.
 
 ## Key Principle
 
@@ -159,11 +87,3 @@ digraph principle {
 **Before operation:** Log before the dangerous operation, not after it fails
 **Include context:** Directory, cwd, environment variables, timestamps
 **Capture stack:** `new Error().stack` shows complete call chain
-
-## Real-World Impact
-
-From debugging session (2025-10-03):
-- Found root cause through 5-level trace
-- Fixed at source (getter validation)
-- Added 4 layers of defense
-- 1847 tests passed, zero pollution

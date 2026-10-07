@@ -13,8 +13,8 @@ The scope is the open issue's criteria and the approved plan. Do not require beh
 - `npm run lint` exits 0 when the task has sources under `src`.
 - `npm run build` exits 0 when the task touches the build or game logic.
 - `npm test` exits 0. UI tests follow the `playwright-tests` skill. The screen matches `docs/design.md`.
-- The same checks run in CI. The pipeline is the CI/CD section of the `stack` rule. A red check fails the task.
-- The result matches the `stack` rule: forbidden libraries, `fetch`, and the console.
+- The same checks run in CI. The pipeline is the CI/CD section of `AGENTS.md`. A red check fails the task.
+- The result matches the stack in `AGENTS.md`: forbidden libraries, `fetch`, and the console.
 
 ## Screen
 
@@ -32,86 +32,12 @@ Do not edit `TASK.md`. Do not edit other issues.
 
 ## Board and pull request
 
-This role moves the issue label and the Status field on the user project `harness for gem-puzzle` (owner `rdog49`). Do not use any other project. The initializer already sets Status `Todo` when the task is taken. This role does not set `Todo`. It sets `Done` only in "After the person merges".
+The person asks for each move. This role does not set `Todo`. `/choose-task` already did that.
 
-`gh` needs the `project` scope. If a project command reports a missing scope, run `gh auth refresh -s project` and retry the same move.
+When the approved task starts, `/plan` sets `In progress`. On a failure, leave the card there. Do not move it to `In review` or `Done`.
 
-```bash
-gh project list --owner rdog49 --limit 30
-```
-
-`PROJECT` is the number whose title is `harness for gem-puzzle`. `ISSUE_URL` is `https://github.com/rdog49/gem-puzzle-harness/issues/NUMBER`.
-
-Issue label, same moment as the project Status:
-
-```bash
-gh issue edit NUMBER --remove-label board:backlog --add-label board:in-progress
-gh issue edit NUMBER --remove-label board:in-progress --add-label board:in-review
-```
-
-Add the issue when it is not already on the project. If add reports that the item already exists, continue and set Status.
-
-```bash
-gh project item-add PROJECT --owner rdog49 --url ISSUE_URL
-gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "In progress"
-gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "In review"
-```
-
-When the approved task starts, set `board:in-progress` and Status `In progress` (work is under way). When every criterion passes, set `board:in-review` and Status `In review` (the pull request is waiting for the person). On a failure, leave both on in progress.
-
-If a Status value is rejected, list the options and use the name of that column:
-
-```bash
-gh project field-list PROJECT --owner rdog49
-```
-
-Stay on the task branch. Follow the `keep-changelog` skill for `CHANGELOG.md`, then commit.
-
-The coder left the task uncommitted. One commit contains every change for this task, including `CHANGELOG.md`. Do not use a `docs:` message.
-
-```bash
-git add CHANGELOG.md
-git add path/to/each/task/file
-git commit -m "feat: GP-XX short result"
-git log --oneline main..HEAD
-```
-
-`git log --oneline main..HEAD` shows exactly one commit. If it shows more, stop and do not push. Do not add another commit to repair it.
-
-Then push that commit and open the pull request against `main`:
-
-```bash
-git push -u origin HEAD
-gh pr create --base main --title "GP-XX short result" --body "Summary of this task."
-```
-
-The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. Merging must leave the issue open so this role can close it after the board move.
-
-Do not commit again after the pull request exists. Tell the person the pull request URL. Their remaining step is to review it and merge it.
-
-Do not set `board:done` or project Status `Done` yet. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
+When every criterion passes, stay on the task branch. Follow the `keep-changelog` skill. The commit waits until the person runs `/commit`. The pull request waits until the person runs `/pull-request`. Do not set `Done` yet. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
 
 ## After the person merges
 
-Run this only when the pull request `state` is `MERGED`. If it is still open, stop. Do not merge it yourself.
-
-```bash
-gh pr view PR --json state,mergedAt,title,url
-```
-
-When it is merged, move the card and close the issue:
-
-```bash
-gh issue edit NUMBER --remove-label board:in-review --add-label board:done
-gh project item-add PROJECT --owner rdog49 --url ISSUE_URL
-gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "Done"
-gh issue close NUMBER --reason completed
-```
-
-If the issue still has `board:in-progress` or `board:backlog`, remove that label in the same `gh issue edit`. If a Status value is rejected, list the field options and use the done column's name.
-
-Skip this move when the issue is already `board:done` and closed.
-
-Leave `CHANGELOG.md` untouched. The `keep-changelog` skill already finished that entry.
-
-A new chat runs this board close for any earlier task that is merged and still open or still `board:in-review`, before it checks out `main` for the new task. It does not write `CHANGELOG.md`.
+The person marks the task with `/done`. If the pull request is still open, stop. Do not merge it. Leave `CHANGELOG.md` untouched. The steps are in `docs/workflow.md`.

@@ -6,19 +6,19 @@ readonly: false
 is_background: false
 ---
 
-You start one task in the current chat. You do not write code and you do not run the build until the person has agreed to the plan.
+You start one task in the current chat. Your work is the plan. You do not write code, and you do not run the build, until the person has agreed.
 
-Read the `board-task` skill and follow it.
+The stack and the table of what to open are `AGENTS.md`. The board sequence is `docs/workflow.md`. Read those. Do not restate them here.
 
-Do this:
+## Focus
 
-1. When this chat starts a new task, finish any earlier task whose pull request is already merged and whose issue is still open or still `board:in-review`. That finish step belongs to the evaluator: `board:done`, project Status `Done`, and close the issue. The commands are in the `verify-task` skill. Do not write `CHANGELOG.md`. The `keep-changelog` skill already finished that entry on the task branch. Then check out `main` and follow "Start from main" in the `board-task` skill. If the latest merged GP is already in local `main`, continue. If it is not, pull `main` first. Do not create the new branch until that check passes.
-2. Take the task number or link from the person's message. If there is no number, show the open backlog and ask which card to open. That is the only clarifying question. Do not change a card in that case.
-3. When one task is taken, set its project Status to `Todo` on `harness for gem-puzzle`, using the project commands in the `board-task` skill. Leave the issue label as it is. Do not set `In progress`, `In review`, or `Done` on the task you just took.
-4. Read the task with `gh`. Compare it with the product description in `TASK.md`. Read the `stack` rule for the stack and the pipeline, the files in `docs/` for the behavior and the screen this task needs, and the coder and evaluator skills for the procedures. Put into the plan only the constraints this task needs in order to be accepted.
-5. Reply in this chat with a description in your own words and an execution plan. The reply shape is in the `board-task` skill.
-6. Stop. Do not create a branch or change files until the person agrees or sends edits.
-7. The person's edits replace the matching parts of the plan. If the same message also says to proceed, start. If the edits do not include agreement, show the updated plan and wait again.
-8. After agreement, stay in this chat. The evaluator moves the issue to `board:in-progress` and the project Status to `In progress`, then the coder role runs, then the evaluator role runs. Do not ask the person to open another chat. A subagent may be called only from here, and its result must return here before the next step. Do not use a background subagent.
+One card. The person's message is the task. If they did not name a number, show the open list and wait. Do not take a second task. Do not merge.
 
-Do not take a second task. Do not merge. Do not move the new task's issue label and do not open its pull request. Those belong to the evaluator. Closing an earlier merged task is also the evaluator's, and it happens in step 1 before the new plan.
+## Steps
+
+1. `/tasks` lists the open cards. Follow that command. Do not change a card.
+2. `/choose-task` takes the one issue the person named. Follow that command and the `board-task` skill. Bring back a description and a plan in that skill's reply shape. Stop.
+3. `/plan` is the person's confirmation or their edits. An edit replaces the matching parts of the plan and does not start the work. Show the updated plan and wait again. Approval hands that scope to the coder in this same chat.
+4. A spec idea uses `openspec-explore`. A new spec uses `openspec-propose`. A revision of a spec plan uses `openspec-update-change`. That skill does not write code. A game card with no spec stays on `board-task`. Do not hang an apply step on it.
+
+Do not commit. Do not push. Do not open a pull request. Do not mark the task done.

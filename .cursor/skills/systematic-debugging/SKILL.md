@@ -69,7 +69,7 @@ You MUST complete each phase before proceeding to the next.
 
 4. **Gather Evidence in Multi-Component Systems**
 
-   **WHEN system has multiple components (CI → build → signing, API → service → database):**
+   **WHEN the failure crosses more than one part of the system:**
 
    **BEFORE proposing fixes, add diagnostic instrumentation:**
    ```
@@ -83,27 +83,6 @@ You MUST complete each phase before proceeding to the next.
    THEN analyze evidence to identify failing component
    THEN investigate that specific component
    ```
-
-   **Example (multi-layer system):**
-   ```bash
-   # Layer 1: Workflow
-   echo "=== Secrets available in workflow: ==="
-   echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
-
-   # Layer 2: Build script
-   echo "=== Env vars in build script: ==="
-   env | grep IDENTITY || echo "IDENTITY not in environment"
-
-   # Layer 3: Signing script
-   echo "=== Keychain state: ==="
-   security list-keychains
-   security find-identity -v
-
-   # Layer 4: Actual signing
-   codesign --sign "$IDENTITY" --verbose=4 "$APP"
-   ```
-
-   **This reveals:** Which layer fails (secrets → workflow ✓, workflow → build ✗)
 
 5. **Trace Data Flow**
 
@@ -207,7 +186,7 @@ You MUST complete each phase before proceeding to the next.
    - Are we "sticking with it through sheer inertia"?
    - Should we refactor architecture vs. continue fixing symptoms?
 
-   **Discuss with your human partner before attempting more fixes**
+   **Discuss with the person before attempting more fixes**
 
    This is NOT a failed hypothesis - this is a wrong architecture.
 
@@ -230,16 +209,9 @@ If you catch yourself thinking:
 
 **If 3+ fixes failed:** Question the architecture (see Phase 4.5)
 
-## your human partner's Signals You're Doing It Wrong
+## When the person redirects you
 
-**Watch for these redirections:**
-- "Is that not happening?" - You assumed without verifying
-- "Will it show us...?" - You should have added evidence gathering
-- "Stop guessing" - You're proposing fixes without understanding
-- "Ultra-think this" - Question fundamentals, not just symptoms
-- "We're stuck?" (frustrated) - Your approach isn't working
-
-**When you see these:** STOP. Return to Phase 1.
+If the person says the approach is guessing, or that the check still fails, stop. Return to Phase 1. Do not add another fix on top of a guess.
 
 ## Common Rationalizations
 

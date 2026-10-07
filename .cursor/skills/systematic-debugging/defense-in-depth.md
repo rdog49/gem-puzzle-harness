@@ -38,51 +38,16 @@ function createProject(name: string, workingDirectory: string) {
 ```
 
 ### Layer 2: Business Logic Validation
-**Purpose:** Ensure data makes sense for this operation
 
-```typescript
-function initializeWorkspace(projectDir: string, sessionId: string) {
-  if (!projectDir) {
-    throw new Error('projectDir required for workspace initialization');
-  }
-  // ... proceed
-}
-```
+**Purpose:** Reject a value that is present but meaningless for this operation.
 
 ### Layer 3: Environment Guards
-**Purpose:** Prevent dangerous operations in specific contexts
 
-```typescript
-async function gitInit(directory: string) {
-  // In tests, refuse git init outside temp directories
-  if (process.env.NODE_ENV === 'test') {
-    const normalized = normalize(resolve(directory));
-    const tmpDir = normalize(resolve(tmpdir()));
-
-    if (!normalized.startsWith(tmpDir)) {
-      throw new Error(
-        `Refusing git init outside temp dir during tests: ${directory}`
-      );
-    }
-  }
-  // ... proceed
-}
-```
+**Purpose:** Refuse an operation that is unsafe in this context, such as a test writing outside its sandbox.
 
 ### Layer 4: Debug Instrumentation
-**Purpose:** Capture context for forensics
 
-```typescript
-async function gitInit(directory: string) {
-  const stack = new Error().stack;
-  logger.debug('About to git init', {
-    directory,
-    cwd: process.cwd(),
-    stack,
-  });
-  // ... proceed
-}
-```
+**Purpose:** Log the inputs and `new Error().stack` before the operation, so the next failure shows which layer was skipped.
 
 ## Applying the Pattern
 
@@ -92,24 +57,6 @@ When you find a bug:
 2. **Map all checkpoints** - List every point data passes through
 3. **Add validation at each layer** - Entry, business, environment, debug
 4. **Test each layer** - Try to bypass layer 1, verify layer 2 catches it
-
-## Example from Session
-
-Bug: Empty `projectDir` caused `git init` in source code
-
-**Data flow:**
-1. Test setup → empty string
-2. `Project.create(name, '')`
-3. `WorkspaceManager.createWorkspace('')`
-4. `git init` runs in `process.cwd()`
-
-**Four layers added:**
-- Layer 1: `Project.create()` validates not empty/exists/writable
-- Layer 2: `WorkspaceManager` validates projectDir not empty
-- Layer 3: `WorktreeManager` refuses git init outside tmpdir in tests
-- Layer 4: Stack trace logging before git init
-
-**Result:** All 1847 tests passed, bug impossible to reproduce
 
 ## Key Insight
 

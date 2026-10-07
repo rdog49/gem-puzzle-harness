@@ -26,7 +26,7 @@ The coder does not write it. The initializer does not write it. A chat that only
 - If the same bullet is already under `Unreleased`, do not add a second copy.
 - Keep every earlier entry.
 
-The commit steps live in the `verify-task` skill. This file rides in that one task commit.
+The commit steps live in the `/commit` command. This file rides in that one task commit.
 
 ## Entry
 

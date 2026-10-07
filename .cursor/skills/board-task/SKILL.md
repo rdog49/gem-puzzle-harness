@@ -11,18 +11,18 @@ Issue labels:
 
 - `board:backlog` — not started
 - `board:in-progress` — the plan is approved and work is under way
-- `board:in-review` — the check passed and the pull request is open
-- `board:done` — the person merged the pull request, and the evaluator then closed the card
+- `board:in-review` — the pull request is open
+- `board:done` — the person merged the pull request, and `/done` then closed the card
 
 Project Status, in order:
 
 - No Status — where a card starts. Do not set this.
-- `Todo` — the task is taken into work. This role sets it when it takes one task. The issue label stays `board:backlog`.
-- `In progress` — work is under way. The evaluator sets it when the approved task starts, together with `board:in-progress`.
-- `In review` — the work is done and the pull request is open, waiting for the person. The evaluator sets it only after every criterion passes, together with `board:in-review`.
-- `Done` — the evaluator sets it after the person has merged the pull request, together with `board:done`, and then closes the issue.
+- `Todo` — `/choose-task` sets it when the person takes one task. The issue label stays `board:backlog`.
+- `In progress` — `/plan` sets it when the person approves the plan, together with `board:in-progress`.
+- `In review` — `/pull-request` sets it when the pull request opens, together with `board:in-review`.
+- `Done` — `/done` sets it after the person has merged the pull request, together with `board:done`, and then closes the issue.
 
-The evaluator moves issue labels from backlog to in progress to in review. The person reviews the pull request and merges it. After that merge, the evaluator sets `board:done` and `Done` and closes the issue. Do not set `Done` while the pull request is still open.
+The person reviews the pull request and merges it. Do not set `Done` while the pull request is still open.
 
 ## Start from main
 
@@ -54,12 +54,7 @@ Then read what already shipped. Open `CHANGELOG.md` and run `git log -8 --onelin
 
 ## Read the task
 
-```bash
-gh issue view NUMBER
-gh issue list --label board:backlog --limit 30
-```
-
-Take one task. If the person did not name a number, show the backlog and wait for a number.
+The person lists open tasks with `/tasks` and takes one with `/choose-task`. If they did not name a number, `/tasks` shows the backlog and waits.
 
 ## Reply before code
 
@@ -86,38 +81,15 @@ feat/gp-XX-slug → pull request into `main`.
 Waiting for approval or edits. I will not change files until you reply.
 ```
 
-Approval is "go", "approved", "ok", "do it", or "ship it", and direct synonyms. An edit without one of those words updates the plan and does not start the work.
+The person confirms or edits that plan with `/plan`.
 
 ## Project status
 
-`gh` needs the `project` scope. If a project command reports a missing scope, run `gh auth refresh -s project` and retry.
-
-```bash
-gh project list --owner rdog49 --limit 30
-```
-
-`PROJECT` is the number whose title is `harness for gem-puzzle`. Do not use any other project. `ISSUE_URL` is `https://github.com/rdog49/gem-puzzle-harness/issues/NUMBER`.
-
-When this role takes one task, add it if it is missing, then set Status to `Todo`. If add reports that the item already exists, still set Status. Do not move a card that is already `In progress`, `In review`, or `Done` back to `Todo`.
-
-```bash
-gh project item-add PROJECT --owner rdog49 --url ISSUE_URL
-gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "Todo"
-```
-
-If the value is rejected, list the options and use the name of the to-do column:
-
-```bash
-gh project field-list PROJECT --owner rdog49
-```
-
-Do not change issue labels from this role. Do not set `In progress`, `In review`, or `Done` on the task just taken. `Done` after a merge belongs to the evaluator.
+`/choose-task` sets Status `Todo`. `/plan` sets `In progress` only after approval. `/pull-request` sets `In review`. `/done` sets `Done` after the merge. Do not set `Done` on the task just taken.
 
 ## After approval
 
-Stay in this chat. The evaluator moves the issue to `board:in-progress` and the project Status to `In progress`, the coder implements, and the evaluator checks. The coder does not commit. On a pass, the evaluator follows the `keep-changelog` skill and makes one commit that contains the task and `CHANGELOG.md`, then moves the issue to `board:in-review` and the project Status to `In review`, and opens the pull request. The person reviews it and merges it. The evaluator then sets `board:done` and Status `Done` and closes the issue. That close leaves `CHANGELOG.md` as the `keep-changelog` skill requires.
-
-Do not open the pull request from this role. Do not set `Done` on the task just taken.
+Stay in this chat. The rest of the loop is `docs/workflow.md`. The coder does not commit. Do not open the pull request from this role. Do not set `Done` on the task just taken.
 
 ## Limits
 
