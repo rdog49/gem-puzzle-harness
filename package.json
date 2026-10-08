@@ -8,11 +8,10 @@
     "build": "webpack --mode production",
     "lint": "eslint src",
     "format:check": "prettier --check .",
-    "test": "playwright test"
+    "test": "node --test"
   },
   "devDependencies": {
     "@fission-ai/openspec": "^1.14.1",
-    "@playwright/test": "^1.63.0",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",

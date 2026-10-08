@@ -31,8 +31,5 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Install Playwright
-        run: npx playwright install --with-deps chromium
-
       - name: Test
         run: npm test

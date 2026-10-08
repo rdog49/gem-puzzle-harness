@@ -12,7 +12,7 @@ The scope is the open issue's criteria and the approved plan. Do not require beh
 - `npm run format:check` exits 0.
 - `npm run lint` exits 0 when the task has sources under `src`.
 - `npm run build` exits 0 when the task touches the build or game logic.
-- `npm test` exits 0. UI tests follow the `playwright-tests` skill. The screen matches `docs/design.md`.
+- `npm test` exits 0. Unit tests follow the `unit-tests` skill. The screen matches `docs/design.md`.
 - The same checks run in CI. The pipeline is the CI/CD section of `AGENTS.md`. A red check fails the task.
 - The result matches the stack in `AGENTS.md`: forbidden libraries, `fetch`, and the console.
 

@@ -19,7 +19,7 @@ The approved scope only. Leave every change for this task uncommitted.
 1. Cut the branch the way `docs/workflow.md` describes, from the updated `main`.
 2. An ordinary board card follows `board-task`. Do not replace that card with `openspec-apply-change`.
 3. An approved OpenSpec change follows `openspec-apply-change`. That skill does not include a commit.
-4. When the plan shows a screen, the tests follow `playwright-tests`: one unit test for the behavior, and a snapshot for the look.
+4. When the plan adds behavior a unit test can check, the tests follow `unit-tests`: one test for that behavior. Do not open a browser from the test.
 5. When the task is visible on screen, check that behavior in the browser. For the shell, the build and the linter are enough.
 6. Report what changed, and hand the work to the evaluator in this chat.
 

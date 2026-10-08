@@ -33,8 +33,8 @@ The game runs in the latest Google Chrome.
 
 ### Webpack
 
-- Dev dependencies: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`, `prettier`, `eslint-config-prettier`, `@playwright/test`.
-- Scripts: `start` runs `webpack serve --mode development` on port 8080; `build` runs `webpack --mode production`; `lint` runs `eslint src`; `format:check` runs Prettier; `test` runs Playwright.
+- Dev dependencies: `webpack`, `webpack-cli`, `webpack-dev-server`, `html-webpack-plugin`, `css-loader`, `style-loader`, `prettier`, `eslint-config-prettier`.
+- Scripts: `start` runs `webpack serve --mode development` on port 8080; `build` runs `webpack --mode production`; `lint` runs `eslint src`; `format:check` runs Prettier; `test` runs Node's built-in test runner.
 - Pull requests, `main`, and GitHub Pages follow the CI/CD section below.
 - In production `publicPath` is `./`, so the page can be opened as static files, including on GitHub Pages.
 - `npm run build` exits 0 and writes `index.html` and the JS bundle into `dist/`. Script and style links are relative. The app needs no separate server.
@@ -53,7 +53,6 @@ Two workflows live under `.github/workflows/`. Do not add another workflow that 
 - `npm run format:check`
 - `npm run lint`
 - `npm run build`
-- `npx playwright install --with-deps chromium`
 - `npm test`
 
 A red check fails the task. The evaluator's local lint and build are these same commands. Do not weaken the workflow to turn a red check green.
@@ -79,7 +78,7 @@ Do not deploy from a task branch. Do not commit `dist/`.
 ### Screen and tests
 
 - The look of the screen is `docs/design.md`.
-- Tests are the `playwright-tests` skill.
+- Tests are the `unit-tests` skill.
 
 ### Console
 
@@ -95,7 +94,7 @@ Opening the page and playing the current task's scenario produces no runtime con
 | Shell, time, moves, resume, sound, scores, labels | `docs/play-session.md` |
 | Picture, loading, error, request cancellation, previews | `docs/picture-tiles.md` |
 | Board steps, git, and specs | `docs/workflow.md` |
-| A screen, a control, or a file under `tests/` | `playwright-tests` |
+| A behavior, or a file under `tests/` | `unit-tests` |
 | A check is red, or behavior is unexpected | `systematic-debugging` |
 | Review comments arrive | `receiving-code-review` |
 | Explore, propose, revise, apply, sync, or archive a spec | `openspec-explore`, `openspec-propose`, `openspec-update-change`, `openspec-apply-change`, `openspec-sync-specs`, `openspec-archive-change` |

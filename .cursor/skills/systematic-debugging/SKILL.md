@@ -153,7 +153,7 @@ You MUST complete each phase before proceeding to the next.
    - Automated test if possible
    - One-off test script if no framework
    - MUST have before fixing
-   - Use the `playwright-tests` skill when the failure is on screen
+   - Use the `unit-tests` skill when the failure can be reproduced as a unit test
 
 2. **Implement Single Fix**
    - Address the root cause identified
