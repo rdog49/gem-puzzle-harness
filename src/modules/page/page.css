@@ -1,9 +1,128 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 0 1rem 2rem;
+}
+
 .page__title {
   margin: 0;
-  padding: 2rem 1rem;
+  padding: 2rem 0 1.25rem;
   color: #e07a3d;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 3rem;
   font-weight: 400;
   text-align: center;
+}
+
+.menu-toggle {
+  display: none;
+  margin: 0 0 1rem;
+  border: 0;
+  background: #e07a3d;
+  color: #f6f1e7;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+}
+
+.app__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.board {
+  width: min(100%, 28rem);
+  aspect-ratio: 1;
+  background: #1c1814;
+  border: 1px solid #3a322b;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(100%, 16rem);
+}
+
+.controls__size {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #f6f1e7;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.controls__select,
+.controls__action {
+  width: 100%;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+}
+
+.controls__select {
+  background: #1c1814;
+  color: #f6f1e7;
+  border: 1px solid #3a322b;
+  padding: 0.55rem 0.75rem;
+}
+
+.controls__action {
+  border: 0;
+  background: #e07a3d;
+  color: #f6f1e7;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .menu-toggle {
+    display: inline-block;
+  }
+
+  .controls {
+    display: none;
+    order: -1;
+    width: 100%;
+  }
+
+  .app--menu-open .controls {
+    display: flex;
+  }
+
+  .board {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .board {
+    width: min(100%, 32rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .app__main {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 72rem;
+  }
+
+  .board {
+    width: min(32rem, 70vh);
+    flex: 0 0 auto;
+  }
+
+  .controls {
+    width: 16rem;
+    flex: 0 0 auto;
+  }
 }
