@@ -61,7 +61,7 @@ A red check fails the task. The evaluator's local lint and build are these same 
 
 `.github/workflows/pages.yml` runs on a push to `main` and on a manual run. It builds `dist/` and deploys that folder to GitHub Pages.
 
-Do not deploy from a task branch. Do not commit `dist/`.
+Do not deploy from a task branch.
 
 ### ESLint
 
@@ -104,11 +104,3 @@ Opening the page and playing the current task's scenario produces no runtime con
 | Commit this task | `/commit` |
 | Open its pull request | `/pull-request` |
 | Mark the task done | `/done` |
-
-`/commit` and `/pull-request` run only when the person asks. The evaluator's file says how. The coder does not run them.
-
-## Workflow
-
-One chat carries one task. The person lists tasks with `/tasks`, chooses one with `/choose-task`, and confirms or edits the plan with `/plan`. The coder then writes only the approved scope and does not commit. The evaluator runs `verify-task` first. When that check is green and the task is an OpenSpec change, the next check is `openspec-verify-change`. The person asks for `/commit` and `/pull-request`. They merge. They mark the task with `/done`.
-
-The full steps are in `docs/workflow.md`.
