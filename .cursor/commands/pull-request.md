@@ -24,7 +24,9 @@ gh issue edit NUMBER --remove-label board:in-progress --add-label board:in-revie
 gh project item-add PROJECT --owner rdog49 --url ISSUE_URL
 gh project item-edit PROJECT --owner rdog49 --url ISSUE_URL --field Status --value "In review"
 git push -u origin HEAD
-gh pr create --base main --title "GP-XX short result" --body "Summary of this task."
+gh pr create --base main --title "GP-XX short result" --body "Summary of this task.
+
+Closes #NUMBER"
 ```
 
 If the Status value is rejected, list the options and use the in-review column's name:
@@ -33,6 +35,6 @@ If the Status value is rejected, list the options and use the in-review column's
 gh project field-list PROJECT --owner rdog49
 ```
 
-The pull request body must not contain `Closes`, `Fixes`, or `Resolves`. Merging must leave the issue open so `/done` can close it after the person merges.
+The pull request body contains `Closes #NUMBER` for this issue, so the project workflows can link it. Do not close the issue from this command.
 
-Do not commit again after the pull request exists. Do not make a second commit for the pull request number. Tell the person the pull request URL. They review it and merge it. Do not merge. After that merge, they mark the task with `/done`.
+Do not commit again after the pull request exists. Do not make a second commit for the pull request number. Tell the person the pull request URL. They review it and merge it. Do not merge. After that merge, the project workflows close the issue and set Status `Done`.

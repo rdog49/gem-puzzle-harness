@@ -12,7 +12,7 @@ A new chat starts on `main`. Follow "Start from main" in the `board-task` skill 
 
 Then read what already shipped. Open `CHANGELOG.md` and run the short log from that section, `git log -8 --oneline`. Do not plan or build a task that repeats a finished entry.
 
-A merged card that is still open waits for the person to run `/done`.
+After the person merges, the project workflows close the issue and set Status `Done`. The agent does not do that and does not edit `CHANGELOG.md` again.
 
 ## One card
 
@@ -22,8 +22,7 @@ Issue labels:
 
 - `board:backlog` — not started
 - `board:in-progress` — the plan is approved and work is under way
-- `board:in-review` — the pull request is open
-- `board:done` — the person merged the pull request, and `/done` then closed the card
+- `board:in-review` — the pull request is open. A closed issue may keep this label. The agent does not set `board:done`.
 
 Project Status, in order: No Status (do not set it), `Todo`, `In progress`, `In review`, `Done`.
 
@@ -33,8 +32,7 @@ Project Status, in order: No Status (do not set it), `Todo`, `In progress`, `In 
 4. The evaluator runs `verify-task` first. That check covers the formatter, the linter, the build, the unit tests, and, when the task is on screen, the browser. A failure stays on `board:in-progress` and Status `In progress`. The coder fixes that same task here. Do not start `openspec-verify-change` while this check is red. The check runs again from `verify-task`.
 5. When `verify-task` passes and the task is an OpenSpec change, the evaluator runs `openspec-verify-change`. It checks the implementation against that change's spec, tasks, and design. A CRITICAL issue, or an applicable check left not verified, is a failure and stays on `board:in-progress`. WARNING and SUGGESTION are reported and do not by themselves fail the task. A game card with no spec skips this step.
 6. When every check that applies has passed, the evaluator follows `keep-changelog`. The commit waits for `/commit`: one commit on the task branch, the task changes and `CHANGELOG.md` together. `/pull-request` then sets `board:in-review` and Status `In review` and opens the pull request. Stop. Do not merge. Do not make a second commit for the pull request number. Leave `CHANGELOG.md` as `keep-changelog` requires.
-7. The person reviews the pull request and merges it.
-8. `/done` sets `board:done` and Status `Done` and closes the issue. Do not do that while the pull request is still open. `/done` does not edit `CHANGELOG.md`.
+7. The person reviews the pull request and merges it. The project workflows then close the issue and set Status `Done`. The agent does not return for that and does not edit `CHANGELOG.md` again.
 
 ## Git
 

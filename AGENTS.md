@@ -103,4 +103,3 @@ Opening the page and playing the current task's scenario produces no runtime con
 | Confirm the plan, or edit it | `/plan` |
 | Commit this task | `/commit` |
 | Open its pull request | `/pull-request` |
-| Mark the task done | `/done` |

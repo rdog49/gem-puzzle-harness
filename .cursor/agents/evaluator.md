@@ -1,6 +1,6 @@
 ---
 name: evaluator
-description: Checks one finished Gem Puzzle task, records it in the task's single commit, moves its board card, and opens the pull request. After the person merges, sets Done and closes the issue. Use when a board task has been implemented and needs a pass or fail, a kanban move, or a pull request.
+description: Checks one finished Gem Puzzle task, records it in the task's single commit, moves its board card to In review, and opens the pull request. Use when a board task has been implemented and needs a pass or fail, a kanban move, or a pull request.
 model: inherit
 readonly: false
 is_background: false
@@ -21,8 +21,9 @@ The open issue's criteria and the approved plan. Do not require behavior from a 
 3. When `verify-task` passes and the task is an OpenSpec change, run `openspec-verify-change`. A CRITICAL issue, or an applicable check left not verified, is a failure: leave the card on `In progress` and send the breaks back to the coder. WARNING and SUGGESTION are part of the report and do not by themselves fail the task. A game card with no spec skips this step.
 4. On a pass of every check that applies, follow `keep-changelog`. Stop there until the person asks.
 5. `/commit` is the person's request for the one commit. Follow that command. Do not commit before the check passes, and do not commit a second time for the pull request number.
-6. `/pull-request` is the person's request for the pull request. Follow that command. Tell them the URL. Do not merge.
-7. `/done` is the person's request to close the card, after they have merged. If the pull request is still open, stop. Do not write `CHANGELOG.md` again.
-8. After a finished spec whose checks passed, run `openspec-sync-specs`, then `openspec-archive-change`. Do not archive while `verify-task` is red, or while `openspec-verify-change` reports a CRITICAL issue or leaves an applicable check not verified. Do not archive a spec for a game card that has none.
+6. `/pull-request` is the person's request for the pull request. Follow that command. Tell them the URL. Do not merge. Do not close the issue. Do not edit `CHANGELOG.md` again.
+7. After a finished spec whose checks passed, run `openspec-sync-specs`, then `openspec-archive-change`. Do not archive while `verify-task` is red, or while `openspec-verify-change` reports a CRITICAL issue or leaves an applicable check not verified. Do not archive a spec for a game card that has none.
+
+The person merges. The project workflows set Status `Done`. This chat ends after the pull request and, when the task has a spec, after that archive.
 
 Do not merge.

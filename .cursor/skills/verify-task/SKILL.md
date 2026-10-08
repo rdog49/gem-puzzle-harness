@@ -36,7 +36,7 @@ The person asks for each move. This role does not set `Todo`. `/choose-task` alr
 
 When the approved task starts, `/plan` sets `In progress`. On a failure, leave the card there. Do not move it to `In review` or `Done`.
 
-When every criterion passes, stay on the task branch. Follow the `keep-changelog` skill. The commit waits until the person runs `/commit`. The pull request waits until the person runs `/pull-request`. Do not set `Done` yet. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
+When every criterion passes, stay on the task branch. Follow the `keep-changelog` skill. The commit waits until the person runs `/commit`. The pull request waits until the person runs `/pull-request`. Do not set `Done`. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
 
 ## Then the spec
 
@@ -46,6 +46,6 @@ When every check here passes and the task is an OpenSpec change, the next skill 
 
 A game card with no spec stops after this skill.
 
-## After the person merges
+## After the pull request
 
-The person marks the task with `/done`. If the pull request is still open, stop. Do not merge it. Leave `CHANGELOG.md` untouched. The steps are in `docs/workflow.md`.
+The person merges the pull request. Do not merge it. Do not close the issue. Do not edit `CHANGELOG.md` again. The project workflows set Status `Done`. The steps are in `docs/workflow.md`.
