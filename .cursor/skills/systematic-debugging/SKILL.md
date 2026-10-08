@@ -153,7 +153,7 @@ You MUST complete each phase before proceeding to the next.
    - Automated test if possible
    - One-off test script if no framework
    - MUST have before fixing
-   - Use the `playwright-tests` skill when the failure is on screen
+   - Use the `unit-tests` skill when the failure can be reproduced as a unit test
 
 2. **Implement Single Fix**
    - Address the root cause identified
@@ -165,7 +165,7 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
-   - Use the `verify-task` skill before claiming the task passes
+   - Use the `verify-task` skill before claiming the task passes. When that check is green and the task is an OpenSpec change, run `openspec-verify-change` next. Do not start it while `verify-task` is red
 
 4. **If Fix Doesn't Work**
    - STOP

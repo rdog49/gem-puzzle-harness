@@ -11,8 +11,7 @@ Issue labels:
 
 - `board:backlog` — not started
 - `board:in-progress` — the plan is approved and work is under way
-- `board:in-review` — the pull request is open
-- `board:done` — the person merged the pull request, and `/done` then closed the card
+- `board:in-review` — the pull request is open. A closed issue may keep this label. The agent does not set `board:done`.
 
 Project Status, in order:
 
@@ -20,7 +19,7 @@ Project Status, in order:
 - `Todo` — `/choose-task` sets it when the person takes one task. The issue label stays `board:backlog`.
 - `In progress` — `/plan` sets it when the person approves the plan, together with `board:in-progress`.
 - `In review` — `/pull-request` sets it when the pull request opens, together with `board:in-review`.
-- `Done` — `/done` sets it after the person has merged the pull request, together with `board:done`, and then closes the issue.
+- `Done` — the project workflows set it after the person merges the pull request, and they close the issue. The agent does not set it.
 
 The person reviews the pull request and merges it. Do not set `Done` while the pull request is still open.
 
@@ -85,7 +84,7 @@ The person confirms or edits that plan with `/plan`.
 
 ## Project status
 
-`/choose-task` sets Status `Todo`. `/plan` sets `In progress` only after approval. `/pull-request` sets `In review`. `/done` sets `Done` after the merge. Do not set `Done` on the task just taken.
+`/choose-task` sets Status `Todo`. `/plan` sets `In progress` only after approval. `/pull-request` sets `In review`. Do not set `Done`. The project workflows set it after the merge.
 
 ## After approval
 

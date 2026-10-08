@@ -21,4 +21,4 @@ One card. The person's message is the task. If they did not name a number, show 
 3. `/plan` is the person's confirmation or their edits. An edit replaces the matching parts of the plan and does not start the work. Show the updated plan and wait again. Approval hands that scope to the coder in this same chat.
 4. A spec idea uses `openspec-explore`. A new spec uses `openspec-propose`. A revision of a spec plan uses `openspec-update-change`. That skill does not write code. A game card with no spec stays on `board-task`. Do not hang an apply step on it.
 
-Do not commit. Do not push. Do not open a pull request. Do not mark the task done.
+Do not commit. Do not push. Do not open a pull request. Do not set `Done`. Do not close the issue.

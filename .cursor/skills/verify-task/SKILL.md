@@ -12,7 +12,7 @@ The scope is the open issue's criteria and the approved plan. Do not require beh
 - `npm run format:check` exits 0.
 - `npm run lint` exits 0 when the task has sources under `src`.
 - `npm run build` exits 0 when the task touches the build or game logic.
-- `npm test` exits 0. UI tests follow the `playwright-tests` skill. The screen matches `docs/design.md`.
+- `npm test` exits 0. Unit tests follow the `unit-tests` skill. The screen matches `docs/design.md`.
 - The same checks run in CI. The pipeline is the CI/CD section of `AGENTS.md`. A red check fails the task.
 - The result matches the stack in `AGENTS.md`: forbidden libraries, `fetch`, and the console.
 
@@ -36,8 +36,16 @@ The person asks for each move. This role does not set `Todo`. `/choose-task` alr
 
 When the approved task starts, `/plan` sets `In progress`. On a failure, leave the card there. Do not move it to `In review` or `Done`.
 
-When every criterion passes, stay on the task branch. Follow the `keep-changelog` skill. The commit waits until the person runs `/commit`. The pull request waits until the person runs `/pull-request`. Do not set `Done` yet. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
+When every criterion passes, stay on the task branch. Follow the `keep-changelog` skill. The commit waits until the person runs `/commit`. The pull request waits until the person runs `/pull-request`. Do not set `Done`. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
 
-## After the person merges
+## Then the spec
 
-The person marks the task with `/done`. If the pull request is still open, stop. Do not merge it. Leave `CHANGELOG.md` untouched. The steps are in `docs/workflow.md`.
+This skill is the technical check. It runs first.
+
+When every check here passes and the task is an OpenSpec change, the next skill is `openspec-verify-change`. It checks that change against its spec, tasks, and design. Do not start it while a check here is red.
+
+A game card with no spec stops after this skill.
+
+## After the pull request
+
+The person merges the pull request. Do not merge it. Do not close the issue. Do not edit `CHANGELOG.md` again. The project workflows set Status `Done`. The steps are in `docs/workflow.md`.
