@@ -1,4 +1,5 @@
 import './page.css';
+import Board from '../board/board';
 
 const SIZES = ['3x3', '4x4', '5x5', '6x6', '7x7', '8x8'];
 
@@ -26,6 +27,7 @@ export default class Page {
     this.board = document.createElement('div');
     this.board.id = 'board';
     this.board.className = 'board';
+    this.puzzle = new Board(this.board);
 
     this.controls = document.createElement('div');
     this.controls.id = 'controls';

@@ -1,0 +1,21 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.35rem;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3e6cf;
+  color: #2a2118;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.5rem;
+}
+
+.tile--empty {
+  background: transparent;
+}
