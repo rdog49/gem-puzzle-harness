@@ -38,6 +38,14 @@ When the approved task starts, `/plan` sets `In progress`. On a failure, leave t
 
 When every criterion passes, stay on the task branch. Follow the `keep-changelog` skill. The commit waits until the person runs `/commit`. The pull request waits until the person runs `/pull-request`. Do not set `Done` yet. Do not close the issue, and do not merge. Leave `CHANGELOG.md` as the `keep-changelog` skill requires.
 
+## Then the spec
+
+This skill is the technical check. It runs first.
+
+When every check here passes and the task is an OpenSpec change, the next skill is `openspec-verify-change`. It checks that change against its spec, tasks, and design. Do not start it while a check here is red.
+
+A game card with no spec stops after this skill.
+
 ## After the person merges
 
 The person marks the task with `/done`. If the pull request is still open, stop. Do not merge it. Leave `CHANGELOG.md` untouched. The steps are in `docs/workflow.md`.

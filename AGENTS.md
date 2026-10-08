@@ -97,7 +97,7 @@ Opening the page and playing the current task's scenario produces no runtime con
 | A behavior, or a file under `tests/` | `unit-tests` |
 | A check is red, or behavior is unexpected | `systematic-debugging` |
 | Review comments arrive | `receiving-code-review` |
-| Explore, propose, revise, apply, sync, or archive a spec | `openspec-explore`, `openspec-propose`, `openspec-update-change`, `openspec-apply-change`, `openspec-sync-specs`, `openspec-archive-change` |
+| Explore, propose, revise, apply, verify, sync, or archive a spec | `openspec-explore`, `openspec-propose`, `openspec-update-change`, `openspec-apply-change`, `openspec-verify-change`, `openspec-sync-specs`, `openspec-archive-change` |
 | See which tasks are open | `/tasks` |
 | Choose one task | `/choose-task` |
 | Confirm the plan, or edit it | `/plan` |
@@ -109,6 +109,6 @@ Opening the page and playing the current task's scenario produces no runtime con
 
 ## Workflow
 
-One chat carries one task. The person lists tasks with `/tasks`, chooses one with `/choose-task`, and confirms or edits the plan with `/plan`. The coder then writes only the approved scope and does not commit. The person asks for `/commit` and `/pull-request`. They merge. They mark the task with `/done`.
+One chat carries one task. The person lists tasks with `/tasks`, chooses one with `/choose-task`, and confirms or edits the plan with `/plan`. The coder then writes only the approved scope and does not commit. The evaluator runs `verify-task` first. When that check is green and the task is an OpenSpec change, the next check is `openspec-verify-change`. The person asks for `/commit` and `/pull-request`. They merge. They mark the task with `/done`.
 
 The full steps are in `docs/workflow.md`.

@@ -165,7 +165,7 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
-   - Use the `verify-task` skill before claiming the task passes
+   - Use the `verify-task` skill before claiming the task passes. When that check is green and the task is an OpenSpec change, run `openspec-verify-change` next. Do not start it while `verify-task` is red
 
 4. **If Fix Doesn't Work**
    - STOP
