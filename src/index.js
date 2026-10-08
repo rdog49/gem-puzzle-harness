@@ -1,8 +1,7 @@
-class App {
-  constructor(root) {
-    this.root = root;
-    this.root.style.minHeight = '100vh';
-  }
-}
+import './styles/base.css';
+import Page from './modules/page/page';
 
-export default new App(document.getElementById('app'));
+const root = document.getElementById('app');
+const page = new Page(root);
+
+export default page;
