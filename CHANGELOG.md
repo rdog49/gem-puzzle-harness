@@ -9,5 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The page opens on a solved 4×4 board: tiles 1–15 and one empty cell. (#9)
 - The shell stays readable on a wide screen, a tablet, and a phone. On a phone, Menu opens the actions. (#8)
 - The page opens from an empty template, and JavaScript creates the Gem Puzzle title. (#7)
