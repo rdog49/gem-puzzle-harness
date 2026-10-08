@@ -1,0 +1,9 @@
+.page__title {
+  margin: 0;
+  padding: 2rem 1rem;
+  color: #e07a3d;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  font-weight: 400;
+  text-align: center;
+}
